@@ -17,37 +17,45 @@
 
 ## 1. 概述 (Overview)
 
-> 产品背景详见 PRD，本节只写技术目标。
+> 产品背景与功能范围见 PRD，此处只写技术层。
 
 ### 1.1 技术目标
 
-- **性能目标**：单轮用户输入到首段可见反馈（含工具日志）可接受；不追求高并发（单机单会话）
-- **可扩展性目标**：Tool Registry 可增删工具；LLM Provider 可切换（DeepSeek / OpenAI 兼容）
-- **开发效率目标**：自研最小循环 + 少量工具，优先可跑通主路径；练手可对照书复盘
-- **成本目标**：默认 DeepSeek；工具分层加载，避免每轮塞满 39 工具全文
-- **其他**：循环可见、迭代上限、路径写入白名单、密钥不进导出文件
+- **学习目标**：用可观察的自研 Agent Loop，跑通 感知→推理→行动→观察；对照书中循环控制、工具设计、错误回传为「指令」。
+- **性能目标**：单用户、单进程；单次用户回合内工具迭代建议上限 **8～12**；导出文件毫秒～百毫秒级本地写盘。
+- **可扩展性目标**：Tool Registry 可增工具；LLM Provider 可换（OpenAI 兼容）；后续可加渠道而不改核心 loop。
+- **开发效率目标**：个人学习项目；阶段可演示；无前端/无微服务。
+- **成本目标**：默认 DeepSeek；密钥本地配置；无云基础设施。
+- **其他**：密钥不进导出；写盘路径白名单；可对纯函数（校验、渲染、路径）做 pytest。
 
 ### 1.2 关键技术选型理由
 
-> 本项目为 **CLI 单体进程**，无浏览器前端、无独立 HTTP 后端、无数据库。下表按模板结构映射到「交互层 / 运行时 / 第三方」。
+> 本产品无 Web 前端、无传统后端服务、无数据库。下表按「展示层 / 核心层 / 外部服务」映射模板中的前后端概念。
 
-**交互层（对应模板「前端」）**：
-- **框架**：Node.js `readline/promises` — 最小对话循环，无 Ink
-- **状态管理**：进程内 `SessionState` 对象 — 无跨端状态库
-- **UI 组件库**：无（纯文本）
-- **样式方案**：约定日志前缀 `[tool]` / 结构化列表
+**展示层（等价「前端」）选型理由**：
+- **形态**：CLI（标准库 `input()` / `print`）— 对齐 PRD；学习项目零 UI 框架噪音。
+- **状态管理**：进程内 `SessionState`（messages + draft）— 关进程即丢，符合「无长期记忆」。
+- **UI 组件库 / 样式 / 深色模式**：**不适用**（无 GUI）。
 
-**运行时（对应模板「后端」）**：
-- **语言 & 框架**：TypeScript + 自研 Agent Loop — 练手核心；不上 LangGraph/Mastra/Agents SDK
-- **数据库**：无；知识在 `data/tools.json`，产物在 `output/*.md`
-- **缓存**：无
-- **对象存储**：无
+**核心层（等价「后端」）选型理由**：
+- **语言**：Python 3.11+ — 学习摩擦力低；Agent 示例多；不要求对齐 `pm-toolbox`。
+- **编排**：自研 Agent Loop — 练手核心；不上 LangChain/LangGraph。
+- **数据库**：**不使用** — MVP 无跨会话持久化。
+- **知识只读源**：`data/tools.json` — 从 toolbox 拷贝即可。
+- **校验**：Pydantic — 校验 tool arguments。
 
-**第三方服务**：
-- DeepSeek Chat Completions + Tool Calls（`openai` SDK，`baseURL=https://api.deepseek.com`）— 与 `pm-toolbox` 习惯一致
-- 可选 OpenAI 兼容端作为备选 Provider
+**第三方服务选型理由**：
+- **DeepSeek API**（`openai` Python SDK + `base_url`）— OpenAI 兼容 Tool Calls；成本友好；可切换兼容端。
 
 > 详细对比见：`项目文档/PM-Agent/TDD/PM-Agent-技术选型调研-2026-07-14.md`
+
+### 1.3 架构审校摘要（对应技能 2-6）
+
+| 审查项 | 结论 |
+|--------|------|
+| ①「前后端」分离 | CLI 只负责 I/O；业务在 `agent/` + `tools/`；无 HTTP 耦合风险 |
+| ② 解耦与模块化 | UI（cli）不直接读文件写盘；经 tools/execute；Tool 与 LLM client 分离 |
+| ③ 极致裁剪 | 无 DB/无 Web/无 MCP/无向量记忆；避免重复造第二推荐服务 |
 
 ---
 
@@ -55,62 +63,69 @@
 
 ### 2.1 整体拓扑图
 
-单体 Node 进程：CLI 读输入 → Agent Loop 调 LLM → 执行本地 Tool → 更新会话状态 / 写文件 → 打印回复。
-
 ```
 ┌─────────────────────────────────────────────┐
-│                 CLI 进程 (pm-agent)           │
-│  ┌──────────┐   ┌──────────┐   ┌──────────┐ │
-│  │ readline │→  │ Agent    │→  │ Tool     │ │
-│  │  I/O     │   │ Loop     │   │ Registry │ │
-│  └──────────┘   └────┬─────┘   └────┬─────┘ │
-│                      │              │       │
-│                 ┌────▼────┐    ┌────▼────┐  │
-│                 │ LLM     │    │ tools.  │  │
-│                 │ Client  │    │ json +  │  │
-│                 │(DeepSeek)│   │ output/ │  │
-│                 └─────────┘    └─────────┘  │
-└─────────────────────────────────────────────┘
-         │ HTTPS（仅模型 API）
-         ▼
-   DeepSeek / OpenAI 兼容网关
+│                 CLI (展示层)                 │
+│         input() / print / [tool] 日志        │
+└──────────────────────┬──────────────────────┘
+                       │ Session 消息
+┌──────────────────────▼──────────────────────┐
+│              Agent Core（核心层）             │
+│  loop · llm_client · tool_registry · state   │
+└───────┬──────────────────────────┬──────────┘
+        │ tool_calls               │ Chat Completions + tools
+        ▼                          ▼
+┌─────────────────┐      ┌─────────────────────┐
+│  Tools 实现层    │      │  DeepSeek / 兼容 LLM │
+│  read json      │      │  (第三方)            │
+│  update draft   │      └─────────────────────┘
+│  write output/  │
+└────────┬────────┘
+         │
+┌────────▼────────┐
+│ 本地数据         │
+│ tools.json      │
+│ output/*.md     │
+│ .env（密钥）     │
+└─────────────────┘
 ```
 
-**数据流**：
-1. 用户文本 → 追加到 `messages`
-2. Loop 调用 LLM（带 tools 定义）
-3. 若有 `tool_calls`：校验参数 → 执行 → 追加 `role:tool` → 打 `[tool]` 日志 → 继续 Loop
-4. 若无 tool_calls：把 assistant 文本打印给用户，等待下一轮输入
-5. `export_markdown` 仅写入 `output/`
+**数据流向（单次用户输入）**：
+1. CLI 读入用户文本 → 追加到 `messages`  
+2. Loop 调 LLM（带 tools 定义）  
+3. 若有 `tool_calls`：Registry 执行 → 结果以 tool 消息回填 → 再调 LLM  
+4. 触顶或模型结束文本回复 → CLI 打印  
+5. 用户要求导出时：`export_markdown` 写 `output/`
 
-### 2.2 交互层架构（原「前端架构」）
+### 2.2 展示层架构（CLI）
 
-- **架构模式**：命令行 REPL（Read-Eval-Print Loop）挂接 Agent
-- **模块划分**：`cli/`（输入输出）与 `agent/`（推理循环）分离
-- **状态管理**：`SessionState`（messages、clarificationCount、draftCharter、draftRisks）
-- **路由**：无 URL；元指令 `/help` `/quit` 在 CLI 层预处理
-- **构建工具**：`tsx` 直接运行；可选 `tsc` 产出 `dist/`
+- **架构模式**：对话 REPL（Read-Eval-Print Loop）  
+- **模块划分**：`cli/main.py`（入口）、帮助/退出指令解析  
+- **状态**：不另建前端 store；全部在 `SessionState`  
+- **路由**：不适用；用意图分流（帮助/退出/交 Agent）  
+- **构建工具**：`uv run` / `python -m pm_agent`
 
-### 2.3 运行时模块划分（原「后端服务」）
+### 2.3 核心服务划分（单体进程）
 
-- **服务架构**：单体内核（单进程）
+- **服务架构**：单机单体 CLI 进程  
 - **模块划分**：
   | 模块 | 职责 |
   |------|------|
-  | `cli` | 提示符、打印、元指令 |
-  | `agent/loop` | 迭代上限、调度 LLM 与工具 |
-  | `agent/llm` | Provider 适配、错误分类 |
-  | `tools/*` | 各工具 execute |
-  | `data` | 加载 tools.json |
-  | `export` | Markdown 渲染与落盘 |
-- **服务边界**：工具层做副作用与白名单；Loop 不做业务知识；LLM 不做文件写入
-- **服务通信**：进程内函数调用；对 LLM 为 HTTPS
+  | `agent/loop.py` | 迭代上限、调模型、派发工具、可见日志 |
+  | `agent/llm.py` | OpenAI 兼容客户端封装、错误分类 |
+  | `agent/session.py` | messages、draft、clarify_count |
+  | `tools/registry.py` | 注册/查找/执行、schema 导出给 LLM |
+  | `tools/pm_*.py` | 各工具 execute |
+  | `knowledge/tools_repo.py` | 加载/查询 tools.json |
+  | `export/markdown.py` | 渲染章程/风险 Markdown |
+- **服务边界**：工具层不调 LLM；LLM 层不直接写盘  
+- **服务通信**：进程内函数调用（无 RPC）
 
 ### 2.4 解耦方案
 
-- **「前后端」分离（映射）**：CLI 只负责 I/O；Agent/Tools 不 `console.log` 业务例外（统一经 Logger/打印机）
-- **数据访问层解耦**：`ToolsRepository` 只读 JSON；导出经 `MarkdownExporter`；禁止工具直接 `fs.writeFile` 到任意路径
-- **业务逻辑解耦**：推荐校验、白名单起草、字段占位规则放在 tools / domain，不塞进 prompt  alone
+- **展示与核心分离**：`cli` 只调用 `agent.handle_user_turn(text)`，不拼 prompt、不写文件。  
+- **数据访问解耦**：`ToolsRepository` 抽象 JSON 读取；日后换 SQLite 只改 repo。  
+- **业务与 I/O 解耦**：草稿变更经 draft 工具；落盘仅 `export_markdown`。
 
 ---
 
@@ -120,225 +135,212 @@
 
 ```mermaid
 flowchart TD
-    A[CLI 读入一行] --> B{元指令?}
-    B -->|/quit| Z[退出]
-    B -->|/help| H[打印帮助] --> A
-    B -->|普通输入| C[append user message]
-    C --> D[Agent Loop 开始]
-    D --> E[调用 LLM + tools]
-    E --> F{有 tool_calls?}
-    F -->|是| G{未超迭代上限?}
-    G -->|否| X[停止并提示用户]
-    G -->|是| I[Zod 校验参数]
-    I --> J[执行 Tool]
-    J --> K[打印 tool 日志]
-    K --> L[append tool results]
-    L --> E
-    F -->|否| M[打印 assistant 文本]
-    M --> A
+    A[CLI 读入用户输入] --> B{元指令?}
+    B -->|退出/帮助| C[本地处理]
+    B -->|业务对话| D[追加 user message]
+    D --> E[Agent Loop 开始 iter=0]
+    E --> F[调用 LLM + tools]
+    F --> G{响应类型}
+    G -->|纯文本| H[打印助手回复 / 结束本轮]
+    G -->|tool_calls| I{iter < max?}
+    I -->|否| J[停止并提示简化或直接起草]
+    I -->|是| K[打印 tool 日志]
+    K --> L[Registry 执行 + Pydantic 校验]
+    L --> M[追加 tool 结果消息]
+    M --> N[iter++]
+    N --> F
 ```
 
 ### 3.2 状态机图
 
-**会话层状态**（粗粒度，便于实现与测试）：
-
 ```mermaid
 stateDiagram-v2
-    [*] --> Idle: 启动
-    Idle --> Clarifying: 信息不足且澄清<2
-    Clarifying --> Recommending: 澄清完成或满2轮
-    Idle --> Recommending: 信息足够/要求推荐
-    Recommending --> Idle: 完成推荐
-    Idle --> DraftingCharter: 用户要求起草章程
-    Idle --> DraftingRisk: 用户要求起草风险登记册
-    DraftingCharter --> Preview: 字段收集可导出
-    DraftingRisk --> Preview: 1-3条可导出
+    [*] --> Idle: 启动并打印能力说明
+    Idle --> Clarifying: 卡点信息不足
+    Clarifying --> Recommending: 澄清满或已足够
+    Idle --> Recommending: 信息足够直接推荐
+    Recommending --> Idle: 用户继续闲聊/只要推荐
+    Recommending --> DraftingCharter: 请求起草章程
+    Recommending --> DraftingRisk: 请求起草风险登记册
+    Idle --> DraftingCharter: 直接起草章程
+    Idle --> DraftingRisk: 直接起草风险
+    DraftingCharter --> Preview: 字段收集可预览
+    DraftingRisk --> Preview: 1-3 条可预览
+    Preview --> DraftingCharter: 重新起草
+    Preview --> DraftingRisk: 重新起草
     Preview --> Exported: export_markdown 成功
-    Preview --> DraftingCharter: 重新起草章程
-    Preview --> DraftingRisk: 重新起草风险
-    Exported --> Idle
-    Recommending --> Idle: 拒绝非法起草
+    Exported --> Idle: 打印路径后回对话
+    Clarifying --> Recommending: clarify_count>=2 强制推荐
+    note right of Idle
+      会话模式由系统提示 + 工具约束引导；
+      代码层用 SessionMode 枚举辅助，避免无限澄清。
+    end note
 ```
 
-说明：状态可由 `SessionState.mode` 显式维护，也可由「对话+草稿是否存在」隐式推导；MVP 推荐 **显式 mode**，减少模型乱跳。
+**SessionMode 枚举（建议）**：`idle` | `clarifying` | `recommending` | `drafting_charter` | `drafting_risk` | `preview`
 
 ### 3.3 关键算法
 
-#### 算法1：Agent Loop 控制
+#### 算法 A：Agent 工具循环
 
-- **适用场景**：每一轮用户输入后的推理执行
-- **思路**：`for (i=0; i<maxIterations; i++)` 调模型；有 tool_calls 则执行并 continue；否则 break；连续工具错误达阈值则 break 并注入纠正指令
-- **输入**：messages、tools、maxIterations（建议 8～12）
-- **输出**：最终 assistant 文本 + 副作用（草稿/文件）
-- **复杂度**：O(iterations × (LLM + tools))；工具数固定约 6，可视为常量
-- **边界**：空 tool_calls + 空 content → 提示重试；畸形 JSON arguments → 工具层返回错误指令，不抛垮进程
+- **适用场景**：每一轮用户业务输入  
+- **思路**：`while iter < max_iterations`：请求 LLM → 无 tool_calls 则 break → 执行 tools → 追加结果  
+- **输入**：`messages`, `tools_schema`, `max_iterations`  
+- **输出**：最终助手文本；副作用为 draft/磁盘  
+- **复杂度**：O(I × (T_llm + Σ tool))，I≤12  
+- **边界**：空 tool_calls、非法 JSON arguments、未知工具名 → 回传纠正指令，不抛死进程
 
-#### 算法2：推荐结果校验
+#### 算法 B：推荐结果白名单校验
 
-- **适用场景**：`recommend_tools` 返回或模型口述推荐后的规范化
-- **思路**：用 slug 集合与 `tools.json` 求交；非法剔除；不足则按知识领域关键词兜底（可参考 toolbox fallback，可选）
-- **输入**：候选 slug 列表、question
-- **输出**：1～3 个合法工具摘要
-- **边界**：0 条 → 返回「引导补充阶段」类错误指令给模型或直接展示给用户
+- **适用场景**：`recommend_tools` 返回或模型口述工具后  
+- **思路**：对每个 slug 查 `ToolsRepository`；过滤不存在项；若空则返回「请补充阶段」类指令  
+- **输入**：候选 slug 列表  
+- **输出**：合法工具摘要列表（≤3）  
+- **复杂度**：O(k)，k≤3
 
-#### 算法3：Markdown 导出命名
+#### 算法 C：Markdown 安全导出路径
 
-- **思路**：`{文档类型}-{YYYYMMDD-HHmm}.md`；若存在则 `-2` `-3` 递增
-- **边界**：目录不可写 → 抛业务错误，保留终端预览
+- **适用场景**：`export_markdown`  
+- **思路**：解析目标路径 → `resolve()` → 必须位于 `output_dir.resolve()` 之下 → 否则拒绝  
+- **输入**：文档类型、草稿、可选文件名  
+- **输出**：绝对路径字符串或错误指令  
+- **边界**：目录不存在则创建；重名追加序号
 
 ### 3.4 异常处理流程
 
 **错误处理策略**：
-- **网络错误**（超时/5xx）：LLM Client 短重试 1～2 次；仍失败 → CLI 提示「模型暂不可用…可直接说起草…」
-- **业务错误**（非法起草、空库、校验失败）：Tool 返回字符串须含「不要… / 应该… / 示例」，Loop 继续让模型纠正
-- **系统错误**（未捕获异常）：记录 stack 到 stderr；对用户一句友好话；会话可继续
+- **网络/API 错误**：超时、5xx → 有限次退避重试后，向用户提示「模型不可用，可稍后重试或直接说起草…」；401 → 提示检查密钥，不盲重试。  
+- **业务错误**：不可填工具起草、非法 slug → 工具返回中文「不要做什么 / 应做什么」。  
+- **系统错误**：未预期异常记日志 + 对用户友好短句；循环可中止本轮。
 
 **边界情况**：
-- **空输入**：CLI 层拦截，不调 LLM
-- **超时**：单次 LLM 请求 timeout（如 60s）
-- **并发**：单线程会话，无并发写；不实现多会话并行
+- **空输入**：CLI 层提示示例，不进 loop  
+- **超时**：LLM 调用设 timeout（如 60s）  
+- **并发**：单线程 REPL，不考虑并发写同一文件  
+- **clarify 超限**：`clarify_count >= 2` 时系统提示强制进入推荐（代码可注入 reminder message）
 
 ---
 
 ## 4. 数据结构 (Data Schema)
 
-### 4.1 建模原则
+### 4.1 存储策略说明
 
-- MVP **无 SQL 数据库**
-- 权威只读源：`data/tools.json`
-- 运行时状态：内存 TypeScript 对象
-- 持久产物：`output/*.md`（用户资产）
+**MVP 不使用 SQL 数据库。** 数据形态：
 
-### 4.2 「表」结构的 TypeScript 等价定义
+| 存储 | 内容 | 生命周期 |
+|------|------|----------|
+| `data/tools.json` | 工具知识库 | 随仓库版本 |
+| 内存 `SessionState` | 对话与草稿 | 进程内 |
+| `output/*.md` | 导出产物 | 用户文件 |
 
-**实体：Tool（来自 JSON）**
+下列「表结构」用 **Pydantic 模型**表达，便于日后若引入 SQLite 再映射 DDL。
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| slug | string | 主键 |
-| name | string | 中文名 |
-| nameEn | string | 英文名 |
-| processGroup | string | 过程组 |
-| knowledgeArea | string | 知识领域 |
-| summary | string | 摘要 |
-| description | string | 详述 |
-| steps | string[] | 步骤 |
-| scenarios | string[] | 场景 |
-| templateType | form/table/... | 模板类型 |
-| templateFields / tableConfig | object | 起草字段来源 |
+### 4.2 核心模型（逻辑 Schema）
 
-**实体：SessionState（内存）**
+**PmTool（对应 tools.json 条目）**
+- `slug`（str）主键语义  
+- `name`, `name_en`, `process_group`, `knowledge_area`  
+- `summary`, `description`, `steps: list[str]`, `scenarios: list[str]`  
+- `template` / 可选 `template_fields` / `table_config`  
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| mode | enum | idle/clarifying/recommending/drafting_charter/drafting_risk/preview |
-| messages | ChatMessage[] | OpenAI 兼容消息 |
-| clarificationCount | number | 0～2 |
-| draftCharter | Record\<string,string\> \| null | 章程字段 |
-| draftRisks | RiskRow[] | 最多引导 3 条 |
-| lastExportPath | string \| null | 上次导出路径 |
+**SessionState**
+- `messages: list[ChatMessage]`  
+- `mode: SessionMode`  
+- `clarify_count: int`  
+- `charter_draft: CharterDraft | None`  
+- `risk_draft: RiskRegisterDraft | None`  
 
-**实体：RiskRow**
+**CharterDraft**（字段对齐 PRD/工具库）
+- `project_name`, `sponsor`, `project_manager`, `business_case`, `high_level_scope`, `milestones`, `budget`, `risks`, `signature`（缺省 `"待补充"`）
 
-| 字段 | 类型 |
-|------|------|
-| riskId, description, cause, probability, impact, score, response, owner, status | string |
+**RiskItem**
+- `risk_id`, `description`, `cause`, `probability`, `impact`, `score`, `response`, `owner`, `status`
+
+**RiskRegisterDraft**
+- `items: list[RiskItem]`（默认引导 1～3 条）
 
 ### 4.3 DDL 示例
 
-不适用关系库。若未来持久化会话，可迁移为：
-
 ```sql
--- 仅作未来扩展示意，MVP 不创建
-CREATE TABLE sessions (
-  id TEXT PRIMARY KEY,
-  mode TEXT NOT NULL,
-  messages_json TEXT NOT NULL,
-  draft_json TEXT,
-  created_at TEXT NOT NULL
-);
+-- MVP 不建库。若后续阶段引入 SQLite，示意如下（非本阶段实现）：
+-- CREATE TABLE pm_tools (
+--   slug TEXT PRIMARY KEY,
+--   name TEXT NOT NULL,
+--   process_group TEXT,
+--   knowledge_area TEXT,
+--   summary TEXT,
+--   payload_json TEXT NOT NULL
+-- );
 ```
 
 ### 4.4 缓存设计
 
-- MVP 无 Redis
-- 可选：启动时把 tools 摘要列表缓存到内存（一次加载）
+- **策略**：进程内缓存已解析的 `tools.json`（启动加载一次即可）  
+- **不做** Redis  
 
 ### 4.5 数据访问层
 
-- `ToolsRepository.load()` / `findBySlug()` / `search(keyword)`
-- `SessionStore`（可先用简单可变对象，便于测）
-- `MarkdownExporter.write(docType, payload) → path`
-- 不使用 ORM
+- **ToolsRepository**：`list_summaries()`, `search(keyword)`, `get_by_slug(slug)`, `exists(slug)`  
+- **DraftStore**：挂在 `SessionState` 上的读写方法  
+- **不设 ORM**
 
 ---
 
 ## 5. 接口定义 (API Specs)
 
+> 无 HTTP API。契约分两类：**CLI 用户协议** 与 **Tool / LLM 协议**。
+
 ### 5.1 接口规范
 
-本 MVP **无对外 HTTP API**。契约分两层：
-
-1. **LLM Tool 契约**（模型可见）：OpenAI function calling schema  
-2. **进程内模块契约**（开发者可见）：TypeScript 函数签名  
-
-若未来挂 Web，可把 Loop 包成 `POST /v1/chat`，本阶段不实现。
+- **风格**：进程内 Tool Calling（OpenAI function tools 形状）  
+- **命名**：`snake_case` 工具名  
+- **版本**：随仓库 semver；MVP 不版控 URL  
+- **认证**：LLM 侧 API Key；CLI 无用户鉴权  
 
 ### 5.2 核心 Tool 契约
 
-统一规范：
-- `name`：snake_case  
-- `description`：含何时用 / 何时不用  
-- 返回：`string`（给模型读的观察结果；失败时写纠正指令）
-
 #### `search_tools`
-- **描述**：按关键词检索工具库摘要；不确定用哪个工具时先搜。不要用于起草文档。
-- **参数**：`{ query: string }`
-- **成功返回**：JSON 字符串列表（slug, name, summary, knowledgeArea）
-
-#### `get_tool_detail`
-- **描述**：查看某工具完整步骤与模板字段。不要用本工具写入文件。
-- **参数**：`{ slug: string }`
-- **失败**：slug 不存在 → 提示从 search 结果选
+- **描述**：按关键词检索工具库摘要  
+- **参数**：`{ "query": string }`  
+- **返回**（给模型的 content 文本/JSON 字符串）：最多 N 条 `{slug,name,summary,process_group,knowledge_area}`  
 
 #### `recommend_tools`
-- **描述**：根据用户卡点推荐 1～3 个库内工具；必须返回库内 slug。信息不足应先向用户澄清（非本工具职责时可直接返回需澄清标记）。
-- **参数**：`{ question: string, max?: number }`（max 默认 3）
-- **返回**：`{ reasoning, tools: [{slug,name,summary,processGroup,knowledgeArea}] }`
+- **描述**：根据用户卡点推荐 1～3 个库内工具；必须校验 slug  
+- **参数**：`{ "question": string, "context": string? }`  
+- **返回**：`{ reasoning, tools: [...] }`；非法 slug 已过滤；若空则带纠正指令  
+
+#### `get_tool_detail`
+- **参数**：`{ "slug": string }`  
+- **返回**：步骤、场景、模板字段概要；未知 slug → 错误指令  
 
 #### `draft_project_charter`
-- **描述**：仅用于更新「项目章程」会话草稿。不要用于其他文档。字段可分多次调用合并。未知填「待补充」。
-- **参数**：部分字段可选的 object（对齐 templateFields）
-- **副作用**：更新 `draftCharter`，mode→drafting_charter/preview
-- **返回**：当前草稿摘要
+- **参数**：部分字段 patch（皆可选字符串）  
+- **规则**：合并进 `charter_draft`；空值可写「待补充」  
+- **返回**：当前草稿摘要  
 
 #### `draft_risk_register`
-- **描述**：仅用于风险登记册；默认累计不超过 3 条。不要起草章程或其他工具。
-- **参数**：`{ risks: RiskRow[] }` 或 `add_risk: RiskRow`
-- **副作用**：更新 `draftRisks`
-- **返回**：当前条目摘要
+- **参数**：`{ "items": RiskItem[] }` 或单条 upsert  
+- **规则**：总数建议 ≤3（超过可警告但仍接受少量超额则截断或提示，**推荐：>3 时返回指令「MVP 请先保留 1～3 条」**）  
+- **返回**：当前条目列表摘要  
 
 #### `export_markdown`
-- **描述**：将当前章程或风险草稿导出到 output/。仅当草稿存在时使用。禁止自定义绝对路径。
-- **参数**：`{ docType: "project_charter" | "risk_register" }`
-- **成功返回**：文件绝对路径
-- **失败**：无草稿 / 无写权限 → 纠正指令
+- **参数**：`{ "doc_type": "charter" | "risk_register" }`  
+- **返回**：`{ "path": "<abs or rel path>" }` 或写盘失败指令  
+- **安全**：仅写 `OUTPUT_DIR`  
 
-### 5.3 进程内「API」示意（非 HTTP）
+### 5.3 CLI「伪接口」
 
-**ChatMessage / LLMClient.complete**
-- **入参**：`{ messages, tools, model? }`
-- **出参**：`{ content, tool_calls[] }`
+| 用户输入 | 行为 |
+|----------|------|
+| `/quit` `退出` | 结束进程 |
+| `/help` `帮助` | 打印能力说明 |
+| 其他文本 | `handle_user_turn` |
 
-**AgentLoop.runTurn**
-- **入参**：`userText: string`
-- **出参**：`{ assistantText: string }`
+### 5.4 业务逻辑与日志
 
-### 5.4 业务逻辑
-
-- **鉴权**：依赖本机 `.env` API Key；无用户体系
-- **业务规则**：可起草白名单；推荐 slug 校验；导出路径限制 `output/`
-- **日志**：`[tool] name args_summary → ok|err message`；禁止打印完整 API Key
+- **鉴权**：无多用户；导出路径白名单即「权限」  
+- **业务规则**：可起草白名单仅 charter/risk；推荐必须库内工具；澄清 ≤2  
+- **日志**：`[tool] name args_summary → ok|err`；API 错误类型；禁止打印完整 API Key  
 
 ---
 
@@ -346,96 +348,91 @@ CREATE TABLE sessions (
 
 ### 6.1 环境变量配置
 
-| 变量 | 必填 | 说明 |
-|------|------|------|
-| `DEEPSEEK_API_KEY` | 主路径必填其一 | DeepSeek |
-| `OPENAI_API_KEY` | 可选 | 兼容备选 |
-| `LLM_PROVIDER` | 可选 | `deepseek` \| `openai`，默认 deepseek |
-| `LLM_MODEL` | 可选 | 默认与 Provider 匹配 |
-| `MAX_AGENT_ITERATIONS` | 可选 | 默认 10 |
-| `OUTPUT_DIR` | 可选 | 默认 `./output` |
+| 变量 | 说明 |
+|------|------|
+| `DEEPSEEK_API_KEY` | 默认 Provider |
+| `DEEPSEEK_BASE_URL` | 默认 `https://api.deepseek.com` |
+| `DEEPSEEK_MODEL` | 可配置模型 ID |
+| `OPENAI_API_KEY` | 可选备用 |
+| `OUTPUT_DIR` | 默认 `./output` |
+| `MAX_TOOL_ITERATIONS` | 默认 `10` |
 
-- `.env` 本地配置；`.env.example` 只含键名
-- `.gitignore`：`.env`、`output/`（或仅 ignore 内容保留目录）、`node_modules/`
+- `.env` 本地加载；示例用 `.env.example`（无真实密钥）  
+- `.gitignore`：`.env`, `output/`, `__pycache__/`, `.venv/`  
 
 ### 6.2 目录结构
 
-CLI 单体，不做 `client/` + `server/` 双包；逻辑上仍分离 I/O 与 Agent：
-
 ```
 pm-agent/
-├── package.json
-├── tsconfig.json
+├── README.md
+├── pyproject.toml          # uv/pip 项目元数据
 ├── .env.example
 ├── .gitignore
-├── README.md
 ├── data/
-│   └── tools.json          # 自 pm-toolbox 复制/同步
-├── output/                 # 导出目录（可 gitkeep）
+│   └── tools.json          # 自包含工具库
+├── output/                 # 导出目录（gitignore）
 ├── src/
-│   ├── index.ts            # 入口：启动 REPL
-│   ├── cli/
-│   │   ├── repl.ts
-│   │   └── printer.ts
-│   ├── agent/
-│   │   ├── loop.ts
-│   │   ├── session.ts
-│   │   ├── system-prompt.ts
-│   │   └── llm/
-│   │       ├── client.ts
-│   │       └── providers.ts
-│   ├── tools/
-│   │   ├── registry.ts
-│   │   ├── types.ts
-│   │   ├── search-tools.ts
-│   │   ├── get-tool-detail.ts
-│   │   ├── recommend-tools.ts
-│   │   ├── draft-charter.ts
-│   │   ├── draft-risk-register.ts
-│   │   └── export-markdown.ts
-│   ├── data/
-│   │   └── tools-repo.ts
-│   ├── export/
-│   │   └── markdown.ts
-│   └── util/
-│       ├── env.ts
-│       └── logger.ts
+│   └── pm_agent/
+│       ├── __init__.py
+│       ├── __main__.py     # python -m pm_agent
+│       ├── cli.py          # REPL
+│       ├── config.py       # 环境变量
+│       ├── agent/
+│       │   ├── loop.py
+│       │   ├── llm.py
+│       │   ├── session.py
+│       │   └── prompts.py  # 系统提示
+│       ├── tools/
+│       │   ├── registry.py
+│       │   ├── search.py
+│       │   ├── recommend.py
+│       │   ├── detail.py
+│       │   ├── draft_charter.py
+│       │   ├── draft_risk.py
+│       │   └── export_md.py
+│       ├── knowledge/
+│       │   └── repo.py
+│       └── export/
+│           └── render.py   # MD 模板渲染
 └── tests/
-    ├── loop.test.ts
-    ├── recommend.test.ts
-    └── export-path.test.ts
+    ├── test_repo.py
+    ├── test_path_guard.py
+    ├── test_draft_merge.py
+    └── test_loop_limits.py
 ```
+
+> 无 `client/` / `server/` 分仓；单体 `src/pm_agent` 内部分层即分离。
 
 ### 6.3 代码规范
 
-- TypeScript `strict: true`
-- 建议 ESLint + Prettier（可阶段 1 后补）
-- 工具 description 变更视为产品行为变更，需人工过目
-- 安全：`export_markdown` resolve 路径必须 `startsWith(outputRoot)`
+- **风格**：`ruff` format + lint  
+- **类型**：尽量加 type hints；Pydantic 模型边界  
+- **测试**：pytest；优先测纯函数与路径守卫  
+- **审查**：自学项目以 PRD 验收清单自检为主  
 
 ---
 
-## 7. 架构深度审校
+## 7. 附录
 
-### ① 前后端分离审查
-- CLI 与 Agent 分模块：通过  
-- 无 HTTP 契约需求：标注 N/A，Tool 契约已定义：通过  
+### 7.1 实现对照《从零到一造 Agent》
 
-### ② 解耦与模块化审查
-- 业务写入（草稿/文件）在 tools，不在 CLI：通过  
-- tools.json 经 Repository，不散落 hardcode：通过  
+| 书中概念 | 本方案落点 |
+|----------|------------|
+| Agent Loop | `agent/loop.py` |
+| 迭代上限 / 可见性 | `MAX_TOOL_ITERATIONS` + `[tool]` 日志 |
+| 工具六字段 | Registry 中 name/description/parameters/category/pure/execute |
+| 错误即指令 | tool 失败返回结构化中文指引 |
+| 工具分层加载 | search 摘要 + get_tool_detail |
+| 路径/副作用安全 | export 白名单；pure/impure 标记（并行非 MVP） |
 
-### ③ 极致裁剪自检
-- 无 DB/无 MCP/无 Web：通过  
-- 推荐与校验合并进 `recommend_tools`，避免重复逻辑：建议实现时 DRY  
-- 数据模型稳定：Tool schema 来自现成 JSON，接口不易因微调连锁爆炸：通过  
+### 7.2 参考资料
 
----
+- DeepSeek Tool Calls 文档  
+- Anthropic Build a tool-using agent（循环模式）  
+- 本项目 PRD / 技术选型调研  
 
-## 8. 附录
+### 7.3 版本历史
 
-- **参考资料**：
-  - DeepSeek Tool Calls 官方文档
-  - Anthropic Tool-using agent loop 教程（消息追加模式）
-  - 《从零到一造 Agent》循环/工具/错误处理要点
-  - `pm-toolbox` `data/tools.json` 与 recommend API
+| 版本 | 日期 | 说明 |
+|------|------|------|
+| v1.0 | 2026-07-14 | 基于 Python 选型与定稿 PRD 生成；同日随开发计划一并确认 |
