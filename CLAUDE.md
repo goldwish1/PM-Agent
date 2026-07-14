@@ -1,7 +1,3 @@
-# [CLAUDE.md](http://CLAUDE.md)
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
 ## 项目目的
 
 PM Agent 是一个面向个人项目经理的 CLI 工具。用户可通过终端多轮对话：
