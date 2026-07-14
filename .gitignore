@@ -1,0 +1,28 @@
+# 环境与密钥
+.env
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# 导出产物
+output/*
+!output/.gitkeep
+
+# IDE / 系统
+.idea/
+.vscode/
+*.swp
+.DS_Store

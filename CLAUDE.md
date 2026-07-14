@@ -5,102 +5,131 @@ PM Agent 是一个面向个人项目经理的 CLI 工具。用户可通过终端
 - 根据工作卡点获得 PMBOK 工具推荐（如项目章程、风险登记册等，约 39 个工具）
 - 自动起草「项目章程」和「风险登记册」Markdown 文档并导出
 
-技术栈：TypeScript + Node.js `readline/promises` + DeepSeek API（OpenAI SDK 兼容）
+技术栈：Python 3.11+ + `openai` SDK → DeepSeek API
 
 ## 项目状态
 
-当前处于 **设计/规划阶段**，尚未开始编码。所有需求、技术方案、开发计划已在 `doc/` 目录中完成。
+当前处于 **MVP 可演示完成**（阶段 0～5）。需求/方案见 `doc/`；实现见 `src/pm_agent/`。
 
 ## 关键文档
 
 - `doc/PM-Agent-MVP-PRD.md` — 产品需求文档
-- `doc/PM-Agent-技术方案.md` — 技术架构方案（单体进程、Agent Loop、Tool Registry）
-- `doc/PM-Agent-技术选型调研-2026-07-14.md` — 技术选型调研
-- `doc/PM-Agent-开发计划.md` — 分阶段开发计划（4 个阶段）
+- `doc/PM-Agent-技术方案.md` — 技术架构方案（Python、自研 Loop、Tool Registry）
+- `doc/PM-Agent-技术选型调研-2026-07-14.md` — 技术选型调研（含语言从 TS → Python 的修订说明）
+- `doc/PM-Agent-开发计划.md` — 分阶段开发计划（6 个阶段：0～5）
 - `doc/需求孵化.md` — 需求孵化记录
 - `doc/agent_learn.md` — **功能变更与问题解决记录**（见下方说明）
-
-
 
 ## 变更记录要求
 
 每当新增功能或解决问题时，必须在 `doc/agent_learn.md` 中做简要记录：
 
 **新增功能** 需记录：
-
 - 新增加了什么功能
 - 原因
 - 一句话方案
 
 **解决问题** 需记录：
-
 - 遇到的问题
 - 原因
 - 解决方案
 
+## 技术选型
 
+| 层级 | 选型 | 理由 |
+|------|------|------|
+| 语言/运行时 | **Python 3.11+** | Agent 教程/示例多；脚本迭代快；学习摩擦力低 |
+| Agent 编排 | **自研 Loop** + 迭代上限 + `[tool]` 日志 | 练手核心，不上 LangChain/LangGraph |
+| LLM | `openai` Python SDK → DeepSeek（兼容 OpenAI） | Tool Calls 成熟，Provider 可切换 |
+| 校验 | **Pydantic** | 校验 tool arguments，防幻觉字段 |
+| CLI | 标准库 `input()` | 最小可用，零依赖 |
+| 数据 | `data/tools.json` + 内存会话 + `output/` | 无数据库也能闭环 |
+| 配置 | `.env` + `.gitignore` | 密钥安全 |
+| 包管理 | **uv**（推荐）或 pip + venv | 现代 Python 工具链 |
+| 测试 | **pytest** | 优先测纯函数与路径守卫 |
+| 风格 | **ruff**（format + lint） | 统一代码风格 |
 
 ## 目录结构
 
 ```
-.
-├── CLAUDE.md
-├── doc/                     # 设计文档
-│   ├── PM-Agent-MVP-PRD.md
-│   ├── PM-Agent-技术方案.md
-│   ├── PM-Agent-技术选型调研-2026-07-14.md
-│   ├── PM-Agent-开发计划.md
-│   ├── 需求孵化.md
-│   └── agent_learn.md       # 变更记录
-├── data/                    # 工具库数据（tools.json）
-├── src/                     # 源代码
-│   ├── index.ts             # 入口
-│   ├── cli/                 # readline I/O
-│   ├── agent/               # Agent Loop
-│   ├── llm/                 # LLM Client（接口 + DeepSeek/Mock Provider）
-│   ├── tools/               # Tool Registry + 工具实现
-│   └── types/               # 类型定义
-└── output/                  # 导出产物
+pm-agent/
+├── README.md
+├── pyproject.toml          # uv/pip 项目元数据
+├── .env.example
+├── .gitignore
+├── data/
+│   └── tools.json          # 自包含工具库（约 39 个 PMBOK 工具）
+├── output/                 # 导出目录（gitignore）
+├── src/
+│   └── pm_agent/
+│       ├── __init__.py
+│       ├── __main__.py     # python -m pm_agent
+│       ├── cli.py          # REPL（input() 循环）
+│       ├── config.py       # 环境变量
+│       ├── agent/
+│       │   ├── loop.py     # Agent Loop（迭代上限、[tool] 日志）
+│       │   ├── llm.py      # OpenAI 兼容客户端封装
+│       │   ├── session.py  # SessionState（messages, draft, clarify_count）
+│       │   └── prompts.py  # 系统提示词
+│       ├── tools/
+│       │   ├── registry.py # 注册/查找/执行、schema 导出
+│       │   ├── search.py   # search_tools
+│       │   ├── recommend.py# recommend_tools（slug 白名单校验）
+│       │   ├── detail.py   # get_tool_detail
+│       │   ├── draft_charter.py
+│       │   ├── draft_risk.py
+│       │   └── export_md.py# export_markdown（路径白名单）
+│       ├── knowledge/
+│       │   └── repo.py     # ToolsRepository（加载/查询 tools.json）
+│       └── export/
+│           └── render.py   # Markdown 模板渲染
+└── tests/
+    ├── test_repo.py
+    ├── test_path_guard.py
+    ├── test_draft_merge.py
+    └── test_loop_limits.py
 ```
 
+## 开发计划（6 阶段）
 
-
-## 开发计划（4 阶段）
-
-
-| 阶段  | 内容             | 可演示                        |
-| --- | -------------- | -------------------------- |
-| 1   | 工程骨架 + Mock 循环 | `npx tsx src/index.ts` 可交互 |
-| 2   | 真实 LLM + 推荐闭环  | 卡点 → 推荐 1～3 个工具            |
-| 3   | 项目章程起草 + 导出    | 多轮收集 → 预览 → 导出 Markdown    |
-| 4   | 风险登记册 + 边界处理   | 同理起草 + 异常场景                |
-
-
-
+| 阶段 | 内容 | 可演示 |
+|------|------|--------|
+| 0 | 工程骨架 | `uv run python -m pm_agent` 看到欢迎语 |
+| 1 | 假工具 + 可见循环 | CLI 输入 → 看到 `[tool]` 日志（无需 API Key） |
+| 2 | 接真 LLM + Tool Calling | 真实模型调用注册工具 |
+| 3 | 知识库 + 推荐/详情工具 | 「下周立项」→ 推荐含项目章程等 1～3 个工具 |
+| 4 | 起草 + Markdown 导出 | 对话起草章程/风险登记册 → 导出 `output/*.md` |
+| 5 | 打磨与验收 | 对照 PRD 验收清单自测通过 |
 
 ## 开发命令
 
 ```bash
-# 启动开发（使用 Mock Provider）
-LLM_PROVIDER=mock npx tsx src/index.ts
+# 安装依赖
+uv sync
+
+# 启动开发（使用 FakeLLM，无需 API Key）
+USE_FAKE_LLM=true uv run python -m pm_agent
 
 # 启动开发（使用 DeepSeek）
-LLM_PROVIDER=deepseek npx tsx src/index.ts
+uv run python -m pm_agent
+
+# 运行测试
+uv run pytest
+
+# 代码风格检查
+uv run ruff check
 ```
-
-
 
 ## 架构要点
 
 - **单体进程**：CLI 读输入 → Agent Loop 调 LLM → 执行本地 Tool → 更新会话状态/写文件 → 打印回复
-- **Tool Registry**：可增删工具，支持 `search_tools`、`get_tool_detail`、`recommend_tools`、`draft_document` 等
-- **LLM 抽象**：`LLMClient` 接口 + 可切换 Provider（Mock / DeepSeek / OpenAI）
+- **自研 Agent Loop**：`while iter < max_iterations` 循环，`[tool]` 日志可见，迭代上限（默认 10）
+- **Tool Registry**：可增删工具，支持 `search_tools`、`get_tool_detail`、`recommend_tools`、`draft_project_charter`、`draft_risk_register`、`export_markdown`
+- **LLM 抽象**：`LlmClient` 协议统一 FakeLLM 与 RealLLM，通过 `USE_FAKE_LLM` 切换
 - **Mock 先行**：先假 LLM/真工具，再接真实模型
 - **无外部依赖**：无数据库、无 Web 框架、无 HTTP 后端
+- **路径白名单**：`export_markdown` 仅允许写入 `output/` 目录
 
+## 其他要求
 
-
-# 其他要求
-
-- 这是我的个人学习项目，我希望从0到1了解熟悉agent的开发过程，因此文件目录需要高度结构化，符合AI agent的最佳实践
-
+- 这是我的个人学习项目，我希望从 0 到 1 了解熟悉 Agent 的开发过程，因此文件目录需要高度结构化，符合 AI Agent 的最佳实践

@@ -1,0 +1,747 @@
+[
+  {
+    "slug": "project-charter",
+    "name": "项目章程",
+    "name_en": "Project Charter",
+    "process_group": "启动",
+    "knowledge_area": "整合",
+    "summary": "正式授权项目并明确高层目标、约束与成功标准",
+    "description": "项目启动文件，明确项目目的、高层需求、总预算与关键里程碑，是立项授权的核心依据。",
+    "steps": [
+      "明确项目目的与业务依据",
+      "识别发起人与项目经理",
+      "定义高层范围与里程碑",
+      "获得签字授权"
+    ],
+    "scenarios": [
+      "项目启动",
+      "立项授权",
+      "下周要立项"
+    ],
+    "draftable": true
+  },
+  {
+    "slug": "stakeholder-register",
+    "name": "干系人登记册",
+    "name_en": "Stakeholder Register",
+    "process_group": "启动",
+    "knowledge_area": "干系人",
+    "summary": "识别并记录项目干系人及其影响与期望",
+    "description": "登记关键干系人、角色、态度与沟通需求，避免关键决策者缺席。",
+    "steps": [
+      "识别干系人",
+      "评估权力/利益",
+      "记录期望与策略"
+    ],
+    "scenarios": [
+      "干系人不清",
+      "需要开启动会"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "assumption-log",
+    "name": "假设日志",
+    "name_en": "Assumption Log",
+    "process_group": "启动",
+    "knowledge_area": "整合",
+    "summary": "记录项目假设与制约并持续验证",
+    "description": "把未经验证的假设与制约显性化，降低后期翻车风险。",
+    "steps": [
+      "列出关键假设",
+      "标记制约条件",
+      "安排验证责任人"
+    ],
+    "scenarios": [
+      "信息不足却要推进",
+      "假设很多"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "benefits-management-plan",
+    "name": "收益管理计划",
+    "name_en": "Benefits Management Plan",
+    "process_group": "启动",
+    "knowledge_area": "整合",
+    "summary": "定义如何度量与实现项目收益",
+    "description": "说明目标收益、度量指标、实现时间表与责任人。",
+    "steps": [
+      "定义收益指标",
+      "设定实现节奏",
+      "指定责任人"
+    ],
+    "scenarios": [
+      "要讲清业务收益",
+      "立项评审"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "project-management-plan",
+    "name": "项目管理计划",
+    "name_en": "Project Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "整合",
+    "summary": "汇总各分册计划，作为执行与监控基线",
+    "description": "整合范围、进度、成本、质量、风险等分计划，形成单一事实来源。",
+    "steps": [
+      "汇总分计划",
+      "定义基线与变更路径",
+      "获批后冻结版本"
+    ],
+    "scenarios": [
+      "要做整体计划",
+      "多方扯皮无统一口径"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "scope-management-plan",
+    "name": "范围管理计划",
+    "name_en": "Scope Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "范围",
+    "summary": "规定如何定义、确认与控制范围",
+    "description": "明确需求收集、WBS、验收与范围变更流程。",
+    "steps": [
+      "定义范围流程",
+      "明确验收标准责任",
+      "约定变更路径"
+    ],
+    "scenarios": [
+      "范围总变",
+      "验收扯皮"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "requirements-documentation",
+    "name": "需求文件",
+    "name_en": "Requirements Documentation",
+    "process_group": "规划",
+    "knowledge_area": "范围",
+    "summary": "结构化记录已获批需求",
+    "description": "把业务/功能/非功能需求写清楚，作为设计与验收依据。",
+    "steps": [
+      "收集并分类需求",
+      "标注优先级",
+      "确认与基线化"
+    ],
+    "scenarios": [
+      "需求很乱",
+      "开发口径不一致"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "requirements-traceability-matrix",
+    "name": "需求跟踪矩阵",
+    "name_en": "Requirements Traceability Matrix",
+    "process_group": "规划",
+    "knowledge_area": "范围",
+    "summary": "把需求追溯到交付物、测试与验收",
+    "description": "建立需求↔设计↔测试链路，防止遗漏与范围漂移。",
+    "steps": [
+      "建立矩阵列",
+      "映射交付与测试",
+      "定期核对"
+    ],
+    "scenarios": [
+      "验收对不上需求",
+      "变更难追溯"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "project-scope-statement",
+    "name": "项目范围说明书",
+    "name_en": "Project Scope Statement",
+    "process_group": "规划",
+    "knowledge_area": "范围",
+    "summary": "详细描述项目范围、边界与验收标准",
+    "description": "写清包含与不包含、交付物与验收条件。",
+    "steps": [
+      "写高层范围",
+      "列出交付物",
+      "定义验收标准",
+      "声明排除项"
+    ],
+    "scenarios": [
+      "范围边界不清",
+      "甲乙扯皮"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "wbs",
+    "name": "工作分解结构",
+    "name_en": "Work Breakdown Structure",
+    "process_group": "规划",
+    "knowledge_area": "范围",
+    "summary": "把可交付成果分解为可管理的工作包",
+    "description": "用层级分解确保工作完整、可估算、可追踪。",
+    "steps": [
+      "识别主要交付物",
+      "逐层分解",
+      "定义工作包与编码"
+    ],
+    "scenarios": [
+      "任务太大估不准",
+      "责任不清"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "schedule-management-plan",
+    "name": "进度管理计划",
+    "name_en": "Schedule Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "进度",
+    "summary": "规定如何制定、监控与控制进度",
+    "description": "定义进度方法、工具、阈值与变更审批。",
+    "steps": [
+      "选定进度方法",
+      "定义更新频率",
+      "约定延误升级"
+    ],
+    "scenarios": [
+      "进度常延误",
+      "汇报口径乱"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "activity-list",
+    "name": "活动清单",
+    "name_en": "Activity List",
+    "process_group": "规划",
+    "knowledge_area": "进度",
+    "summary": "列出完成工作包所需的全部活动",
+    "description": "把 WBS 工作包展开为可排程活动。",
+    "steps": [
+      "基于 WBS 识别活动",
+      "补充属性",
+      "评审完整性"
+    ],
+    "scenarios": [
+      "不知从哪排期",
+      "遗漏任务"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "network-diagram",
+    "name": "项目网络图",
+    "name_en": "Project Schedule Network Diagram",
+    "process_group": "规划",
+    "knowledge_area": "进度",
+    "summary": "展示活动逻辑关系与关键路径",
+    "description": "用前导关系识别关键路径与并行机会。",
+    "steps": [
+      "定义依赖",
+      "绘制网络",
+      "识别关键路径"
+    ],
+    "scenarios": [
+      "想压缩工期",
+      "弄清先后依赖"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "gantt-chart",
+    "name": "进度计划（甘特图）",
+    "name_en": "Schedule / Gantt Chart",
+    "process_group": "规划",
+    "knowledge_area": "进度",
+    "summary": "用时间轴呈现活动开始/结束与里程碑",
+    "description": "直观展示进度、里程碑与责任安排。",
+    "steps": [
+      "录入活动与工期",
+      "设置依赖",
+      "标注里程碑"
+    ],
+    "scenarios": [
+      "要排期",
+      "要给老板看进度"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "cost-management-plan",
+    "name": "成本管理计划",
+    "name_en": "Cost Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "成本",
+    "summary": "规定成本估算、预算与控制方法",
+    "description": "定义估算精度、成本科目、阈值与阈值规则。",
+    "steps": [
+      "定义估算方法",
+      "设置成本科目",
+      "约定报告与审批"
+    ],
+    "scenarios": [
+      "预算怎么管",
+      "花超了怎么办"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "cost-baseline",
+    "name": "成本基准",
+    "name_en": "Cost Baseline",
+    "process_group": "规划",
+    "knowledge_area": "成本",
+    "summary": "经批准的阶段性预算，用于绩效比较",
+    "description": "形成按时段分布的批准预算（通常含应急储备）。",
+    "steps": [
+      "汇总估算",
+      "分配到时间段",
+      "获批形成基准"
+    ],
+    "scenarios": [
+      "要批预算",
+      "对比实际花费"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "quality-management-plan",
+    "name": "质量管理计划",
+    "name_en": "Quality Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "质量",
+    "summary": "定义质量标准、保证与控制活动",
+    "description": "明确质量目标、检查点与不合格处理。",
+    "steps": [
+      "定义质量标准",
+      "安排保证活动",
+      "设计控制点"
+    ],
+    "scenarios": [
+      "质量事故频发",
+      "验收标准模糊"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "resource-management-plan",
+    "name": "资源管理计划",
+    "name_en": "Resource Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "资源",
+    "summary": "规划团队与实物资源的获取与管理",
+    "description": "说明角色、获取、培训与释放方式。",
+    "steps": [
+      "识别角色技能",
+      "规划获取途径",
+      "定义团队规则"
+    ],
+    "scenarios": [
+      "人不够",
+      "角色冲突"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "raci-matrix",
+    "name": "RACI 矩阵",
+    "name_en": "RACI Matrix",
+    "process_group": "规划",
+    "knowledge_area": "资源",
+    "summary": "澄清活动的负责/审批/咨询/知会关系",
+    "description": "用 RACI 消除职责空白与多方同时决策。",
+    "steps": [
+      "列出关键活动",
+      "分配 R/A/C/I",
+      "与干系人确认"
+    ],
+    "scenarios": [
+      "谁拍板不清楚",
+      "人人负责等于没人负责"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "communications-management-plan",
+    "name": "沟通管理计划",
+    "name_en": "Communications Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "沟通",
+    "summary": "规定说什么、对谁说、何时与何种渠道",
+    "description": "设计会议、报告与升级路径，减少信息噪音。",
+    "steps": [
+      "识别信息需求",
+      "选择渠道频率",
+      "约定升级机制"
+    ],
+    "scenarios": [
+      "会太多",
+      "信息不透明"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "risk-management-plan",
+    "name": "风险管理计划",
+    "name_en": "Risk Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "风险",
+    "summary": "规定风险识别、评估、应对与监控方法",
+    "description": "定义风险类别、评分尺、会议节奏与升级阈值。",
+    "steps": [
+      "定义风险方法",
+      "设评分尺",
+      "安排复盘频率"
+    ],
+    "scenarios": [
+      "要建立风险体系"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "risk-register",
+    "name": "风险登记册",
+    "name_en": "Risk Register",
+    "process_group": "规划",
+    "knowledge_area": "风险",
+    "summary": "记录已识别风险、评估结果与应对措施",
+    "description": "持续维护风险条目、责任人与状态，支撑决策。",
+    "steps": [
+      "识别风险",
+      "评估概率影响",
+      "制定应对",
+      "指定责任人"
+    ],
+    "scenarios": [
+      "担心出事",
+      "风险冒出来了",
+      "不确定因素多"
+    ],
+    "draftable": true
+  },
+  {
+    "slug": "procurement-management-plan",
+    "name": "采购管理计划",
+    "name_en": "Procurement Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "采购",
+    "summary": "规划外采内容、方式与合同策略",
+    "description": "明确自制/外购、招标与合同类型选择。",
+    "steps": [
+      "识别采购包",
+      "选择合同类型",
+      "定义选型流程"
+    ],
+    "scenarios": [
+      "要招供应商",
+      "外采很多"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "stakeholder-engagement-plan",
+    "name": "干系人参与计划",
+    "name_en": "Stakeholder Engagement Plan",
+    "process_group": "规划",
+    "knowledge_area": "干系人",
+    "summary": "规划如何提升干系人支持度",
+    "description": "针对当前/期望参与度设计策略与行动。",
+    "steps": [
+      "评估参与度差距",
+      "设计策略",
+      "安排沟通动作"
+    ],
+    "scenarios": [
+      "老板不支持",
+      "跨部门难推动"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "change-management-plan",
+    "name": "变更管理计划",
+    "name_en": "Change Management Plan",
+    "process_group": "规划",
+    "knowledge_area": "整合",
+    "summary": "规定变更提出、评估、批准与落实流程",
+    "description": "建立变更控制委员会（或等效）与影响分析要求。",
+    "steps": [
+      "定义变更流程",
+      "明确审批角色",
+      "设定文档模板"
+    ],
+    "scenarios": [
+      "变更失控",
+      "口头变更太多"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "deliverables",
+    "name": "可交付成果",
+    "name_en": "Deliverables",
+    "process_group": "执行",
+    "knowledge_area": "范围",
+    "summary": "按计划产出并提交可验收成果",
+    "description": "管理成果完成定义、提交与移交。",
+    "steps": [
+      "按验收标准完成",
+      "组织内部评审",
+      "提交干系人"
+    ],
+    "scenarios": [
+      "要交付了",
+      "交付口径不一致"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "issue-log",
+    "name": "问题日志",
+    "name_en": "Issue Log",
+    "process_group": "执行",
+    "knowledge_area": "整合",
+    "summary": "跟踪当前阻碍项目的问题直至关闭",
+    "description": "记录问题、影响、责任人、到期日与状态。",
+    "steps": [
+      "登记问题",
+      "分配责任人",
+      "跟踪关闭"
+    ],
+    "scenarios": [
+      "卡点一堆",
+      "问题没人跟"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "lessons-learned-register",
+    "name": "经验教训登记册",
+    "name_en": "Lessons Learned Register",
+    "process_group": "执行",
+    "knowledge_area": "整合",
+    "summary": "在过程中持续记录可复用经验",
+    "description": "不要等到收尾才写；边做边提炼。",
+    "steps": [
+      "触发记录点",
+      "写清情境与建议",
+      "分享给团队"
+    ],
+    "scenarios": [
+      "想复盘",
+      "别再踩坑"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "team-charter",
+    "name": "团队章程",
+    "name_en": "Team Charter",
+    "process_group": "执行",
+    "knowledge_area": "资源",
+    "summary": "约定团队目标、规范与决策方式",
+    "description": "对齐价值观、会议规则与冲突处理。",
+    "steps": [
+      "共创目标",
+      "约定规范",
+      "明确决策机制"
+    ],
+    "scenarios": [
+      "新组队",
+      "协作混乱"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "quality-checklists",
+    "name": "质量核对单",
+    "name_en": "Quality Checklists",
+    "process_group": "执行",
+    "knowledge_area": "质量",
+    "summary": "用清单确保关键步骤不遗漏",
+    "description": "把重复性检查项固化，提高一致性。",
+    "steps": [
+      "编制核对项",
+      "执行勾选",
+      "记录偏差"
+    ],
+    "scenarios": [
+      "漏检",
+      "要标准化检查"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "status-report",
+    "name": "项目状态报告",
+    "name_en": "Project Status Report",
+    "process_group": "监控",
+    "knowledge_area": "整合",
+    "summary": "周期性汇总范围/进度/成本/风险状态",
+    "description": "用统一模板向发起人汇报红黄绿与请求决策项。",
+    "steps": [
+      "收集数据",
+      "标健康度",
+      "写清请求"
+    ],
+    "scenarios": [
+      "要周报",
+      "汇报瞎写"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "earned-value-analysis",
+    "name": "挣值分析",
+    "name_en": "Earned Value Analysis",
+    "process_group": "监控",
+    "knowledge_area": "成本",
+    "summary": "用 PV/EV/AC 量化进度与成本绩效",
+    "description": "计算 SPI/CPI 等，判断趋势与预测完工。",
+    "steps": [
+      "采集 PV/EV/AC",
+      "计算指数",
+      "解释趋势"
+    ],
+    "scenarios": [
+      "不知道是否落后",
+      "成本超支难量化"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "variance-analysis",
+    "name": "偏差分析",
+    "name_en": "Variance Analysis",
+    "process_group": "监控",
+    "knowledge_area": "整合",
+    "summary": "解释计划与实际的差异原因",
+    "description": "对范围/进度/成本偏差做原因与纠偏建议。",
+    "steps": [
+      "识别偏差",
+      "分析原因",
+      "提出纠偏"
+    ],
+    "scenarios": [
+      "实际偏离计划",
+      "要解释差异"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "change-request",
+    "name": "变更请求",
+    "name_en": "Change Request",
+    "process_group": "监控",
+    "knowledge_area": "整合",
+    "summary": "正式提出对基线的变更",
+    "description": "描述变更内容、理由、影响与建议决策。",
+    "steps": [
+      "描述变更",
+      "评估影响",
+      "提交审批"
+    ],
+    "scenarios": [
+      "需求变了",
+      "要改基线"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "risk-report",
+    "name": "风险报告",
+    "name_en": "Risk Report",
+    "process_group": "监控",
+    "knowledge_area": "风险",
+    "summary": "汇总整体风险态势与高优先级风险",
+    "description": "向决策者呈现风险趋势与需升级事项。",
+    "steps": [
+      "汇总高优先级风险",
+      "说明应对进展",
+      "提出决策请求"
+    ],
+    "scenarios": [
+      "风险会上要材料",
+      "发起人要风险态势"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "final-report",
+    "name": "最终报告",
+    "name_en": "Final Report",
+    "process_group": "收尾",
+    "knowledge_area": "整合",
+    "summary": "总结项目绩效、成果与经验",
+    "description": "对照目标说明完成情况、偏差与建议。",
+    "steps": [
+      "汇总绩效",
+      "总结经验",
+      "提出后续建议"
+    ],
+    "scenarios": [
+      "项目要结项",
+      "写总结"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "project-closure-document",
+    "name": "项目收尾文件",
+    "name_en": "Project Closure Document",
+    "process_group": "收尾",
+    "knowledge_area": "整合",
+    "summary": "正式确认项目关闭并释放资源",
+    "description": "完成行政收尾、合同收尾与资源释放清单。",
+    "steps": [
+      "核对验收完成",
+      "关闭合同与账户",
+      "归档并释放资源"
+    ],
+    "scenarios": [
+      "要正式结项",
+      "资源还占着"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "acceptance-document",
+    "name": "验收文件",
+    "name_en": "Acceptance Document",
+    "process_group": "收尾",
+    "knowledge_area": "范围",
+    "summary": "记录客户/发起人对交付物的正式验收",
+    "description": "固化验收范围、结果与签字，作为关闭依据。",
+    "steps": [
+      "准备验收包",
+      "组织验收",
+      "取得签字"
+    ],
+    "scenarios": [
+      "要验收签字",
+      "交付有争议"
+    ],
+    "draftable": false
+  },
+  {
+    "slug": "transition-plan",
+    "name": "移交计划",
+    "name_en": "Transition Plan",
+    "process_group": "收尾",
+    "knowledge_area": "整合",
+    "summary": "规划成果移交给运营/维护团队",
+    "description": "明确移交内容、培训、支持窗口与责任切换。",
+    "steps": [
+      "列出移交清单",
+      "安排培训",
+      "确认支持责任"
+    ],
+    "scenarios": [
+      "上线后谁维护",
+      "交接不清"
+    ],
+    "draftable": false
+  }
+]
