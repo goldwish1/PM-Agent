@@ -335,6 +335,8 @@ stateDiagram-v2
 |----------|------|
 | `/quit` | 结束进程 |
 | `/help` | 打印能力说明 |
+| `/debug` | 切换终端 `[llm]` 摘要 on/off |
+| `/dump` | 切换 `output/debug/*.json` 落盘 on/off |
 | 其他文本 | `handle_user_turn` |
 
 元指令仅识别上述 slash 规范名（无中文/英文关键词别名）；交互终端下以 `/` 开头可前缀补全。
@@ -343,7 +345,8 @@ stateDiagram-v2
 
 - **鉴权**：无多用户；导出路径白名单即「权限」  
 - **业务规则**：可起草白名单仅 charter/risk；推荐必须库内工具；澄清 ≤2  
-- **日志**：`[tool] name args_summary → ok|err`；API 错误类型；禁止打印完整 API Key  
+- **日志**：`[tool] name args_summary → ok|err`；`[llm]`（`PMBOX_DEBUG` 或 `/debug`）；API 错误类型；禁止打印完整 API Key  
+- **落盘**：默认将每次用户回合写入 `OUTPUT_DIR/debug/turn-NNN.json`（含 `iterations[]`；`PMBOX_DEBUG_DUMP=0` 或 `/dump` 可关）  
 
 ---
 
@@ -359,6 +362,8 @@ stateDiagram-v2
 | `OPENAI_API_KEY` | 可选备用 |
 | `OUTPUT_DIR` | 默认 `./output` |
 | `MAX_TOOL_ITERATIONS` | 默认 `10` |
+| `PMBOX_DEBUG` | 终端 `[llm]` 摘要；默认 off；`1` 开启 |
+| `PMBOX_DEBUG_DUMP` | 每用户回合 JSON 落盘（`turn-NNN.json`）；**默认 on**；`0`/`false` 关闭 |
 
 - `.env` 本地加载；示例用 `.env.example`（无真实密钥）  
 - `.gitignore`：`.env`, `output/`, `__pycache__/`, `.venv/`  

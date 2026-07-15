@@ -2,6 +2,18 @@
 
 ## 新增功能
 
+### 2026-07-15 · debug 落盘改为每 turn 一个 JSON
+
+- **遇到的问题**：每次 `llm.complete` 写 `turn-NNN-iter-MM.json` 且重复拷贝全量 messages，回放一轮用户对话要开多个文件。
+- **原因**：L2 按「单次 API 调用」落盘，未按用户回合聚合。
+- **解决方案**：`TurnDebugDump` 写 `turn-NNN.json`，`iterations[]` 累加每次调用；回合结束写入 `final_assistant` + messages 快照 + `usage_total`。
+
+### 2026-07-15 · LLM 调试观测（L1 终端 + L2 落盘）
+
+- **新增加了什么功能**：每次 `llm.complete` 可观测输入/输出摘要与 token 用量；默认将完整 messages 写入 `output/debug/`；支持 `/debug`、`/dump` 与 `PMBOX_DEBUG` / `PMBOX_DEBUG_DUMP`。
+- **原因**：开发阶段需回放发给模型的上下文与用量，持续迭代 prompt / tool / loop。
+- **一句话方案**：`complete` 返回 `usage`；`debug_log` 打印 `[llm]` 并 dump JSON；CLI 局部开关 + dump 默认 on。
+
 ### 2026-07-15 · 交互终端 slash 命令前缀补全
 
 - **新增加了什么功能**：TTY 下输入 `/` 或 `/h` 边打边出候选，Tab 可补全 `/help`、`/quit`。

@@ -25,7 +25,7 @@ class LlmClient(Protocol):
         messages: list[dict[str, Any]],
         tools: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
-        """返回统一形状：{"content": str|None, "tool_calls": list|None}。"""
+        """返回统一形状：{"content", "tool_calls", "usage"}。"""
         ...
 
 
@@ -432,6 +432,7 @@ class FakeLlmClient:
             return {
                 "content": "（假模型剧本已用尽，结束本轮。）",
                 "tool_calls": None,
+                "usage": None,
             }
 
         turn = self._script[self._index]
@@ -449,11 +450,12 @@ class FakeLlmClient:
                         "arguments": raw.get("arguments") or {},
                     }
                 )
-            return {"content": content, "tool_calls": normalized}
+            return {"content": content, "tool_calls": normalized, "usage": None}
 
         return {
             "content": content if content is not None else "",
             "tool_calls": None,
+            "usage": None,
         }
 
 
@@ -511,6 +513,28 @@ def _parse_tool_arguments(raw: str | None) -> dict[str, Any]:
     if isinstance(parsed, dict):
         return parsed
     return {"_raw": parsed}
+
+
+def _extract_usage(response: Any) -> dict[str, int] | None:
+    """从 OpenAI 兼容 response.usage 提取 token 计数。"""
+    usage = getattr(response, "usage", None)
+    if usage is None:
+        return None
+    prompt = getattr(usage, "prompt_tokens", None)
+    completion = getattr(usage, "completion_tokens", None)
+    total = getattr(usage, "total_tokens", None)
+    if prompt is None and completion is None and total is None:
+        return None
+    out: dict[str, int] = {}
+    if prompt is not None:
+        out["prompt_tokens"] = int(prompt)
+    if completion is not None:
+        out["completion_tokens"] = int(completion)
+    if total is not None:
+        out["total_tokens"] = int(total)
+    elif "prompt_tokens" in out and "completion_tokens" in out:
+        out["total_tokens"] = out["prompt_tokens"] + out["completion_tokens"]
+    return out or None
 
 
 def _normalize_messages_for_api(
@@ -575,14 +599,20 @@ class OpenAICompatibleClient:
         except Exception as exc:
             raise classify_api_error(exc) from exc
 
+        usage = _extract_usage(response)
+
         if not response.choices:
-            return {"content": "（模型未返回任何 choice。）", "tool_calls": None}
+            return {
+                "content": "（模型未返回任何 choice。）",
+                "tool_calls": None,
+                "usage": usage,
+            }
 
         message = response.choices[0].message
         content = message.content
         raw_calls = getattr(message, "tool_calls", None) or []
         if not raw_calls:
-            return {"content": content, "tool_calls": None}
+            return {"content": content, "tool_calls": None, "usage": usage}
 
         tool_calls: list[dict[str, Any]] = []
         for tc in raw_calls:
@@ -596,7 +626,7 @@ class OpenAICompatibleClient:
                     "arguments": _parse_tool_arguments(arguments),
                 }
             )
-        return {"content": content, "tool_calls": tool_calls}
+        return {"content": content, "tool_calls": tool_calls, "usage": usage}
 
 
 def build_llm_client(

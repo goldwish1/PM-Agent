@@ -15,7 +15,7 @@ from pm_agent.cli_input import (
 
 def test_matching_slash_root() -> None:
     cmds = [c for c, _ in matching_slash_commands("/")]
-    assert cmds == ["/help", "/quit"]
+    assert cmds == ["/help", "/quit", "/debug", "/dump"]
 
 
 def test_matching_slash_help_prefix() -> None:
@@ -26,6 +26,16 @@ def test_matching_slash_help_prefix() -> None:
 def test_matching_slash_quit_prefix() -> None:
     cmds = [c for c, _ in matching_slash_commands("/q")]
     assert cmds == ["/quit"]
+
+
+def test_matching_slash_dump_prefix() -> None:
+    cmds = [c for c, _ in matching_slash_commands("/du")]
+    assert cmds == ["/dump"]
+
+
+def test_matching_slash_d_prefix() -> None:
+    cmds = [c for c, _ in matching_slash_commands("/d")]
+    assert cmds == ["/debug", "/dump"]
 
 
 def test_matching_non_slash_empty() -> None:

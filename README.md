@@ -18,7 +18,9 @@ cp .env.example .env
 # 使用真模型时：编辑 .env，将 DEEPSEEK_API_KEY 换成真实密钥
 ```
 
-环境变量说明见 `.env.example`（`USE_FAKE_LLM`、`DEEPSEEK_*`、`OUTPUT_DIR`、`MAX_TOOL_ITERATIONS`）。
+环境变量说明见 `.env.example`（`USE_FAKE_LLM`、`DEEPSEEK_*`、`OUTPUT_DIR`、`MAX_TOOL_ITERATIONS`、`PMBOX_DEBUG`、`PMBOX_DEBUG_DUMP`）。
+
+调试：默认将每轮用户对话写入 `output/debug/turn-NNN.json`（`PMBOX_DEBUG_DUMP=0` 可关）；终端 `[llm]` 摘要默认关，会话内 `/debug` 开启，或 `PMBOX_DEBUG=1`。
 
 ## 启动
 

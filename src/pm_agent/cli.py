@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 
 from pm_agent import __version__
+from pm_agent.agent.debug_log import debug_dir
 from pm_agent.agent.llm import (
     FakeLlmClient,
     LlmClient,
@@ -31,6 +33,7 @@ WELCOME = """\
   · 卡点澄清（≤2 轮）→ 库内推荐 1～3 个工具 → 可查详情
   · 起草章程 / 风险登记册（1～3 条）→ 预览 → 确认后写入 output/
   · FakeLLM / DeepSeek 可切换；工具调用可见 [tool] 日志
+  · /debug · /dump 切换 LLM 摘要与落盘（dump 默认开）
 
 输入 /help 查看指令与演示句，输入 /quit 退出。
 交互终端下以 / 开头可 Tab 补全指令。
@@ -40,6 +43,8 @@ HELP = """\
 可用指令：
   /help · 帮助     显示本说明
   /quit · 退出     结束进程
+  /debug · 调试    切换终端 [llm] 摘要 on/off
+  /dump · 落盘     切换 output/debug JSON 落盘 on/off
 
 交互终端下输入 / 或 /h 可边打边补，Tab 补全完整命令。
 
@@ -72,6 +77,31 @@ def _is_quit(text: str) -> bool:
 
 def _is_help(text: str) -> bool:
     return text == "/help"
+
+
+def _is_debug(text: str) -> bool:
+    return text == "/debug"
+
+
+def _is_dump(text: str) -> bool:
+    return text == "/dump"
+
+
+def _on_off(flag: bool) -> str:
+    return "on" if flag else "off"
+
+
+def _print_debug_status(
+    *,
+    debug_on: bool,
+    dump_on: bool,
+    output_dir: Path,
+) -> None:
+    print(
+        f"[config] debug={_on_off(debug_on)} dump={_on_off(dump_on)} "
+        f"dir={debug_dir(output_dir)}",
+        flush=True,
+    )
 
 
 def _client_for_turn(
@@ -128,6 +158,14 @@ def main() -> None:
             flush=True,
         )
         raise SystemExit(1)
+
+    debug_on = settings.debug_llm
+    dump_on = settings.debug_dump_llm
+    _print_debug_status(
+        debug_on=debug_on,
+        dump_on=dump_on,
+        output_dir=settings.output_dir,
+    )
     print(flush=True)
 
     real_client: LlmClient | None = None
@@ -135,6 +173,7 @@ def main() -> None:
         real_client = build_llm_client(settings)
         assert isinstance(real_client, OpenAICompatibleClient)
 
+    user_turn = 0
     while True:
         try:
             raw = read_user_line("> ").strip()
@@ -154,6 +193,25 @@ def main() -> None:
             _print_help()
             continue
 
+        if _is_debug(raw):
+            debug_on = not debug_on
+            _print_debug_status(
+                debug_on=debug_on,
+                dump_on=dump_on,
+                output_dir=settings.output_dir,
+            )
+            continue
+
+        if _is_dump(raw):
+            dump_on = not dump_on
+            _print_debug_status(
+                debug_on=debug_on,
+                dump_on=dump_on,
+                output_dir=settings.output_dir,
+            )
+            continue
+
+        user_turn += 1
         llm = _client_for_turn(
             use_fake=settings.use_fake_llm,
             real_client=real_client,
@@ -165,6 +223,11 @@ def main() -> None:
             llm,
             registry,
             max_iterations=settings.max_tool_iterations,
+            debug_llm=debug_on,
+            debug_dump_llm=dump_on,
+            output_dir=settings.output_dir,
+            user_turn=user_turn,
+            llm_is_fake=settings.use_fake_llm,
         )
         print(f"● {reply}", flush=True)
         print(flush=True)

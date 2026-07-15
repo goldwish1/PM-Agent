@@ -40,6 +40,8 @@ class Settings:
     max_tool_iterations: int
     tools_json_path: Path
     provider_label: str
+    debug_llm: bool
+    debug_dump_llm: bool
     config_notice: str | None = None
 
 
@@ -69,6 +71,20 @@ def _parse_max_iterations() -> int:
         return max(1, int(raw))
     except ValueError:
         return 10
+
+
+def _parse_debug_llm() -> bool:
+    """PMBOX_DEBUG：未设 → False；显式 truthy → True。"""
+    parsed = _parse_bool_env(os.getenv("PMBOX_DEBUG"))
+    return parsed is True
+
+
+def _parse_debug_dump_llm() -> bool:
+    """PMBOX_DEBUG_DUMP：未设 → True；仅显式 falsy → False。"""
+    parsed = _parse_bool_env(os.getenv("PMBOX_DEBUG_DUMP"))
+    if parsed is None:
+        return True
+    return parsed
 
 
 def resolve_use_fake_llm(
@@ -133,5 +149,7 @@ def load_settings() -> Settings:
         max_tool_iterations=_parse_max_iterations(),
         tools_json_path=REPO_ROOT / "data" / "tools.json",
         provider_label=provider_label,
+        debug_llm=_parse_debug_llm(),
+        debug_dump_llm=_parse_debug_dump_llm(),
         config_notice=notice,
     )
