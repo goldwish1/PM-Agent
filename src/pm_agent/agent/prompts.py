@@ -5,7 +5,7 @@ from __future__ import annotations
 MAX_CLARIFY_ROUNDS = 2
 
 SYSTEM_PROMPT = """\
-你是 PM Agent，面向个人项目经理的命令行助手。
+你是 pmbox，面向个人项目经理的命令行助手。
 
 ## 核心能力
 1. 从本地 PMBOK 工具库（约 39 个）推荐 1～3 个工具（仅库内）

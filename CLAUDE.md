@@ -94,7 +94,7 @@ pm-agent/
 
 | 阶段 | 内容 | 可演示 |
 |------|------|--------|
-| 0 | 工程骨架 | `uv run python -m pm_agent` 看到欢迎语 |
+| 0 | 工程骨架 | `uv run pmbox` 看到欢迎语 |
 | 1 | 假工具 + 可见循环 | CLI 输入 → 看到 `[tool]` 日志（无需 API Key） |
 | 2 | 接真 LLM + Tool Calling | 真实模型调用注册工具 |
 | 3 | 知识库 + 推荐/详情工具 | 「下周立项」→ 推荐含项目章程等 1～3 个工具 |
@@ -108,10 +108,12 @@ pm-agent/
 uv sync
 
 # 启动开发（使用 FakeLLM，无需 API Key）
-USE_FAKE_LLM=true uv run python -m pm_agent
+USE_FAKE_LLM=true uv run pmbox
 
 # 启动开发（使用 DeepSeek）
-uv run python -m pm_agent
+uv run pmbox
+
+# 等价：uv run python -m pm_agent
 
 # 运行测试
 uv run pytest

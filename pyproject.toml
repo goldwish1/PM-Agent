@@ -17,7 +17,7 @@ dev = [
 ]
 
 [project.scripts]
-pm-agent = "pm_agent.cli:main"
+pmbox = "pm_agent.cli:main"
 
 [build-system]
 requires = ["hatchling"]

@@ -43,7 +43,7 @@ def render_charter_markdown(draft: CharterDraft) -> str:
 {d["signature"]}
 
 ---
-*由 PM Agent 导出；可直接在编辑器中修改后发给发起人。*
+*由 pmbox 导出；可直接在编辑器中修改后发给发起人。*
 """
 
 
@@ -73,5 +73,5 @@ def render_risk_register_markdown(draft: RiskRegisterDraft) -> str:
 
 {body}
 ---
-*由 PM Agent 导出；MVP 建议保留 1～3 条，细改可在本文件中直接编辑。*
+*由 pmbox 导出；MVP 建议保留 1～3 条，细改可在本文件中直接编辑。*
 """

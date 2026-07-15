@@ -2,6 +2,12 @@
 
 ## 新增功能
 
+### 2026-07-15 · CLI 对外名与入口改为 pmbox
+
+- **新增加了什么功能**：终端命令与产品名统一为 `pmbox`（欢迎语、系统提示、导出页脚）；`[project.scripts]` 入口 `pmbox`。
+- **原因**：产品对外名称从「PM Agent」改为更好记的 CLI 命令。
+- **一句话方案**：保留 Python 包 `pm_agent`；`pyproject.toml` 注册 `pmbox`；运行时文案与 README/开发命令同步；`python -m pm_agent` 仍可用。
+
 ### 2026-07-14 · 适配 NIO OpenAI 兼容网关
 
 - **新增加了什么功能**：默认 `DEEPSEEK_BASE_URL=https://api.deepseek.com/v1`、`DEEPSEEK_MODEL=DeepSeek-V4-Flash`；Real 客户端超时 120s；`.env.example` / README 说明兼容网关。

@@ -19,7 +19,7 @@ from pm_agent.tools.bootstrap import build_registry_from_path
 
 WELCOME = """\
 ╔══════════════════════════════════════════╗
-║           PM Agent  v{version}            ║
+║             pmbox  v{version}             ║
 ╚══════════════════════════════════════════╝
 
 面向个人项目经理的 CLI 助手。
