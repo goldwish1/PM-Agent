@@ -136,7 +136,7 @@ def main() -> None:
 
     while True:
         try:
-            raw = input("你> ").strip()
+            raw = input("> ").strip()
         except (EOFError, KeyboardInterrupt):
             print("\n再见。", flush=True)
             break
@@ -165,7 +165,7 @@ def main() -> None:
             registry,
             max_iterations=settings.max_tool_iterations,
         )
-        print(f"助手> {reply}", flush=True)
+        print(f"● {reply}", flush=True)
         print(flush=True)
 
 
