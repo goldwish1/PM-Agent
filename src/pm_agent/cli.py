@@ -14,6 +14,7 @@ from pm_agent.agent.llm import (
 )
 from pm_agent.agent.loop import handle_user_turn
 from pm_agent.agent.session import SessionState
+from pm_agent.cli_input import read_user_line
 from pm_agent.config import ConfigError, load_settings
 from pm_agent.tools.bootstrap import build_registry_from_path
 
@@ -32,12 +33,15 @@ WELCOME = """\
   · FakeLLM / DeepSeek 可切换；工具调用可见 [tool] 日志
 
 输入 /help 查看指令与演示句，输入 /quit 退出。
+交互终端下以 / 开头可 Tab 补全指令。
 """
 
 HELP = """\
 可用指令：
   /help · 帮助     显示本说明
   /quit · 退出     结束进程
+
+交互终端下输入 / 或 /h 可边打边补，Tab 补全完整命令。
 
 演示句（Fake / 真模型均可试）：
   · 「下周立项，不知道从哪下手」→ 推荐含项目章程
@@ -53,9 +57,6 @@ EMPTY_INPUT_HINT = (
     "请用一句话描述你当前的项目卡点，例如：下周要立项还没授权。"
 )
 
-QUIT_COMMANDS = frozenset({"/quit", "quit", "exit", "退出", "q"})
-HELP_COMMANDS = frozenset({"/help", "help", "帮助", "?"})
-
 
 def _print_welcome() -> None:
     print(WELCOME.format(version=__version__), flush=True)
@@ -66,11 +67,11 @@ def _print_help() -> None:
 
 
 def _is_quit(text: str) -> bool:
-    return text.lower() in QUIT_COMMANDS or text in QUIT_COMMANDS
+    return text == "/quit"
 
 
 def _is_help(text: str) -> bool:
-    return text.lower() in HELP_COMMANDS or text in HELP_COMMANDS
+    return text == "/help"
 
 
 def _client_for_turn(
@@ -136,7 +137,7 @@ def main() -> None:
 
     while True:
         try:
-            raw = input("> ").strip()
+            raw = read_user_line("> ").strip()
         except (EOFError, KeyboardInterrupt):
             print("\n再见。", flush=True)
             break
