@@ -93,6 +93,7 @@ printf '帮我起草 WBS\n/quit\n' | USE_FAKE_LLM=true uv run pmbox
 ## CLI 指令
 
 交互终端下输入 `/` 或 `/h` 可边打边补，Tab 补全完整命令（管道输入无补全菜单）。
+交互终端下输入 `@` 路径前缀时，可递归补全当前工作目录下的 `.md`/`.txt` 文件。
 
 输入中可用 `@./notes.md` 附带本地 `.md`/`.txt`（发送前显示 `[attach]`），辅助更准确的工具推荐。
 

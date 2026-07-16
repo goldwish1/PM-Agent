@@ -39,10 +39,10 @@ WELCOME = """\
   · 起草章程 / 风险登记册（1～3 条）→ 预览 → 确认后写入 output/
   · FakeLLM / DeepSeek 可切换；Agent 循环过程日志默认可见
   · /debug · /dump 切换 LLM 摘要与落盘（dump 默认开）
-  · 输入中用 @./notes.md 附带 .md/.txt，辅助更准推荐
+  · 输入中用 @./notes.md 附带 .md/.txt；交互终端下 @ 可 Tab 补全文件
 
 输入 /help 查看指令与演示句，输入 /quit 退出。
-交互终端下以 / 开头可 Tab 补全指令。
+交互终端下以 / 开头可补全指令，以 @ 开头可补全 .md/.txt 文件。
 """
 
 HELP = """\
@@ -53,6 +53,7 @@ HELP = """\
   /dump · 落盘     切换 output/debug JSON 落盘 on/off
 
 交互终端下输入 / 或 /h 可边打边补，Tab 补全完整命令。
+输入 @ 路径前缀时，会递归提示当前工作目录下的 .md/.txt 文件。
 
 演示句（Fake / 真模型均可试）：
   · 「下周立项，不知道从哪下手」→ 推荐含项目章程
