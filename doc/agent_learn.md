@@ -2,11 +2,11 @@
 
 ## 新增功能
 
-### 2026-07-16 · resolve_attachments 组装注入文本
+### 2026-07-16 · CLI @ 附带材料辅助推荐
 
-- **新增加了什么功能**：`AttachResult` / `resolve_attachments` / `format_attach_line`：剥离 @ 后拼自然语言 + 成功附件块，并格式化 `[attach]` 行。
-- **原因**：CLI 注入附件材料前需统一组装预算与注入文本（Task 4 再接线）。
-- **一句话方案**：按 mention 顺序 `load_attachment` 扣减合计预算；有成功项时拼 `---`/`[附件 n]` 块；`should_enter_loop` 看非空 user_text 或任一 ok。
+- **新增加了什么功能**：输入 `@路径` 附带 `.md/.txt`；CLI 打印 `[attach]` 并将正文注入本轮消息，prompt 引导少问快荐。
+- **原因**：用户常有卡点相关纪要，纯对话澄清成本高。
+- **一句话方案**：`cli_attach` 解析/截断/组装 + CLI 接入；不新增通用读盘工具。
 
 ### 2026-07-16 · tools 按业务域分包
 

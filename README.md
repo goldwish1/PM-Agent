@@ -94,6 +94,8 @@ printf '帮我起草 WBS\n/quit\n' | USE_FAKE_LLM=true uv run pmbox
 
 交互终端下输入 `/` 或 `/h` 可边打边补，Tab 补全完整命令（管道输入无补全菜单）。
 
+输入中可用 `@./notes.md` 附带本地 `.md`/`.txt`（发送前显示 `[attach]`），辅助更准确的工具推荐。
+
 | 输入 | 行为 |
 |------|------|
 | `/help` | 能力说明与演示句 |
