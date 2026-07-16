@@ -31,6 +31,19 @@ class AttachItem:
     size_bytes: int = 0
 
 
+@dataclass(frozen=True)
+class AttachResult:
+    user_text: str
+    assembled: str
+    items: tuple[AttachItem, ...]
+
+    @property
+    def should_enter_loop(self) -> bool:
+        if self.user_text.strip():
+            return True
+        return any(i.ok for i in self.items)
+
+
 _QUOTED = re.compile(r'@(?:"([^"]+)"|\'([^\']+)\')')
 _BARE = re.compile(r"@([^\s@]+)")
 
@@ -152,3 +165,48 @@ def strip_mentions(text: str, mentions: list[AttachMention]) -> str:
     parts.append(text[cursor:])
     joined = "".join(parts)
     return re.sub(r"\s+", " ", joined).strip()
+
+
+def format_attach_line(item: AttachItem) -> str:
+    if item.ok:
+        kb = max(1, (item.size_bytes + 1023) // 1024) if item.size_bytes >= 1024 else None
+        size = f"{kb}KB" if kb is not None else f"{item.size_bytes} B"
+        extra = ", truncated" if item.truncated else ""
+        return f"[attach] ok  {item.display_name}  ({size}{extra})"
+    return f"[attach] fail  {item.display_name}  {item.reason}"
+
+
+def resolve_attachments(
+    raw: str,
+    *,
+    cwd: Path | None = None,
+    total_budget: int | None = None,
+) -> AttachResult:
+    base = cwd if cwd is not None else Path.cwd()
+    budget = MAX_TOTAL_BYTES if total_budget is None else total_budget
+    mentions = extract_mentions(raw)
+    user_text = strip_mentions(raw, mentions)
+    items: list[AttachItem] = []
+    remaining = budget
+    for m in mentions:
+        item = load_attachment(m.path_text, cwd=base, remaining_budget=remaining)
+        items.append(item)
+        if item.ok:
+            used = min(item.size_bytes, MAX_FILE_BYTES, remaining)
+            remaining -= used
+
+    ok_items = [i for i in items if i.ok]
+    if not ok_items:
+        return AttachResult(user_text=user_text, assembled=user_text, items=tuple(items))
+
+    blocks: list[str] = []
+    for idx, item in enumerate(ok_items, start=1):
+        path_s = str(item.path) if item.path is not None else item.display_name
+        header = (
+            f"[附件 {idx}] path={path_s} name={item.display_name} "
+            f"truncated={'true' if item.truncated else 'false'}"
+        )
+        blocks.append(f"---\n{header}\n{item.content}")
+    body = "\n".join(blocks)
+    assembled = f"{user_text}\n\n{body}" if user_text else body
+    return AttachResult(user_text=user_text, assembled=assembled, items=tuple(items))

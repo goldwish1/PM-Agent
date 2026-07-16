@@ -2,6 +2,12 @@
 
 ## 新增功能
 
+### 2026-07-16 · resolve_attachments 组装注入文本
+
+- **新增加了什么功能**：`AttachResult` / `resolve_attachments` / `format_attach_line`：剥离 @ 后拼自然语言 + 成功附件块，并格式化 `[attach]` 行。
+- **原因**：CLI 注入附件材料前需统一组装预算与注入文本（Task 4 再接线）。
+- **一句话方案**：按 mention 顺序 `load_attachment` 扣减合计预算；有成功项时拼 `---`/`[附件 n]` 块；`should_enter_loop` 看非空 user_text 或任一 ok。
+
 ### 2026-07-16 · tools 按业务域分包
 
 - **新增加了什么功能**：`tools/` 拆为 `knowledge` / `draft` / `export` / `demo` 子包；根级保留 `registry.py` + `bootstrap.py`。

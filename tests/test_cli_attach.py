@@ -7,8 +7,10 @@ from pathlib import Path
 from pm_agent.cli_attach import (
     MAX_FILE_BYTES,
     extract_mentions,
+    format_attach_line,
     load_attachment,
     looks_like_attach_path,
+    resolve_attachments,
     strip_mentions,
 )
 
@@ -96,3 +98,59 @@ def test_load_absolute_path(tmp_path: Path) -> None:
     item = load_attachment(str(f.resolve()), cwd=Path("/"), remaining_budget=MAX_FILE_BYTES)
     assert item.ok is True
     assert item.content == "hi"
+
+
+def test_resolve_no_mention_identity(tmp_path: Path) -> None:
+    r = resolve_attachments("下周立项不知道从哪下手", cwd=tmp_path)
+    assert r.user_text == "下周立项不知道从哪下手"
+    assert r.assembled == r.user_text
+    assert r.items == ()
+    assert r.should_enter_loop is True
+
+
+def test_resolve_injects_block(tmp_path: Path) -> None:
+    f = tmp_path / "kickoff.md"
+    f.write_text("目的：上线支付", encoding="utf-8")
+    r = resolve_attachments("下周立项 @kickoff.md 请推荐", cwd=tmp_path)
+    assert r.user_text == "下周立项 请推荐"
+    assert r.should_enter_loop is True
+    assert len(r.items) == 1 and r.items[0].ok
+    assert "[附件 1]" in r.assembled
+    assert "path=" in r.assembled
+    assert "目的：上线支付" in r.assembled
+    assert "truncated=false" in r.assembled
+
+
+def test_resolve_all_fail_empty_nl_no_loop(tmp_path: Path) -> None:
+    r = resolve_attachments("@missing.md", cwd=tmp_path)
+    assert r.user_text == ""
+    assert r.should_enter_loop is False
+    assert r.items and r.items[0].ok is False
+
+
+def test_resolve_total_budget_skips_later(tmp_path: Path) -> None:
+    a = tmp_path / "a.md"
+    b = tmp_path / "b.md"
+    a.write_bytes(b"x" * 100)
+    b.write_text("second", encoding="utf-8")
+    r = resolve_attachments(
+        "@a.md @b.md",
+        cwd=tmp_path,
+        total_budget=50,
+    )
+    assert r.items[0].ok is True
+    assert r.items[1].ok is False
+    assert "合计" in r.items[1].reason or "未载入" in r.items[1].reason
+
+
+def test_format_attach_line_ok_and_fail(tmp_path: Path) -> None:
+    f = tmp_path / "a.md"
+    f.write_text("hi", encoding="utf-8")
+    r = resolve_attachments("@a.md", cwd=tmp_path)
+    line = format_attach_line(r.items[0])
+    assert line.startswith("[attach] ok")
+    assert "a.md" in line
+
+    r2 = resolve_attachments("@nope.md", cwd=tmp_path)
+    line2 = format_attach_line(r2.items[0])
+    assert line2.startswith("[attach] fail")
