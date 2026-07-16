@@ -7,13 +7,17 @@ from pathlib import Path
 from pm_agent.agent.session import SessionState
 from pm_agent.knowledge.repo import ToolsRepository
 from pm_agent.tools.demo import register_demo_tools
-from pm_agent.tools.detail import register_get_tool_detail
-from pm_agent.tools.draft_charter import register_draft_project_charter
-from pm_agent.tools.draft_risk import register_draft_risk_register
-from pm_agent.tools.export_md import register_export_markdown
-from pm_agent.tools.recommend import register_recommend_tools
+from pm_agent.tools.draft import (
+    register_draft_project_charter,
+    register_draft_risk_register,
+)
+from pm_agent.tools.export import register_export_markdown
+from pm_agent.tools.knowledge import (
+    register_get_tool_detail,
+    register_recommend_tools,
+    register_search_tools,
+)
 from pm_agent.tools.registry import ToolRegistry
-from pm_agent.tools.search import register_search_tools
 
 
 def build_registry(

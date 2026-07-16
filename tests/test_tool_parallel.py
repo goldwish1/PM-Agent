@@ -16,7 +16,7 @@ from pm_agent.agent.loop import (
 )
 from pm_agent.agent.session import SessionState
 from pm_agent.tools.demo import build_demo_registry, register_demo_tools
-from pm_agent.tools.draft_charter import register_draft_project_charter
+from pm_agent.tools.draft import register_draft_project_charter
 from pm_agent.tools.registry import ToolRegistry, ToolSpec
 
 

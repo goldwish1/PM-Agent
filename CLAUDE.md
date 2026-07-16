@@ -73,12 +73,11 @@ pm-agent/
 │       │   └── prompts.py  # 系统提示词
 │       ├── tools/
 │       │   ├── registry.py # 注册/查找/执行、schema 导出
-│       │   ├── search.py   # search_tools
-│       │   ├── recommend.py# recommend_tools（slug 白名单校验）
-│       │   ├── detail.py   # get_tool_detail
-│       │   ├── draft_charter.py
-│       │   ├── draft_risk.py
-│       │   └── export_md.py# export_markdown（路径白名单）
+│       │   ├── bootstrap.py# 组装入口
+│       │   ├── knowledge/  # search / recommend / detail
+│       │   ├── draft/      # charter / risk
+│       │   ├── export/     # markdown（路径白名单）
+│       │   └── demo/       # echo / add
 │       ├── knowledge/
 │       │   └── repo.py     # ToolsRepository（加载/查询 tools.json）
 │       └── export/

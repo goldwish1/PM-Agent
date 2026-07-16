@@ -2,6 +2,12 @@
 
 ## 新增功能
 
+### 2026-07-16 · tools 按业务域分包
+
+- **新增加了什么功能**：`tools/` 拆为 `knowledge` / `draft` / `export` / `demo` 子包；根级保留 `registry.py` + `bootstrap.py`。
+- **原因**：扁平文件混杂多域，后续扩工具时难扫；按域分组更符合 Agent 工具层惯例。
+- **一句话方案**：一工具一文件仍同居 Args+execute+register；bootstrap 统一组装；无行为变更。
+
 ### 2026-07-16 · 工具 pure 标记与保守并行
 
 - **新增加了什么功能**：`ToolSpec.pure`；同轮 `tool_calls` 全部为已知 pure 工具且数量 >1 时用线程池并行执行。

@@ -116,9 +116,10 @@
   | `agent/llm.py` | OpenAI 兼容客户端封装、错误分类 |
   | `agent/session.py` | messages、draft、clarify_count |
   | `tools/registry.py` | 注册/查找/执行、schema 导出给 LLM |
-  | `tools/pm_*.py` | 各工具 execute |
-  | `knowledge/tools_repo.py` | 加载/查询 tools.json |
-  | `export/markdown.py` | 渲染章程/风险 Markdown |
+  | `tools/bootstrap.py` | 按域组装并注册 Agent 工具 |
+  | `tools/knowledge|draft|export|demo/` | 各域工具 execute |
+  | `knowledge/repo.py` | 加载/查询 tools.json |
+  | `export/render.py` | 渲染章程/风险 Markdown |
 - **服务边界**：工具层不调 LLM；LLM 层不直接写盘  
 - **服务通信**：进程内函数调用（无 RPC）
 
@@ -396,12 +397,11 @@ pm-agent/
 │       │   └── prompts.py  # 系统提示
 │       ├── tools/
 │       │   ├── registry.py
-│       │   ├── search.py
-│       │   ├── recommend.py
-│       │   ├── detail.py
-│       │   ├── draft_charter.py
-│       │   ├── draft_risk.py
-│       │   └── export_md.py
+│       │   ├── bootstrap.py
+│       │   ├── knowledge/  # search / recommend / detail
+│       │   ├── draft/      # charter / risk
+│       │   ├── export/     # markdown
+│       │   └── demo/       # echo / add
 │       ├── knowledge/
 │       │   └── repo.py
 │       └── export/
