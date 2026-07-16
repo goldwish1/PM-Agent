@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from pm_agent.cli_attach import (
+    ATTACH_EMPTY_HINT,
     MAX_FILE_BYTES,
     extract_mentions,
     format_attach_line,
@@ -13,6 +14,11 @@ from pm_agent.cli_attach import (
     resolve_attachments,
     strip_mentions,
 )
+
+
+def test_attach_empty_hint_non_empty() -> None:
+    assert "@" in ATTACH_EMPTY_HINT
+    assert ".md" in ATTACH_EMPTY_HINT
 
 
 def test_looks_like_path_accepts_relative_and_ext() -> None:

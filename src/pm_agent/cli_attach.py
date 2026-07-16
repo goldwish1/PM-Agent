@@ -11,6 +11,11 @@ MAX_TOTAL_BYTES = 128 * 1024
 TRUNCATION_SUFFIX = "\n\n…[内容已截断]"
 _ALLOWED_SUFFIX = {".md", ".txt"}
 
+ATTACH_EMPTY_HINT = (
+    "未载入任何材料。请使用 @./notes.md 附带 .md/.txt，"
+    "或直接描述卡点后再试。"
+)
+
 
 @dataclass(frozen=True)
 class AttachMention:

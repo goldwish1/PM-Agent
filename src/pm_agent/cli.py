@@ -16,6 +16,11 @@ from pm_agent.agent.llm import (
 )
 from pm_agent.agent.loop import handle_user_turn
 from pm_agent.agent.session import SessionState
+from pm_agent.cli_attach import (
+    ATTACH_EMPTY_HINT,
+    format_attach_line,
+    resolve_attachments,
+)
 from pm_agent.cli_input import read_user_line
 from pm_agent.config import ConfigError, load_settings
 from pm_agent.tools.bootstrap import build_registry_from_path
@@ -34,6 +39,7 @@ WELCOME = """\
   · 起草章程 / 风险登记册（1～3 条）→ 预览 → 确认后写入 output/
   · FakeLLM / DeepSeek 可切换；Agent 循环过程日志默认可见
   · /debug · /dump 切换 LLM 摘要与落盘（dump 默认开）
+  · 输入中用 @./notes.md 附带 .md/.txt，辅助更准推荐
 
 输入 /help 查看指令与演示句，输入 /quit 退出。
 交互终端下以 / 开头可 Tab 补全指令。
@@ -50,6 +56,7 @@ HELP = """\
 
 演示句（Fake / 真模型均可试）：
   · 「下周立项，不知道从哪下手」→ 推荐含项目章程
+  · 「下周立项 @./kickoff.md」→ 先 [attach] 再推荐
   · 「看一下 project-charter」→ 工具详情
   · 「帮我起草项目章程」→ 草稿预览 → 「确认导出」
   · 「起草风险登记册」→ 预览 → 「确认导出风险登记册」
@@ -211,14 +218,21 @@ def main() -> None:
             )
             continue
 
+        attach = resolve_attachments(raw)
+        for item in attach.items:
+            print(format_attach_line(item), flush=True)
+        if not attach.should_enter_loop:
+            print(ATTACH_EMPTY_HINT, flush=True)
+            continue
+
         user_turn += 1
         llm = _client_for_turn(
             use_fake=settings.use_fake_llm,
             real_client=real_client,
-            user_text=raw,
+            user_text=attach.assembled,
         )
         reply = handle_user_turn(
-            raw,
+            attach.assembled,
             state,
             llm,
             registry,
