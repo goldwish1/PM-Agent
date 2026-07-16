@@ -79,11 +79,12 @@ def test_load_rejects_extension(tmp_path: Path) -> None:
 
 
 def test_load_rejects_directory(tmp_path: Path) -> None:
-    d = tmp_path / "docs"
+    # 目录名带 .md 后缀，避免在扩展名白名单处提前失败
+    d = tmp_path / "kickoff.md"
     d.mkdir()
-    # docs 无扩展名且是目录；若 looks 未过则不会调用；这里测 load 对目录
-    item = load_attachment("./docs", cwd=tmp_path, remaining_budget=MAX_FILE_BYTES)
+    item = load_attachment("kickoff.md", cwd=tmp_path, remaining_budget=MAX_FILE_BYTES)
     assert item.ok is False
+    assert "不是普通文件" in item.reason or "目录" in item.reason
 
 
 def test_load_truncates_to_budget(tmp_path: Path) -> None:
@@ -132,6 +133,17 @@ def test_resolve_all_fail_empty_nl_no_loop(tmp_path: Path) -> None:
     assert r.user_text == ""
     assert r.should_enter_loop is False
     assert r.items and r.items[0].ok is False
+
+
+def test_resolve_ok_only_attach_assembled_starts_with_separator(tmp_path: Path) -> None:
+    f = tmp_path / "kickoff.md"
+    f.write_text("仅附件无自然语言", encoding="utf-8")
+    r = resolve_attachments("@kickoff.md", cwd=tmp_path)
+    assert r.user_text == ""
+    assert r.should_enter_loop is True
+    assert r.items and r.items[0].ok
+    assert r.assembled.startswith("---")
+    assert "仅附件无自然语言" in r.assembled
 
 
 def test_resolve_total_budget_skips_later(tmp_path: Path) -> None:
