@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from pm_agent.cli_attach import (
+    MAX_FILE_BYTES,
     extract_mentions,
+    load_attachment,
     looks_like_attach_path,
     strip_mentions,
 )
@@ -46,3 +50,49 @@ def test_email_not_extracted_as_attach() -> None:
     text = "联系 @user@example.com 再立项"
     assert extract_mentions(text) == []
     assert strip_mentions(text, []) == text
+
+
+def test_load_ok_md(tmp_path: Path) -> None:
+    f = tmp_path / "kickoff.md"
+    f.write_text("立项下周\n", encoding="utf-8")
+    item = load_attachment("kickoff.md", cwd=tmp_path, remaining_budget=MAX_FILE_BYTES)
+    assert item.ok is True
+    assert item.content == "立项下周\n"
+    assert item.truncated is False
+    assert item.display_name == "kickoff.md"
+
+
+def test_load_rejects_extension(tmp_path: Path) -> None:
+    f = tmp_path / "a.bin"
+    f.write_bytes(b"\x00\x01")
+    item = load_attachment("a.bin", cwd=tmp_path, remaining_budget=MAX_FILE_BYTES)
+    assert item.ok is False
+    assert "md" in item.reason.lower() or "txt" in item.reason.lower() or "仅支持" in item.reason
+
+
+def test_load_rejects_directory(tmp_path: Path) -> None:
+    d = tmp_path / "docs"
+    d.mkdir()
+    # docs 无扩展名且是目录；若 looks 未过则不会调用；这里测 load 对目录
+    item = load_attachment("./docs", cwd=tmp_path, remaining_budget=MAX_FILE_BYTES)
+    assert item.ok is False
+
+
+def test_load_truncates_to_budget(tmp_path: Path) -> None:
+    f = tmp_path / "big.md"
+    f.write_text("abcd" * 100, encoding="utf-8")
+    item = load_attachment("big.md", cwd=tmp_path, remaining_budget=10)
+    assert item.ok is True
+    assert item.truncated is True
+    assert "内容已截断" in item.content
+    # 截断后原文部分的 utf-8 长度 <= 10
+    body = item.content.split("\n\n…[内容已截断]")[0]
+    assert len(body.encode("utf-8")) <= 10
+
+
+def test_load_absolute_path(tmp_path: Path) -> None:
+    f = tmp_path / "x.txt"
+    f.write_text("hi", encoding="utf-8")
+    item = load_attachment(str(f.resolve()), cwd=Path("/"), remaining_budget=MAX_FILE_BYTES)
+    assert item.ok is True
+    assert item.content == "hi"
