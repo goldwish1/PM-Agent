@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-MAX_CLARIFY_ROUNDS = 2
+MAX_CLARIFY_ROUNDS = 5
 
 SYSTEM_PROMPT = """\
 你是 pmbox，面向个人项目经理的命令行助手。
@@ -28,7 +28,7 @@ SYSTEM_PROMPT = """\
 - 导出仅写本地 output/；不发邮件/飞书
 
 ## 澄清
-- 最多 1～2 轮；达上限必须 `recommend_tools`，禁止空转追问
+- 最多 5 轮；达上限必须 `recommend_tools`，禁止空转追问
 
 ## 回复风格
 - 中文、编号列表可扫读；推荐点明「为何对应当前卡点」

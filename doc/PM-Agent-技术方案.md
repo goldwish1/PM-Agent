@@ -171,7 +171,7 @@ stateDiagram-v2
     Preview --> DraftingRisk: 重新起草
     Preview --> Exported: export_markdown 成功
     Exported --> Idle: 打印路径后回对话
-    Clarifying --> Recommending: clarify_count>=2 强制推荐
+    Clarifying --> Recommending: clarify_count>=5 强制推荐
     note right of Idle
       会话模式由系统提示 + 工具约束引导；
       代码层用 SessionMode 枚举辅助，避免无限澄清。
@@ -218,7 +218,7 @@ stateDiagram-v2
 - **空输入**：CLI 层提示示例，不进 loop  
 - **超时**：LLM 调用设 timeout（如 60s）  
 - **并发**：单线程 REPL，不考虑并发写同一文件  
-- **clarify 超限**：`clarify_count >= 2` 时系统提示强制进入推荐（代码可注入 reminder message）
+- **clarify 超限**：`clarify_count >= 5` 时系统提示强制进入推荐（代码可注入 reminder message）
 
 ---
 
@@ -344,7 +344,7 @@ stateDiagram-v2
 ### 5.4 业务逻辑与日志
 
 - **鉴权**：无多用户；导出路径白名单即「权限」  
-- **业务规则**：可起草白名单仅 charter/risk；推荐必须库内工具；澄清 ≤2  
+- **业务规则**：可起草白名单仅 charter/risk；推荐必须库内工具；澄清 ≤5  
 - **日志（两层）**：
   - **过程层**（默认可见）：`── 第N轮迭代 ──`，缩进事件 `thinking` / `response`（非流式摘要）/ `tool_call` / `tool_result`（ok|err + 摘要 + 耗时）；不用 `●`
   - **结果层**：空一行后 `●` + 最终自然语言回复（仅 CLI）
