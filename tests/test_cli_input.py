@@ -90,6 +90,11 @@ def test_extract_attach_fragment_ignores_email_like_input() -> None:
     assert extract_attach_fragment("联系 test@example.com") is None
 
 
+def test_extract_attach_fragment_stops_after_unquoted_path() -> None:
+    assert extract_attach_fragment("下周立项 @doc/foo.md 从") is None
+    assert extract_attach_fragment("下周立项 @doc/foo.md") is not None
+
+
 def test_list_attach_candidates_filters_and_sorts(tmp_path: Path) -> None:
     (tmp_path / "doc").mkdir()
     (tmp_path / "doc" / "b.txt").write_text("b", encoding="utf-8")
@@ -150,7 +155,7 @@ def test_accept_current_completion_applies_selected_item() -> None:
     buffer = MagicMock(complete_state=state, text="@rea")
     event = MagicMock(current_buffer=buffer)
 
-    accepted = _accept_current_completion(event, source="enter")
+    accepted = _accept_current_completion(event)
 
     assert accepted is True
     buffer.apply_completion.assert_called_once_with(completion)
@@ -163,7 +168,7 @@ def test_accept_current_completion_falls_back_to_first_item() -> None:
     buffer = MagicMock(complete_state=state, text="@rea")
     event = MagicMock(current_buffer=buffer)
 
-    accepted = _accept_current_completion(event, source="tab")
+    accepted = _accept_current_completion(event)
 
     assert accepted is True
     buffer.apply_completion.assert_called_once_with(first)

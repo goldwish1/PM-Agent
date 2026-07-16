@@ -34,6 +34,7 @@ IGNORED_ATTACH_DIR_NAMES: tuple[str, ...] = (
     "__pycache__",
 )
 
+
 @dataclass(frozen=True)
 class AttachFragment:
     """光标前正在输入的 @ 附件片段。"""
@@ -65,6 +66,9 @@ def extract_attach_fragment(text_before_cursor: str) -> AttachFragment | None:
         return AttachFragment(raw=fragment, path_prefix=fragment[2:], quoted=True)
     if fragment.startswith("@'"):
         return AttachFragment(raw=fragment, path_prefix=fragment[2:], quoted=True)
+    # 未加引号的 @xxx 与 cli_attach 的 @([^\s@]+) 一致：片段内出现空白即结束附件补全。
+    if any(ch.isspace() for ch in fragment[1:]):
+        return None
     return AttachFragment(raw=fragment, path_prefix=fragment[1:], quoted=False)
 
 
@@ -142,7 +146,7 @@ class SlashCompleter(PmboxCompleter):
     """兼容旧测试与调用方命名；当前已升级为组合补全。"""
 
 
-def _accept_current_completion(event: Any, *, source: str) -> bool:
+def _accept_current_completion(event: Any) -> bool:
     state = event.current_buffer.complete_state
     current = state.current_completion if state is not None else None
     if current is None and state is not None and state.completions:
@@ -158,13 +162,13 @@ def _build_debug_key_bindings() -> KeyBindings:
 
     @kb.add("tab")
     def _(event: Any) -> None:
-        if _accept_current_completion(event, source="tab"):
+        if _accept_current_completion(event):
             return
         get_by_name("complete").call(event)
 
     @kb.add("enter")
     def _(event: Any) -> None:
-        if _accept_current_completion(event, source="enter"):
+        if _accept_current_completion(event):
             return
         get_by_name("accept-line").call(event)
 
