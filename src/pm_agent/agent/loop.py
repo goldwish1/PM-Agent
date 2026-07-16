@@ -1,8 +1,9 @@
-"""Agent Loop：迭代上限、调模型、派发工具、可见 [tool] 日志。"""
+"""Agent Loop：迭代上限、调模型、派发工具、过程层可见日志。"""
 
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 from typing import Any
 
@@ -10,21 +11,14 @@ from pm_agent.agent.debug_log import TurnDebugDump, print_llm_round
 from pm_agent.agent.llm import LlmApiError, LlmClient
 from pm_agent.agent.prompts import MAX_CLARIFY_ROUNDS, get_system_prompt
 from pm_agent.agent.session import SessionMode, SessionState
+from pm_agent.agent.trace import (
+    trace_iteration,
+    trace_response,
+    trace_thinking,
+    trace_tool_call,
+    trace_tool_result,
+)
 from pm_agent.tools.registry import ToolRegistry
-
-
-def _format_args_summary(arguments: dict[str, Any] | Any) -> str:
-    if not isinstance(arguments, dict):
-        return repr(arguments)
-    try:
-        return json.dumps(arguments, ensure_ascii=False, separators=(",", ":"))
-    except (TypeError, ValueError):
-        return str(arguments)
-
-
-def _log_tool(name: str, arguments: dict[str, Any], status: str) -> None:
-    summary = _format_args_summary(arguments)
-    print(f"[tool] {name}({summary}) → {status}", flush=True)
 
 
 def _ensure_system_prompt(state: SessionState) -> None:
@@ -153,6 +147,9 @@ def run_agent_loop(
     iteration = 0
 
     while True:
+        round_n = iteration + 1
+        trace_iteration(round_n)
+        trace_thinking()
         try:
             response = llm.complete(state.messages, tools=tools_schema)
         except LlmApiError as exc:
@@ -166,7 +163,7 @@ def run_agent_loop(
             debug_llm=debug_llm,
             turn_dump=turn_dump,
             user_turn=user_turn,
-            iteration=iteration + 1,
+            iteration=round_n,
             messages=state.messages,
             tools_count=tools_count,
             response=response,
@@ -175,6 +172,7 @@ def run_agent_loop(
 
         content = response.get("content")
         tool_calls = response.get("tool_calls") or []
+        trace_response(content if isinstance(content, str) or content is None else str(content))
 
         if not tool_calls:
             final_text = (content or "").strip() or "（模型未返回文本。）"
@@ -218,9 +216,11 @@ def run_agent_loop(
             if not isinstance(args, dict):
                 args = {}
 
+            trace_tool_call(name, args)
+            started = time.perf_counter()
             result = registry.execute(name, args)
-            status = "err" if result.startswith("错误：") else "ok"
-            _log_tool(name, args, status)
+            elapsed_ms = (time.perf_counter() - started) * 1000
+            trace_tool_result(result, elapsed_ms)
 
             state.append(
                 {

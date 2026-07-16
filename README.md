@@ -48,7 +48,7 @@ printf '下周立项，不知道从哪下手\n看一下 project-charter\n/quit\n
   | USE_FAKE_LLM=true uv run pmbox
 ```
 
-期望：`[tool] recommend_tools`（含项目章程）→ `[tool] get_tool_detail`。
+期望：过程层出现 `tool_call: recommend_tools`（含项目章程）→ `tool_call: get_tool_detail`，最后以 `●` 给出回复。
 
 ### 澄清（过短输入）
 

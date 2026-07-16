@@ -166,7 +166,7 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
             },
             {
                 "content": (
-                    f"已导出「{label}」Markdown（见上方 [tool] 返回的 path）。"
+                    f"已导出「{label}」Markdown（见上方 tool_result 返回的 path）。"
                     "请直接打开该文件继续修改。"
                 )
             },
@@ -408,7 +408,7 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
         },
         {
             "content": (
-                f"已根据「{snippet}」检索并推荐库内工具（见上方 [tool] 结果）。"
+                f"已根据「{snippet}」检索并推荐库内工具（见上方 tool_result）。"
                 "请按编号查看；若需要详情或起草，直接说工具名。"
             )
         },

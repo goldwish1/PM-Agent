@@ -2,6 +2,12 @@
 
 ## 新增功能
 
+### 2026-07-16 · Agent 循环过程层可见日志
+
+- **新增加了什么功能**：每轮迭代打印 `thinking` / `response` / `tool_call` / `tool_result`（含耗时）；与最终 `●` 回复分层显示。
+- **原因**：对齐「循环可见」学习目标与 PRD；原先仅有 `[tool] … → ok|err`，缺少迭代边界、结果摘要与耗时。
+- **一句话方案**：`agent/trace.py` 过程层（分隔行+缩进，不用 `●`）；`loop.py` 接入并计时 `execute`；CLI 空一行后打印结果层 `●`。
+
 ### 2026-07-15 · debug 落盘改为每 turn 一个 JSON
 
 - **遇到的问题**：每次 `llm.complete` 写 `turn-NNN-iter-MM.json` 且重复拷贝全量 messages，回放一轮用户对话要开多个文件。

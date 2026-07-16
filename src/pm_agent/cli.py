@@ -32,7 +32,7 @@ WELCOME = """\
 当前能力：
   · 卡点澄清（≤2 轮）→ 库内推荐 1～3 个工具 → 可查详情
   · 起草章程 / 风险登记册（1～3 条）→ 预览 → 确认后写入 output/
-  · FakeLLM / DeepSeek 可切换；工具调用可见 [tool] 日志
+  · FakeLLM / DeepSeek 可切换；Agent 循环过程日志默认可见
   · /debug · /dump 切换 LLM 摘要与落盘（dump 默认开）
 
 输入 /help 查看指令与演示句，输入 /quit 退出。
@@ -229,6 +229,7 @@ def main() -> None:
             user_turn=user_turn,
             llm_is_fake=settings.use_fake_llm,
         )
+        print(flush=True)
         print(f"● {reply}", flush=True)
         print(flush=True)
 

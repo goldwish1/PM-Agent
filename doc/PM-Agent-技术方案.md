@@ -66,7 +66,7 @@
 ```
 ┌─────────────────────────────────────────────┐
 │                 CLI (展示层)                 │
-│         读入 / print / [tool] 日志           │
+│         读入 / 过程层 trace / ● 结果层      │
 └──────────────────────┬──────────────────────┘
                        │ Session 消息
 ┌──────────────────────▼──────────────────────┐
@@ -145,7 +145,7 @@ flowchart TD
     G -->|纯文本| H[打印助手回复 / 结束本轮]
     G -->|tool_calls| I{iter < max?}
     I -->|否| J[停止并提示简化或直接起草]
-    I -->|是| K[打印 tool 日志]
+    I -->|是| K[打印过程层 tool_call/result]
     K --> L[Registry 执行 + Pydantic 校验]
     L --> M[追加 tool 结果消息]
     M --> N[iter++]
@@ -345,7 +345,11 @@ stateDiagram-v2
 
 - **鉴权**：无多用户；导出路径白名单即「权限」  
 - **业务规则**：可起草白名单仅 charter/risk；推荐必须库内工具；澄清 ≤2  
-- **日志**：`[tool] name args_summary → ok|err`；`[llm]`（`PMBOX_DEBUG` 或 `/debug`）；API 错误类型；禁止打印完整 API Key  
+- **日志（两层）**：
+  - **过程层**（默认可见）：`── 第N轮迭代 ──`，缩进事件 `thinking` / `response`（非流式摘要）/ `tool_call` / `tool_result`（ok|err + 摘要 + 耗时）；不用 `●`
+  - **结果层**：空一行后 `●` + 最终自然语言回复（仅 CLI）
+  - **调试增强**：`[llm]`（`PMBOX_DEBUG` 或 `/debug`）；API 错误类型；禁止打印完整 API Key  
+
 - **落盘**：默认将每次用户回合写入 `OUTPUT_DIR/debug/turn-NNN.json`（含 `iterations[]`；`PMBOX_DEBUG_DUMP=0` 或 `/dump` 可关）  
 
 ---
@@ -427,7 +431,7 @@ pm-agent/
 | 书中概念 | 本方案落点 |
 |----------|------------|
 | Agent Loop | `agent/loop.py` |
-| 迭代上限 / 可见性 | `MAX_TOOL_ITERATIONS` + `[tool]` 日志 |
+| 迭代上限 / 可见性 | `MAX_TOOL_ITERATIONS` + 过程层 trace 日志 |
 | 工具六字段 | Registry 中 name/description/parameters/category/pure/execute |
 | 错误即指令 | tool 失败返回结构化中文指引 |
 | 工具分层加载 | search 摘要 + get_tool_detail |
