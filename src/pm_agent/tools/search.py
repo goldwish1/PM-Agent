@@ -44,5 +44,6 @@ def register_search_tools(registry: ToolRegistry, repo: ToolsRepository) -> None
             parameters_model=SearchToolsArgs,
             execute=_execute,
             category="knowledge",
+            pure=True,
         )
     )

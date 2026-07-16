@@ -136,5 +136,6 @@ def register_export_markdown(
             parameters_model=ExportMarkdownArgs,
             execute=_execute,
             category="export",
+            pure=False,
         )
     )

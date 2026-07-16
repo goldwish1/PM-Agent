@@ -52,5 +52,6 @@ def register_get_tool_detail(registry: ToolRegistry, repo: ToolsRepository) -> N
             parameters_model=GetToolDetailArgs,
             execute=_execute,
             category="knowledge",
+            pure=True,
         )
     )

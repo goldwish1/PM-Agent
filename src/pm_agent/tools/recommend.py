@@ -129,5 +129,6 @@ def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> N
             parameters_model=RecommendToolsArgs,
             execute=_execute,
             category="knowledge",
+            pure=True,
         )
     )

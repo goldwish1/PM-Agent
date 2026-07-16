@@ -72,5 +72,6 @@ def register_draft_project_charter(
             parameters_model=DraftProjectCharterArgs,
             execute=_execute,
             category="draft",
+            pure=False,
         )
     )

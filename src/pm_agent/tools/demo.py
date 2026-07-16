@@ -37,6 +37,7 @@ def register_demo_tools(registry: ToolRegistry) -> None:
             parameters_model=EchoArgs,
             execute=_echo,
             category="demo",
+            pure=True,
         )
     )
     registry.register(
@@ -46,6 +47,7 @@ def register_demo_tools(registry: ToolRegistry) -> None:
             parameters_model=AddArgs,
             execute=_add,
             category="demo",
+            pure=True,
         )
     )
 

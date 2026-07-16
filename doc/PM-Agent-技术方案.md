@@ -435,7 +435,7 @@ pm-agent/
 | 工具六字段 | Registry 中 name/description/parameters/category/pure/execute |
 | 错误即指令 | tool 失败返回结构化中文指引 |
 | 工具分层加载 | search 摘要 + get_tool_detail |
-| 路径/副作用安全 | export 白名单；pure/impure 标记（并行非 MVP） |
+| 路径/副作用安全 | export 白名单；`pure` 标记；同轮全部 pure 才并行（否则串行） |
 
 ### 7.2 参考资料
 

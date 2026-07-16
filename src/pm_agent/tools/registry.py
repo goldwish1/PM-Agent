@@ -19,6 +19,7 @@ class ToolSpec:
     parameters_model: type[BaseModel]
     execute: Callable[[BaseModel], str]
     category: str = "demo"
+    pure: bool = True  # 无副作用时可与其他 pure 工具并行
 
 
 @dataclass
@@ -37,6 +38,16 @@ class ToolRegistry:
 
     def names(self) -> list[str]:
         return sorted(self._tools.keys())
+
+    def all_pure(self, names: list[str]) -> bool:
+        """同批工具是否均可并行：未知工具视为 impure。"""
+        if not names:
+            return False
+        for name in names:
+            spec = self.get(name)
+            if spec is None or not spec.pure:
+                return False
+        return True
 
     def openai_tools_schema(self) -> list[dict[str, Any]]:
         """导出 Chat Completions `tools` 参数（function calling）。"""

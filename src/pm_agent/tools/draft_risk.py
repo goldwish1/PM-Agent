@@ -132,5 +132,6 @@ def register_draft_risk_register(
             parameters_model=DraftRiskRegisterArgs,
             execute=_execute,
             category="draft",
+            pure=False,
         )
     )

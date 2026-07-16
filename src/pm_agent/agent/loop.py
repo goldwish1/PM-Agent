@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +20,105 @@ from pm_agent.agent.trace import (
     trace_tool_result,
 )
 from pm_agent.tools.registry import ToolRegistry
+
+
+def _normalize_tool_args(raw: Any) -> dict[str, Any]:
+    if isinstance(raw, dict):
+        return raw
+    return {}
+
+
+def _can_run_tools_in_parallel(
+    registry: ToolRegistry,
+    tool_calls: list[dict[str, Any]],
+) -> bool:
+    """保守策略：数量 >1 且全部为已知 pure 工具才并行。"""
+    if len(tool_calls) <= 1:
+        return False
+    names = [str(tc["name"]) for tc in tool_calls]
+    return registry.all_pure(names)
+
+
+def _execute_tools_serial(
+    state: SessionState,
+    registry: ToolRegistry,
+    tool_calls: list[dict[str, Any]],
+) -> None:
+    for tc in tool_calls:
+        name = str(tc["name"])
+        args = _normalize_tool_args(tc.get("arguments"))
+        trace_tool_call(name, args)
+        started = time.perf_counter()
+        result = registry.execute(name, args)
+        elapsed_ms = (time.perf_counter() - started) * 1000
+        trace_tool_result(result, elapsed_ms)
+        state.append(
+            {
+                "role": "tool",
+                "tool_call_id": tc["id"],
+                "name": name,
+                "content": result,
+            }
+        )
+
+
+def _timed_execute(
+    registry: ToolRegistry,
+    name: str,
+    args: dict[str, Any],
+) -> tuple[str, float]:
+    started = time.perf_counter()
+    result = registry.execute(name, args)
+    elapsed_ms = (time.perf_counter() - started) * 1000
+    return result, elapsed_ms
+
+
+def _execute_tools_parallel(
+    state: SessionState,
+    registry: ToolRegistry,
+    tool_calls: list[dict[str, Any]],
+) -> None:
+    """全 pure 并行执行；trace 与 messages 仍按原 tool_calls 顺序输出。"""
+    prepared: list[tuple[str, str, dict[str, Any]]] = []
+    for tc in tool_calls:
+        name = str(tc["name"])
+        args = _normalize_tool_args(tc.get("arguments"))
+        prepared.append((str(tc["id"]), name, args))
+        trace_tool_call(name, args)
+
+    ordered: list[tuple[str, float] | None] = [None] * len(prepared)
+    max_workers = min(len(prepared), 4)
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        future_to_idx = {
+            pool.submit(_timed_execute, registry, name, args): idx
+            for idx, (_call_id, name, args) in enumerate(prepared)
+        }
+        for future in as_completed(future_to_idx):
+            idx = future_to_idx[future]
+            ordered[idx] = future.result()
+
+    for (call_id, name, _args), timed in zip(prepared, ordered, strict=True):
+        result, elapsed_ms = timed if timed is not None else ("", 0.0)
+        trace_tool_result(result, elapsed_ms)
+        state.append(
+            {
+                "role": "tool",
+                "tool_call_id": call_id,
+                "name": name,
+                "content": result,
+            }
+        )
+
+
+def _dispatch_tool_calls(
+    state: SessionState,
+    registry: ToolRegistry,
+    tool_calls: list[dict[str, Any]],
+) -> None:
+    if _can_run_tools_in_parallel(registry, tool_calls):
+        _execute_tools_parallel(state, registry, tool_calls)
+    else:
+        _execute_tools_serial(state, registry, tool_calls)
 
 
 def _ensure_system_prompt(state: SessionState) -> None:
@@ -209,28 +309,7 @@ def run_agent_loop(
             ],
         }
         state.append(assistant_msg)
-
-        for tc in tool_calls:
-            name = str(tc["name"])
-            args = tc.get("arguments") or {}
-            if not isinstance(args, dict):
-                args = {}
-
-            trace_tool_call(name, args)
-            started = time.perf_counter()
-            result = registry.execute(name, args)
-            elapsed_ms = (time.perf_counter() - started) * 1000
-            trace_tool_result(result, elapsed_ms)
-
-            state.append(
-                {
-                    "role": "tool",
-                    "tool_call_id": tc["id"],
-                    "name": name,
-                    "content": result,
-                }
-            )
-
+        _dispatch_tool_calls(state, registry, tool_calls)
         iteration += 1
 
 
