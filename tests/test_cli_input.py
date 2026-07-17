@@ -6,11 +6,15 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from prompt_toolkit.document import Document
+from prompt_toolkit.input.ansi_escape_sequences import ANSI_SEQUENCES
+from prompt_toolkit.keys import Keys
 
 from pm_agent.cli_input import (
     PmboxCompleter,
     SlashCompleter,
     _accept_current_completion,
+    _build_input_key_bindings,
+    _patch_shift_enter_sequences,
     extract_attach_fragment,
     format_attach_completion,
     list_attach_candidates,
@@ -73,6 +77,32 @@ def test_read_user_line_falls_back_when_not_tty() -> None:
         mock_stdin.isatty.return_value = False
         assert read_user_line("> ") == "  hello  "
         mock_input.assert_called_once_with("> ")
+
+
+def test_read_user_line_uses_multiline_prompt_when_tty() -> None:
+    with (
+        patch("pm_agent.cli_input.sys.stdin") as mock_stdin,
+        patch("pm_agent.cli_input.prompt", return_value="line1\nline2") as mock_prompt,
+    ):
+        mock_stdin.isatty.return_value = True
+        assert read_user_line("> ") == "line1\nline2"
+        mock_prompt.assert_called_once()
+        _, kwargs = mock_prompt.call_args
+        assert kwargs["multiline"] is True
+        assert kwargs["key_bindings"] is not None
+
+
+def test_input_key_bindings_register_enter_and_shift_enter() -> None:
+    bindings = _build_input_key_bindings()
+    keys = {binding.keys for binding in bindings.bindings}
+    assert (Keys.ControlM,) in keys
+    assert (Keys.ControlJ,) in keys
+
+
+def test_shift_enter_sequences_map_to_control_j() -> None:
+    _patch_shift_enter_sequences()
+    assert ANSI_SEQUENCES["\x1b[27;2;13~"] is Keys.ControlJ
+    assert ANSI_SEQUENCES["\x1b[13;2u"] is Keys.ControlJ
 
 
 def test_extract_attach_fragment_in_middle_of_line() -> None:

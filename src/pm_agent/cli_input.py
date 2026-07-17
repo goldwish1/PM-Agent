@@ -12,9 +12,26 @@ from prompt_toolkit import prompt
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.document import Document
 from prompt_toolkit.history import InMemoryHistory
+from prompt_toolkit.input.ansi_escape_sequences import ANSI_SEQUENCES
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
+from prompt_toolkit.keys import Keys
 from prompt_toolkit.shortcuts import CompleteStyle
+
+# Shift+Enter 在多数终端会落成下列 CSI；prompt_toolkit 默认把它们当成 Enter。
+# 重映射为 ControlJ，再由自定义绑定插入换行。
+_SHIFT_ENTER_SEQUENCES: tuple[str, ...] = (
+    "\x1b[27;2;13~",
+    "\x1b[13;2u",
+)
+
+
+def _patch_shift_enter_sequences() -> None:
+    for seq in _SHIFT_ENTER_SEQUENCES:
+        ANSI_SEQUENCES[seq] = Keys.ControlJ
+
+
+_patch_shift_enter_sequences()
 
 # 本进程内共享：↑/↓ 回填已提交过的输入；进程结束即清空。
 _history = InMemoryHistory()
@@ -162,7 +179,7 @@ def _accept_current_completion(event: Any) -> bool:
     return True
 
 
-def _build_debug_key_bindings() -> KeyBindings:
+def _build_input_key_bindings() -> KeyBindings:
     kb = KeyBindings()
 
     @kb.add("tab")
@@ -177,18 +194,23 @@ def _build_debug_key_bindings() -> KeyBindings:
             return
         get_by_name("accept-line").call(event)
 
+    @kb.add("c-j", eager=True)
+    def _(event: Any) -> None:
+        event.current_buffer.insert_text("\n")
+
     return kb
 
 
 def read_user_line(prompt_text: str = "> ") -> str:
-    """TTY 下用 prompt_toolkit（边打边补）；管道/非交互回退 input()。"""
+    """TTY 下用 prompt_toolkit（边打边补、多行输入）；管道/非交互回退 input()。"""
     if not sys.stdin.isatty():
         return input(prompt_text)
     return prompt(
         prompt_text,
         completer=PmboxCompleter(),
         history=_history,
-        key_bindings=_build_debug_key_bindings(),
+        key_bindings=_build_input_key_bindings(),
         complete_while_typing=True,
         complete_style=CompleteStyle.COLUMN,
+        multiline=True,
     )

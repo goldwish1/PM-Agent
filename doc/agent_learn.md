@@ -2,6 +2,12 @@
 
 ## 新增功能
 
+### 2026-07-17 · CLI 多行输入（Shift+Enter / Enter）
+
+- **新增加了什么功能**：交互终端下 Shift+Enter 换行、Enter 提交整段输入；管道模式仍为单行。
+- **原因**：长 prompt 需分段书写；对齐 ChatGPT / Cursor 等主流 Agent 习惯。
+- **一句话方案**：`prompt_toolkit` 开启 `multiline=True`；Enter 绑定提交；Shift+Enter CSI 重映射为 `ControlJ` 后插入换行。
+
 ### 2026-07-17 · 工具库 Top 10 内容写厚
 
 - **新增加了什么功能**：对 10 个高频工具加厚 `description` / `steps` / `scenarios`，并增加最低厚度单测。
