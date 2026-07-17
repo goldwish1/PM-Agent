@@ -42,10 +42,12 @@ TOP10_THICK_SLUGS = frozenset(
 
 def test_repo_loads_all_tools() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 40
+    assert len(repo) == 47
     assert repo.exists("project-charter")
     assert repo.exists("risk-register")
     assert repo.exists("decision-record")
+    assert repo.exists("decision-matrix")
+    assert repo.exists("swot-analysis")
     charter = repo.get_by_slug("project-charter")
     assert charter is not None
     assert charter.name == "项目章程"
@@ -100,6 +102,14 @@ def test_recommend_heuristic_for_立项() -> None:
     ranked = repo.recommend_by_question("下周立项，不知道从哪下手")
     slugs = [t.slug for t, _ in ranked]
     assert "project-charter" in slugs
+    assert 1 <= len(ranked) <= 3
+
+
+def test_recommend_decision_dilemma() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    ranked = repo.recommend_by_question("自研还是外采拿不定主意")
+    slugs = {t.slug for t, _ in ranked}
+    assert "decision-matrix" in slugs or "decision-record" in slugs
     assert 1 <= len(ranked) <= 3
 
 

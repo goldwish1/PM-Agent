@@ -7,14 +7,20 @@ from pathlib import Path
 
 import pytest
 
-from pm_agent.agent.session import CharterDraft, SessionState
+from pm_agent.agent.session import (
+    CharterDraft,
+    DecisionMatrixDraft,
+    MatrixCriterion,
+    MatrixOption,
+    SessionState,
+)
 from pm_agent.config import REPO_ROOT
 from pm_agent.export.path_guard import (
     PathGuardError,
     resolve_safe_output_file,
     sanitize_filename,
 )
-from pm_agent.export.render import render_charter_markdown
+from pm_agent.export.render import render_charter_markdown, render_decision_matrix_markdown
 from pm_agent.knowledge.repo import ToolsRepository
 from pm_agent.tools.bootstrap import build_registry
 
@@ -114,3 +120,44 @@ def test_render_charter_contains_fields() -> None:
     )
     assert "P1" in md
     assert "S1" in md
+
+
+def test_export_decision_matrix_writes_markdown(tmp_path: Path) -> None:
+    state = SessionState()
+    state.matrix_draft = DecisionMatrixDraft(
+        title="选型",
+        context="测试",
+        criteria=[MatrixCriterion(criterion_id="C01", name="成本", weight="100%")],
+        options=[
+            MatrixOption(
+                option_id="O01",
+                name="A",
+                scores={"C01": "8"},
+                weighted_total="8",
+            )
+        ],
+        recommended_option="A",
+        rationale="唯一方案",
+    )
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    registry = build_registry(
+        repo,
+        session=state,
+        output_dir=tmp_path,
+        include_demo_tools=False,
+    )
+    raw = registry.execute(
+        "export_markdown",
+        {
+            "doc_type": "decision_matrix",
+            "confirmed": True,
+            "filename": "决策矩阵-test.md",
+        },
+    )
+    payload = json.loads(raw)
+    assert payload["ok"] is True
+    out = Path(payload["path"])
+    text = out.read_text(encoding="utf-8")
+    assert "# 决策矩阵" in text
+    assert "加权总分" in text
+    assert render_decision_matrix_markdown(state.matrix_draft) == text

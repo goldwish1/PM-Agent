@@ -77,7 +77,12 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
     )
     allowed_draft_target = _contains_any(
         text,
-        ["项目章程", "章程", "charter", "风险登记册", "risk-register", "风险条目", "决策记录", "decision-record"],
+        [
+            "项目章程", "章程", "charter",
+            "风险登记册", "risk-register", "风险条目",
+            "决策记录", "decision-record",
+            "决策矩阵", "decision-matrix",
+        ],
     )
     if draft_intent and unsupported_target and not allowed_draft_target:
         slug = "wbs"
@@ -97,10 +102,12 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
             },
             {
                 "content": (
-                    "本 MVP **仅支持自动起草「项目章程」「风险登记册」和「决策记录」**，"
+                    "本 MVP **仅支持自动起草「项目章程」「风险登记册」"
+                    "「决策矩阵」和「决策记录」**，"
                     f"不支持自动填写「{slug}」完整模板。\n"
                     "你可查看上方工具说明（步骤/场景）；"
-                    "若要开干，请改口：「帮我起草项目章程」「起草风险登记册」或「起草决策记录」。"
+                    "若要开干，请改口：「帮我起草项目章程」「起草风险登记册」"
+                    "「起草决策矩阵」或「起草决策记录」。"
                 )
             },
         ]
@@ -137,14 +144,24 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
 
     if _contains_any(
         text,
-        ["确认导出", "导出章程", "导出项目章程", "导出风险", "导出登记册", "导出决策记录", "导出决策", "导出 markdown"],
+        [
+            "确认导出", "导出章程", "导出项目章程", "导出风险", "导出登记册",
+            "导出决策记录", "导出决策矩阵", "导出决策", "导出 markdown",
+        ],
     ):
         doc_type = "charter"
         if _contains_any(text, ["风险", "登记册", "risk"]):
             doc_type = "risk_register"
+        elif _contains_any(text, ["决策矩阵", "decision-matrix", "matrix"]):
+            doc_type = "decision_matrix"
         elif _contains_any(text, ["决策", "decision"]):
             doc_type = "decision"
-        labels = {"charter": "项目章程", "risk_register": "风险登记册", "decision": "决策记录"}
+        labels = {
+            "charter": "项目章程",
+            "risk_register": "风险登记册",
+            "decision": "决策记录",
+            "decision_matrix": "决策矩阵",
+        }
         label = labels.get(doc_type, "文档")
         return [
             {
@@ -252,6 +269,65 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
 
     if _contains_any(
         text,
+        ["起草决策矩阵", "帮我起草决策矩阵", "decision-matrix"],
+    ):
+        return [
+            {
+                "tool_calls": [
+                    {
+                        "id": "call_draft_matrix_1",
+                        "name": "draft_decision_matrix",
+                        "arguments": {
+                            "title": "自研 vs 外采方案决策矩阵",
+                            "context": "团队需要在自研与外采之间做量化比较，预算50万",
+                            "replace_criteria": True,
+                            "criteria": [
+                                {"criterion_id": "C01", "name": "成本", "weight": "30%"},
+                                {"criterion_id": "C02", "name": "周期", "weight": "25%"},
+                                {"criterion_id": "C03", "name": "可控性", "weight": "25%"},
+                                {"criterion_id": "C04", "name": "风险", "weight": "20%"},
+                            ],
+                            "replace_options": True,
+                            "options": [
+                                {
+                                    "option_id": "O01",
+                                    "name": "自研",
+                                    "scores": {
+                                        "C01": "6",
+                                        "C02": "5",
+                                        "C03": "9",
+                                        "C04": "6",
+                                    },
+                                    "weighted_total": "6.5",
+                                },
+                                {
+                                    "option_id": "O02",
+                                    "name": "外采",
+                                    "scores": {
+                                        "C01": "7",
+                                        "C02": "8",
+                                        "C03": "5",
+                                        "C04": "7",
+                                    },
+                                    "weighted_total": "6.8",
+                                },
+                            ],
+                            "recommended_option": "外采（加权总分略高）",
+                            "rationale": "周期与成本维度外采更优；若更看重可控性可选自研",
+                        },
+                    }
+                ]
+            },
+            {
+                "content": (
+                    "已生成决策矩阵草稿预览（准则/方案/打分见工具返回）。\n"
+                    "若确认无误，请回复「确认导出决策矩阵」写入 output/。"
+                )
+            },
+        ]
+
+    if _contains_any(
+        text,
         ["起草决策记录", "起草决策", "帮我起草决策记录", "帮我起草决策"],
     ):
         return [
@@ -263,7 +339,10 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
                         "arguments": {
                             "decision_title": "自研 vs 外采方案决策",
                             "context": "团队需要决定自研还是外采方案，预算50万，团队3人",
-                            "options_considered": "方案A：自研，可控但周期长\n方案B：外采，快速上线但定制成本高",
+                            "options_considered": (
+                                "方案A：自研，可控但周期长\n"
+                                "方案B：外采，快速上线但定制成本高"
+                            ),
                             "decision": "采用自研方案",
                             "rationale": "长期可控，团队能力可沉淀",
                             "consequences": "开发周期3个月，需招聘1人",

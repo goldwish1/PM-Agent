@@ -1,8 +1,13 @@
-"""Markdown 模板渲染：项目章程 / 风险登记册 / 决策记录。"""
+"""Markdown 模板渲染：项目章程 / 风险登记册 / 决策记录 / 决策矩阵。"""
 
 from __future__ import annotations
 
-from pm_agent.agent.session import CharterDraft, DecisionDraft, RiskRegisterDraft
+from pm_agent.agent.session import (
+    CharterDraft,
+    DecisionDraft,
+    DecisionMatrixDraft,
+    RiskRegisterDraft,
+)
 
 
 def render_charter_markdown(draft: CharterDraft) -> str:
@@ -83,6 +88,61 @@ def render_decision_markdown(draft: DecisionDraft) -> str:
 
 ---
 *由 pmbox 导出；决策过程可追溯，便于后续复盘与干系人同步。*
+"""
+
+
+def render_decision_matrix_markdown(draft: DecisionMatrixDraft) -> str:
+    """渲染决策矩阵 Markdown（含打分表）。"""
+    d = draft.model_dump()
+    criteria = draft.criteria
+    options = draft.options
+
+    if not criteria or not options:
+        table_body = "_（请先添加准则与方案后再导出完整打分表）_\n"
+    else:
+        header_cols = " | ".join(
+            f"{opt.name or opt.option_id or f'O{i+1}'}" for i, opt in enumerate(options)
+        )
+        header = f"| 准则 / 权重 | {header_cols} |\n"
+        sep_cols = " | ".join("---" for _ in options)
+        separator = f"|-------------|{sep_cols}|\n"
+        rows: list[str] = []
+        for criterion in criteria:
+            cid = criterion.criterion_id or ""
+            label = f"{criterion.name} {criterion.weight}".strip()
+            cells: list[str] = []
+            for option in options:
+                score = option.scores.get(cid, "—")
+                if score == "—" and cid:
+                    score = option.scores.get(criterion.name, "—")
+                cells.append(str(score))
+            rows.append(f"| {label} | " + " | ".join(cells) + " |")
+        total_cells = [opt.weighted_total or "—" for opt in options]
+        rows.append("| **加权总分** | " + " | ".join(total_cells) + " |")
+        table_body = header + separator + "\n".join(rows) + "\n"
+
+    return f"""# 决策矩阵
+
+## 基本信息
+
+| 字段 | 内容 |
+|------|------|
+| 标题 | {d["title"]} |
+| 背景 | {d["context"]} |
+
+## 打分表
+
+{table_body}
+## 推荐方案
+
+{d["recommended_option"]}
+
+## 推荐依据
+
+{d["rationale"]}
+
+---
+*由 pmbox 导出；打分表可作为决策过程证据，结论可同步写入决策记录。*
 """
 
 

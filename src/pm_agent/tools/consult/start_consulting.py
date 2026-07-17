@@ -13,7 +13,10 @@ from pm_agent.tools.registry import ToolRegistry, ToolSpec
 
 class StartConsultingArgs(BaseModel):
     tool_slug: str = Field(
-        description="可起草工具的 slug，例如 project-charter、risk-register"
+        description=(
+            "可起草工具的 slug，例如 project-charter、risk-register、"
+            "decision-matrix、decision-record"
+        )
     )
 
 
@@ -43,7 +46,7 @@ def register_start_consulting(
                     "ok": False,
                     "error": (
                         f"「{tool.name}」不支持陪跑讨论与自动起草。"
-                        "本 MVP 仅支持项目章程与风险登记册；"
+                        "本 MVP 仅支持项目章程、风险登记册、决策矩阵与决策记录；"
                         "可 get_tool_detail 查看说明，或改选可起草工具。"
                     ),
                     "draftable": False,
@@ -74,8 +77,9 @@ def register_start_consulting(
         ToolSpec(
             name="start_consulting",
             description=(
-                "当用户对可起草工具（项目章程/风险登记册）表达「怎么用」"
-                "或希望深入讨论使用思路时调用：进入陪跑模式并返回步骤/场景素材。"
+                "当用户对可起草工具（项目章程/风险登记册/决策矩阵/决策记录）"
+                "表达「怎么用」或希望深入讨论使用思路时调用："
+                "进入陪跑模式并返回步骤/场景素材。"
             ),
             parameters_model=StartConsultingArgs,
             execute=_execute,

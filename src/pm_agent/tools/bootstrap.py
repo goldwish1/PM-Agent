@@ -12,6 +12,7 @@ from pm_agent.tools.consult import (
 )
 from pm_agent.tools.demo import register_demo_tools
 from pm_agent.tools.draft import (
+    register_draft_decision_matrix,
     register_draft_decision_record,
     register_draft_project_charter,
     register_draft_risk_register,
@@ -42,6 +43,7 @@ def build_registry(
     register_draft_project_charter(registry, session)
     register_draft_risk_register(registry, session)
     register_draft_decision_record(registry, session)
+    register_draft_decision_matrix(registry, session)
     register_export_markdown(registry, session, output_dir)
     if include_demo_tools:
         register_demo_tools(registry)

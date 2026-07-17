@@ -153,6 +153,11 @@ class ToolsRepository:
                 ["status-report", "communications-management-plan"],
                 "与沟通与状态同步相关",
             ),
+            (
+                ["决策", "选方案", "拿不定主意", "trade-off", "怎么选", "纠结", "权衡"],
+                ["decision-matrix", "swot-analysis", "pre-mortem", "decision-record"],
+                "与方案决策/权衡相关",
+            ),
         ]
 
         scores: dict[str, float] = {t.slug: 0.0 for t in self._tools}

@@ -1,4 +1,4 @@
-"""会话状态：messages、澄清计数、章程/风险/决策草稿。"""
+"""会话状态：messages、澄清计数、章程/风险/决策/矩阵草稿。"""
 
 from __future__ import annotations
 
@@ -10,6 +10,8 @@ from pydantic import BaseModel, Field
 
 PLACEHOLDER = "待补充"
 MAX_RISK_ITEMS = 3
+MAX_MATRIX_CRITERIA = 6
+MAX_MATRIX_OPTIONS = 5
 
 
 class SessionMode(StrEnum):
@@ -22,6 +24,7 @@ class SessionMode(StrEnum):
     DRAFTING_CHARTER = "drafting_charter"
     DRAFTING_RISK = "drafting_risk"
     DRAFTING_DECISION = "drafting_decision"
+    DRAFTING_DECISION_MATRIX = "drafting_decision_matrix"
     PREVIEW = "preview"
 
 
@@ -146,6 +149,65 @@ class DecisionDraft(BaseModel):
         return [f"- {labels[k]}：{v}" for k, v in self.model_dump().items()]
 
 
+class MatrixCriterion(BaseModel):
+    """决策矩阵评价准则。"""
+
+    criterion_id: str = ""
+    name: str = PLACEHOLDER
+    weight: str = PLACEHOLDER
+
+
+class MatrixOption(BaseModel):
+    """决策矩阵备选方案及打分。"""
+
+    option_id: str = ""
+    name: str = PLACEHOLDER
+    scores: dict[str, str] = Field(default_factory=dict)
+    weighted_total: str = PLACEHOLDER
+
+
+class DecisionMatrixDraft(BaseModel):
+    """决策矩阵草稿。"""
+
+    title: str = PLACEHOLDER
+    context: str = PLACEHOLDER
+    criteria: list[MatrixCriterion] = Field(default_factory=list)
+    options: list[MatrixOption] = Field(default_factory=list)
+    recommended_option: str = PLACEHOLDER
+    rationale: str = PLACEHOLDER
+
+    def merge_patch(self, patch: dict[str, str | None]) -> DecisionMatrixDraft:
+        data = self.model_dump()
+        for key, value in patch.items():
+            if key not in data or key in ("criteria", "options"):
+                continue
+            if value is None:
+                continue
+            text = str(value).strip()
+            if text:
+                data[key] = text
+        return DecisionMatrixDraft.model_validate(data)
+
+    def preview_lines(self) -> list[str]:
+        lines = [
+            f"- 标题：{self.title}",
+            f"- 背景：{self.context}",
+            f"- 准则数：{len(self.criteria)}",
+            f"- 方案数：{len(self.options)}",
+            f"- 推荐方案：{self.recommended_option}",
+            f"- 依据：{self.rationale}",
+        ]
+        for idx, criterion in enumerate(self.criteria, start=1):
+            cid = criterion.criterion_id or f"C{idx:02d}"
+            lines.append(f"  · [{cid}] {criterion.name}（权重 {criterion.weight}）")
+        for idx, option in enumerate(self.options, start=1):
+            oid = option.option_id or f"O{idx:02d}"
+            lines.append(
+                f"  · [{oid}] {option.name} | 加权总分={option.weighted_total}"
+            )
+        return lines
+
+
 @dataclass
 class SessionState:
     """进程内会话（关进程即丢）。"""
@@ -156,6 +218,7 @@ class SessionState:
     charter_draft: CharterDraft | None = None
     risk_draft: RiskRegisterDraft | None = None
     decision_draft: DecisionDraft | None = None
+    matrix_draft: DecisionMatrixDraft | None = None
     consulting_tool_slug: str | None = None
     consulting_notes: list[str] = field(default_factory=list)
 
@@ -176,3 +239,8 @@ class SessionState:
         if self.decision_draft is None:
             self.decision_draft = DecisionDraft()
         return self.decision_draft
+
+    def ensure_matrix_draft(self) -> DecisionMatrixDraft:
+        if self.matrix_draft is None:
+            self.matrix_draft = DecisionMatrixDraft()
+        return self.matrix_draft

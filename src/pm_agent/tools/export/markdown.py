@@ -14,14 +14,18 @@ from pm_agent.export.path_guard import PathGuardError, resolve_safe_output_file
 from pm_agent.export.render import (
     render_charter_markdown,
     render_decision_markdown,
+    render_decision_matrix_markdown,
     render_risk_register_markdown,
 )
 from pm_agent.tools.registry import ToolRegistry, ToolSpec
 
 
 class ExportMarkdownArgs(BaseModel):
-    doc_type: Literal["charter", "risk_register", "decision"] = Field(
-        description="导出文档类型：charter=项目章程，risk_register=风险登记册，decision=决策记录"
+    doc_type: Literal["charter", "risk_register", "decision", "decision_matrix"] = Field(
+        description=(
+            "导出文档类型：charter=项目章程，risk_register=风险登记册，"
+            "decision=决策记录，decision_matrix=决策矩阵"
+        )
     )
     filename: str | None = Field(
         default=None,
@@ -35,7 +39,12 @@ class ExportMarkdownArgs(BaseModel):
 
 def _default_filename(doc_type: str) -> str:
     stamp = datetime.now().strftime("%Y%m%d-%H%M")
-    prefix = {"charter": "项目章程", "risk_register": "风险登记册", "decision": "决策记录"}
+    prefix = {
+        "charter": "项目章程",
+        "risk_register": "风险登记册",
+        "decision": "决策记录",
+        "decision_matrix": "决策矩阵",
+    }
     return f"{prefix.get(doc_type, '文档')}-{stamp}.md"
 
 
@@ -83,6 +92,18 @@ def register_export_markdown(
                         ensure_ascii=False,
                     )
                 content = render_charter_markdown(state.charter_draft)
+            elif args.doc_type == "decision_matrix":
+                if state.matrix_draft is None:
+                    return json.dumps(
+                        {
+                            "ok": False,
+                            "instruction": (
+                                "尚无决策矩阵草稿。请先调用 draft_decision_matrix 收集准则与方案。"
+                            ),
+                        },
+                        ensure_ascii=False,
+                    )
+                content = render_decision_matrix_markdown(state.matrix_draft)
             elif args.doc_type == "decision":
                 if state.decision_draft is None:
                     return json.dumps(
@@ -146,8 +167,9 @@ def register_export_markdown(
         ToolSpec(
             name="export_markdown",
             description=(
-                "将当前会话中的项目章程或风险登记册草稿导出为 Markdown，"
-                "仅写入 output/ 目录。必须在用户确认后以 confirmed=true 调用。"
+                "将当前会话中的项目章程、风险登记册、决策记录或决策矩阵草稿"
+                "导出为 Markdown，仅写入 output/ 目录。"
+                "必须在用户确认后以 confirmed=true 调用。"
             ),
             parameters_model=ExportMarkdownArgs,
             execute=_execute,

@@ -22,7 +22,7 @@ def _registry(state: SessionState, output_dir: Path | None = None):
 
 
 def test_start_consulting_draftable_tools() -> None:
-    for slug in ("project-charter", "risk-register"):
+    for slug in ("project-charter", "risk-register", "decision-matrix", "decision-record"):
         state = SessionState()
         registry = _registry(state)
         raw = registry.execute("start_consulting", {"tool_slug": slug})
@@ -36,6 +36,17 @@ def test_start_consulting_draftable_tools() -> None:
 
 
 def test_start_consulting_rejects_non_draftable() -> None:
+    state = SessionState(mode=SessionMode.RECOMMENDING)
+    registry = _registry(state)
+    raw = registry.execute("start_consulting", {"tool_slug": "swot-analysis"})
+    payload = json.loads(raw)
+    assert payload["ok"] is False
+    assert "draftable" in payload or "error" in payload
+    assert state.mode == SessionMode.RECOMMENDING
+    assert state.consulting_tool_slug is None
+
+
+def test_start_consulting_rejects_wbs() -> None:
     state = SessionState(mode=SessionMode.RECOMMENDING)
     registry = _registry(state)
     raw = registry.execute("start_consulting", {"tool_slug": "wbs"})
