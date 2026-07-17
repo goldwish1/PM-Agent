@@ -47,19 +47,29 @@ def register_draft_project_charter(
 
         draft = state.charter_draft
         missing = draft.missing_fields()
+        has_notes = bool(state.consulting_notes)
+        note = (
+            "缺字段可用「待补充」占位，不阻塞导出。"
+            "预览后请用户确认，再调用 export_markdown(doc_type=charter)。"
+            if missing
+            else "关键字段已基本齐全。请先向用户展示预览，"
+            "用户确认后再 export_markdown。"
+        )
+        if has_notes:
+            note = (
+                "已有陪跑沉淀，应基于 consulting_notes 提炼字段而非空白追问。"
+                + note
+            )
         payload = {
             "ok": True,
             "preview": draft.preview_lines(),
             "missing_fields": missing,
-            "note": (
-                "缺字段可用「待补充」占位，不阻塞导出。"
-                "预览后请用户确认，再调用 export_markdown(doc_type=charter)。"
-                if missing
-                else "关键字段已基本齐全。请先向用户展示预览，"
-                "用户确认后再 export_markdown。"
-            ),
+            "consulting_notes_available": has_notes,
+            "note": note,
             "placeholder": PLACEHOLDER,
         }
+        if has_notes:
+            payload["consulting_notes"] = list(state.consulting_notes)
         return json.dumps(payload, ensure_ascii=False)
 
     registry.register(

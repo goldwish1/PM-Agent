@@ -110,16 +110,24 @@ def register_draft_risk_register(
 
         state.risk_draft = draft
         state.mode = SessionMode.DRAFTING_RISK
+        has_notes = bool(state.consulting_notes)
+        note = "预览后请用户确认，再调用 export_markdown(doc_type=risk_register)。"
+        if has_notes:
+            note = (
+                "已有陪跑沉淀，应基于 consulting_notes 提炼条目而非空白追问。"
+                + note
+            )
         payload = {
             "ok": warning == "" or warning.startswith("MVP"),
             "preview": draft.preview_lines(),
             "count": len(draft.items),
             "warning": warning,
             "placeholder": PLACEHOLDER,
-            "note": (
-                "预览后请用户确认，再调用 export_markdown(doc_type=risk_register)。"
-            ),
+            "consulting_notes_available": has_notes,
+            "note": note,
         }
+        if has_notes:
+            payload["consulting_notes"] = list(state.consulting_notes)
         return json.dumps(payload, ensure_ascii=False)
 
     registry.register(

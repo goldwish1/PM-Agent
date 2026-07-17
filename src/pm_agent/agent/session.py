@@ -18,6 +18,7 @@ class SessionMode(StrEnum):
     IDLE = "idle"
     CLARIFYING = "clarifying"
     RECOMMENDING = "recommending"
+    CONSULTING = "consulting"
     DRAFTING_CHARTER = "drafting_charter"
     DRAFTING_RISK = "drafting_risk"
     PREVIEW = "preview"
@@ -110,6 +111,8 @@ class SessionState:
     clarify_count: int = 0
     charter_draft: CharterDraft | None = None
     risk_draft: RiskRegisterDraft | None = None
+    consulting_tool_slug: str | None = None
+    consulting_notes: list[str] = field(default_factory=list)
 
     def append(self, message: ChatMessage) -> None:
         self.messages.append(message)
