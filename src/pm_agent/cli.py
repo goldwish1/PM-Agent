@@ -23,6 +23,7 @@ from pm_agent.cli_attach import (
 )
 from pm_agent.cli_input import read_user_line
 from pm_agent.cli_render import print_assistant_reply
+from pm_agent.cli_tools import format_tools_reply, is_tools_command
 from pm_agent.config import ConfigError, load_settings
 from pm_agent.tools.bootstrap import build_registry_from_path
 
@@ -33,13 +34,13 @@ WELCOME = """\
 
 面向个人项目经理的 CLI 助手。
 
-可推荐约 39 个 PMBOK 工具；可起草「项目章程 / 风险登记册」并导出 Markdown。
+可推荐 {tool_count} 个 PMBOK 工具；可起草「项目章程 / 风险登记册」并导出 Markdown。
 
 当前能力：
   · 卡点澄清（≤5 轮）→ 库内推荐 1～3 个工具 → 可查详情
   · 起草章程 / 风险登记册（1～3 条）→ 预览 → 确认后写入 output/
   · FakeLLM / DeepSeek 可切换；Agent 循环过程日志默认可见
-  · /debug · /dump 切换 LLM 摘要与落盘（dump 默认开）
+  · /tools 浏览知识库；/debug · /dump 切换 LLM 摘要与落盘（dump 默认开）
   · 输入中用 @./notes.md 附带 .md/.txt；交互终端下 @ 可 Tab 补全文件
 
 输入 /help 查看指令与演示句，输入 /quit 退出。
@@ -50,6 +51,7 @@ HELP = """\
 可用指令：
   /help · 帮助     显示本说明
   /quit · 退出     结束进程
+  /tools · 工具库  浏览知识库（/tools · /tools <slug> · /tools <关键词>）
   /debug · 调试    切换终端 [llm] 摘要 on/off
   /dump · 落盘     切换 output/debug JSON 落盘 on/off
 
@@ -72,8 +74,11 @@ EMPTY_INPUT_HINT = (
 )
 
 
-def _print_welcome() -> None:
-    print(WELCOME.format(version=__version__), flush=True)
+def _print_welcome(*, tool_count: int) -> None:
+    print(
+        WELCOME.format(version=__version__, tool_count=tool_count),
+        flush=True,
+    )
 
 
 def _print_help() -> None:
@@ -133,18 +138,6 @@ def main() -> None:
         print(f"[config] {exc}", flush=True)
         raise SystemExit(1) from exc
 
-    _print_welcome()
-
-    print(
-        f"[config] provider={settings.provider_label}  "
-        f"model={settings.deepseek_model if not settings.use_fake_llm else '-'}  "
-        f"output={settings.output_dir}  "
-        f"max_iter={settings.max_tool_iterations}",
-        flush=True,
-    )
-    if settings.config_notice:
-        print(f"[config] {settings.config_notice}", flush=True)
-
     state = SessionState()
     try:
         registry, repo = build_registry_from_path(
@@ -160,13 +153,26 @@ def main() -> None:
         )
         raise SystemExit(1) from exc
 
-    print(f"[config] tools_loaded={len(repo)}", flush=True)
     if len(repo) == 0:
         print(
             "工具库未加载成功，请检查 tools 数据文件后重启。",
             flush=True,
         )
         raise SystemExit(1)
+
+    _print_welcome(tool_count=len(repo))
+
+    print(
+        f"[config] provider={settings.provider_label}  "
+        f"model={settings.deepseek_model if not settings.use_fake_llm else '-'}  "
+        f"output={settings.output_dir}  "
+        f"max_iter={settings.max_tool_iterations}",
+        flush=True,
+    )
+    if settings.config_notice:
+        print(f"[config] {settings.config_notice}", flush=True)
+
+    print(f"[config] tools_loaded={len(repo)}", flush=True)
 
     debug_on = settings.debug_llm
     dump_on = settings.debug_dump_llm
@@ -200,6 +206,10 @@ def main() -> None:
 
         if _is_help(raw):
             _print_help()
+            continue
+
+        if is_tools_command(raw):
+            print(format_tools_reply(repo, raw), end="", flush=True)
             continue
 
         if _is_debug(raw):

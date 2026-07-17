@@ -19,6 +19,7 @@ from prompt_toolkit.shortcuts import CompleteStyle
 SLASH_COMMANDS: tuple[tuple[str, str], ...] = (
     ("/help", "显示本说明"),
     ("/quit", "结束进程"),
+    ("/tools", "浏览知识库工具"),
     ("/debug", "切换 [llm] 终端摘要"),
     ("/dump", "切换 debug JSON 落盘"),
 )
