@@ -68,8 +68,8 @@ def trace_iteration(n: int) -> None:
     print(format_iteration_header(n), flush=True)
 
 
-def trace_thinking() -> None:
-    print(format_thinking_line(), flush=True)
+def trace_thinking(*, end: str = "\n") -> None:
+    print(format_thinking_line(), end=end, flush=True)
 
 
 def trace_response(content: str | None, elapsed_ms: float) -> None:

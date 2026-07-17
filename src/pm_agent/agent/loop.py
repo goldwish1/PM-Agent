@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -12,6 +13,7 @@ from pm_agent.agent.debug_log import TurnDebugDump, print_llm_round
 from pm_agent.agent.llm import LlmApiError, LlmClient
 from pm_agent.agent.prompts import MAX_CLARIFY_ROUNDS, get_system_prompt
 from pm_agent.agent.session import SessionMode, SessionState
+from pm_agent.agent.spinner import llm_spinner
 from pm_agent.agent.trace import (
     trace_iteration,
     trace_response,
@@ -249,10 +251,12 @@ def run_agent_loop(
     while True:
         round_n = iteration + 1
         trace_iteration(round_n)
-        trace_thinking()
+        tty = sys.stdout.isatty()
+        trace_thinking(end="" if tty else "\n")
         started = time.perf_counter()
         try:
-            response = llm.complete(state.messages, tools=tools_schema)
+            with llm_spinner(enabled=tty):
+                response = llm.complete(state.messages, tools=tools_schema)
         except LlmApiError as exc:
             final_text = exc.user_message
             state.append({"role": "assistant", "content": final_text})
