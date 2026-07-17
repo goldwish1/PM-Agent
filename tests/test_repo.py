@@ -23,6 +23,23 @@ def _registry(repo: ToolsRepository, state: SessionState | None = None):
     )
 
 
+# 首批写厚目标：推荐/陪跑高频工具（其余条目不强制厚度）
+TOP10_THICK_SLUGS = frozenset(
+    {
+        "project-charter",
+        "risk-register",
+        "stakeholder-register",
+        "wbs",
+        "raci-matrix",
+        "issue-log",
+        "change-management-plan",
+        "status-report",
+        "requirements-documentation",
+        "lessons-learned-register",
+    }
+)
+
+
 def test_repo_loads_about_39_tools() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
     assert len(repo) == 39
@@ -32,6 +49,20 @@ def test_repo_loads_about_39_tools() -> None:
     assert charter is not None
     assert charter.name == "项目章程"
     assert charter.draftable is True
+
+
+def test_top10_tools_meet_thickness_floor() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    slugs = {t.slug for t in repo.all()}
+    assert TOP10_THICK_SLUGS <= slugs
+    assert len({t.slug for t in repo.all()}) == len(repo)
+
+    for slug in sorted(TOP10_THICK_SLUGS):
+        tool = repo.get_by_slug(slug)
+        assert tool is not None
+        assert len(tool.description) >= 80, slug
+        assert 5 <= len(tool.steps) <= 8, slug
+        assert 6 <= len(tool.scenarios) <= 12, slug
 
 
 def test_repo_search_finds_charter() -> None:

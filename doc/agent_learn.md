@@ -2,6 +2,24 @@
 
 ## 新增功能
 
+### 2026-07-17 · 工具库 Top 10 内容写厚
+
+- **新增加了什么功能**：对 10 个高频工具加厚 `description` / `steps` / `scenarios`，并增加最低厚度单测。
+- **原因**：原条目过薄，推荐召回与陪跑素材不够支撑「下一步问什么 / 产出什么」。
+- **一句话方案**：只扩现有字段、不改 schema；Top 10 写满规范，其余保持原样。
+
+**Top 10 slug**：`project-charter`、`risk-register`、`stakeholder-register`、`wbs`、`raci-matrix`、`issue-log`、`change-management-plan`、`status-report`、`requirements-documentation`、`lessons-learned-register`。
+
+**写厚规范**：`description` ≥80 字（含何时用/别用/常见坑）；`steps` 5～8 条（动作→产出）；`scenarios` 6～12 条口语卡点（含易混/反例）。
+
+**模板示例（项目章程字段形态）**：
+
+```text
+description: 何时用：…。何时别用：…。常见坑：…
+steps: 「明确业务依据 → 产出一句话说明」…
+scenarios: 「下周要立项，还没正式授权」…「别和范围说明书搞混（反例）」…
+```
+
 ### 2026-07-17 · CLI ↑/↓ 输入历史回填
 
 - **新增加了什么功能**：交互终端下可用 ↑/↓ 回填本会话已提交的输入行。
