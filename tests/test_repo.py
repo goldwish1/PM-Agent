@@ -149,3 +149,31 @@ def test_clarify_force_reminder_after_max() -> None:
         if m.get("role") == "system"
     ]
     assert any("澄清已达上限" in t for t in system_texts)
+
+
+def test_clarify_skipped_in_consulting_mode() -> None:
+    registry = ToolRegistry()
+    llm = FakeLlmClient([{"content": "经济压力打几分？A/B/C？"}])
+    state = SessionState(
+        mode=SessionMode.CONSULTING,
+        consulting_tool_slug="decision-matrix",
+    )
+    handle_user_turn("A 6 B 1 C 10", state, llm, registry, max_iterations=3)
+    assert state.clarify_count == 0
+    assert state.mode == SessionMode.CONSULTING
+
+
+def test_clarify_force_reminder_skipped_in_drafting_mode() -> None:
+    registry = ToolRegistry()
+    state = SessionState(
+        mode=SessionMode.DRAFTING_DECISION_MATRIX,
+        clarify_count=MAX_CLARIFY_ROUNDS,
+    )
+    llm = FakeLlmClient([{"content": "矩阵已更新，是否确认导出？"}])
+    handle_user_turn("先2后3", state, llm, registry, max_iterations=3)
+    system_texts = [
+        m.get("content", "")
+        for m in state.messages
+        if m.get("role") == "system"
+    ]
+    assert not any("澄清已达上限" in t for t in system_texts)

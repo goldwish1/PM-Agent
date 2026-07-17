@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+from pm_agent.agent.session import SessionMode
+
 MAX_CLARIFY_ROUNDS = 5
+
+_EARLY_DISCOVERY_MODES = frozenset({SessionMode.IDLE, SessionMode.CLARIFYING})
 
 SYSTEM_PROMPT = """\
 你是 pmbox，面向个人项目经理的命令行助手。
@@ -74,8 +78,14 @@ SYSTEM_PROMPT = """\
 """
 
 
-def get_system_prompt(*, clarify_count: int = 0) -> str:
+def get_system_prompt(
+    *,
+    clarify_count: int = 0,
+    mode: SessionMode = SessionMode.IDLE,
+) -> str:
     base = SYSTEM_PROMPT.strip()
+    if mode not in _EARLY_DISCOVERY_MODES:
+        return base
     if clarify_count >= MAX_CLARIFY_ROUNDS:
         return (
             base

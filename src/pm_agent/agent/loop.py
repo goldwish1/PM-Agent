@@ -123,8 +123,18 @@ def _dispatch_tool_calls(
         _execute_tools_serial(state, registry, tool_calls)
 
 
+_EARLY_DISCOVERY_MODES = frozenset({SessionMode.IDLE, SessionMode.CLARIFYING})
+
+
+def _in_clarify_phase(state: SessionState) -> bool:
+    return state.mode in _EARLY_DISCOVERY_MODES
+
+
 def _ensure_system_prompt(state: SessionState) -> None:
-    prompt = get_system_prompt(clarify_count=state.clarify_count)
+    prompt = get_system_prompt(
+        clarify_count=state.clarify_count,
+        mode=state.mode,
+    )
     if not state.messages or state.messages[0].get("role") != "system":
         state.messages.insert(0, {"role": "system", "content": prompt})
     else:
@@ -132,6 +142,8 @@ def _ensure_system_prompt(state: SessionState) -> None:
 
 
 def _inject_clarify_force_reminder(state: SessionState) -> None:
+    if not _in_clarify_phase(state):
+        return
     if state.clarify_count < MAX_CLARIFY_ROUNDS:
         return
     state.append(
@@ -158,7 +170,9 @@ def _update_clarify_after_turn(
             state.mode = SessionMode.RECOMMENDING
         return
 
-    # 未调工具且像在追问 → 计为一次澄清
+    # 未调工具且像在追问 → 计为一次澄清（仅早期发现阶段）
+    if not _in_clarify_phase(state):
+        return
     if ("？" in reply or "?" in reply) and state.clarify_count < MAX_CLARIFY_ROUNDS:
         state.clarify_count += 1
         state.mode = SessionMode.CLARIFYING
