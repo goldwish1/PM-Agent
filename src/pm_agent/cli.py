@@ -22,6 +22,7 @@ from pm_agent.cli_attach import (
     resolve_attachments,
 )
 from pm_agent.cli_input import read_user_line
+from pm_agent.cli_render import print_assistant_reply
 from pm_agent.config import ConfigError, load_settings
 from pm_agent.tools.bootstrap import build_registry_from_path
 
@@ -245,7 +246,7 @@ def main() -> None:
             llm_is_fake=settings.use_fake_llm,
         )
         print(flush=True)
-        print(f"● {reply}", flush=True)
+        print_assistant_reply(reply)
         print(flush=True)
 
 

@@ -15,6 +15,7 @@ from pm_agent.agent.trace import (
     format_tool_call_line,
     format_tool_result_line,
 )
+from pm_agent.cli_render import print_assistant_reply
 from pm_agent.tools.demo import build_demo_registry
 
 
@@ -108,7 +109,7 @@ def test_loop_emits_trace_events_and_result_layer_distinct(
 
     # 模拟 cli 结果层：空行 + ●
     print(flush=True)
-    print(f"● {reply}", flush=True)
+    print_assistant_reply(reply)
     combined = process_out + capsys.readouterr().out
     assert "\n● " in combined
     bullet_lines = [ln for ln in combined.splitlines() if ln.startswith("● ")]

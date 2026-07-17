@@ -2,6 +2,12 @@
 
 ## 新增功能
 
+### 2026-07-17 · TTY 下最终回复 Markdown 渲染
+
+- **新增加了什么功能**：交互终端中助手最终回复经 `rich` 渲染 Markdown（加粗、列表、表格等）；管道/非 TTY 仍纯文本。
+- **原因**：模型默认输出 Markdown，终端 `print` 不渲染，可读性差。
+- **一句话方案**：`cli_render.print_assistant_reply` 仅结果层、仅 `isatty` 时 `Console`+`Markdown`；过程日志不动；系统提示少用宽表。
+
 ### 2026-07-17 · TTY 下 LLM 等待同行 spinner
 
 - **新增加了什么功能**：`thinking: LLM调用开始。` 同行显示经典 `|/-\\` 动画，返回后擦除再打印 `response`。
