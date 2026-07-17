@@ -11,9 +11,13 @@ from typing import Any
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import Completer, Completion
 from prompt_toolkit.document import Document
+from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from prompt_toolkit.shortcuts import CompleteStyle
+
+# 本进程内共享：↑/↓ 回填已提交过的输入；进程结束即清空。
+_history = InMemoryHistory()
 
 # (命令, 说明) — 仅 slash 元指令进入补全列表
 SLASH_COMMANDS: tuple[tuple[str, str], ...] = (
@@ -183,6 +187,7 @@ def read_user_line(prompt_text: str = "> ") -> str:
     return prompt(
         prompt_text,
         completer=PmboxCompleter(),
+        history=_history,
         key_bindings=_build_debug_key_bindings(),
         complete_while_typing=True,
         complete_style=CompleteStyle.COLUMN,
