@@ -9,6 +9,7 @@ from pm_agent.agent.loop import handle_user_turn
 from pm_agent.agent.prompts import MAX_CLARIFY_ROUNDS
 from pm_agent.agent.session import SessionMode, SessionState
 from pm_agent.config import REPO_ROOT
+from pm_agent.knowledge.categories import BOOST_EXPECTED_USE_CASE
 from pm_agent.knowledge.repo import ToolsRepository
 from pm_agent.tools.bootstrap import build_registry
 from pm_agent.tools.registry import ToolRegistry
@@ -73,6 +74,80 @@ def test_repo_search_finds_charter() -> None:
     hits = repo.search("立项授权")
     slugs = {t.slug for t in hits}
     assert "project-charter" in slugs
+
+
+def test_all_tools_have_valid_use_cases() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    assert len(repo) == 47
+    for tool in repo.all():
+        assert tool.use_cases
+        assert all(isinstance(c, str) and c for c in tool.use_cases)
+
+
+def test_repo_search_by_use_case_name() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    hits = repo.search("决策")
+    slugs = {t.slug for t in hits}
+    assert "decision-matrix" in slugs
+
+
+def test_list_by_use_case() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    tools = repo.list_by_use_case("决策与分析")
+    slugs = {t.slug for t in tools}
+    assert "decision-matrix" in slugs
+    assert "decision-record" in slugs
+
+
+def test_keyword_boosts_align_with_use_cases() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    boosts: list[tuple[list[str], str]] = [
+        (
+            ["project-charter", "stakeholder-register", "assumption-log"],
+            "与立项授权/启动阶段高度相关",
+        ),
+        (
+            ["risk-register", "risk-management-plan", "risk-report"],
+            "与风险识别与应对相关",
+        ),
+        (
+            ["gantt-chart", "activity-list", "network-diagram"],
+            "与进度规划/赶工相关",
+        ),
+        (
+            ["project-scope-statement", "wbs", "requirements-documentation"],
+            "与范围与需求澄清相关",
+        ),
+        (
+            ["cost-baseline", "cost-management-plan", "earned-value-analysis"],
+            "与成本预算与绩效相关",
+        ),
+        (
+            ["stakeholder-register", "stakeholder-engagement-plan", "raci-matrix"],
+            "与干系人管理相关",
+        ),
+        (
+            ["change-request", "change-management-plan", "issue-log"],
+            "与变更控制相关",
+        ),
+        (
+            ["project-closure-document", "final-report", "transition-plan"],
+            "与项目收尾相关",
+        ),
+        (
+            ["status-report", "communications-management-plan"],
+            "与沟通与状态同步相关",
+        ),
+        (
+            ["decision-matrix", "swot-analysis", "pre-mortem", "decision-record"],
+            "与方案决策/权衡相关",
+        ),
+    ]
+    for slugs, reason in boosts:
+        expected = BOOST_EXPECTED_USE_CASE[reason]
+        tool = repo.get_by_slug(slugs[0])
+        assert tool is not None, slugs[0]
+        assert expected in tool.use_cases, (slugs[0], tool.use_cases, expected)
 
 
 def test_recommend_rejects_unknown_slug() -> None:

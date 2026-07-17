@@ -240,10 +240,10 @@ stateDiagram-v2
 ### 4.2 核心模型（逻辑 Schema）
 
 **PmTool（对应 tools.json 条目）**
-- `slug`（str）主键语义  
-- `name`, `name_en`, `process_group`, `knowledge_area`  
-- `summary`, `description`, `steps: list[str]`, `scenarios: list[str]`  
-- `template` / 可选 `template_fields` / `table_config`  
+- `slug`（str）主键语义
+- `name`, `name_en`, `use_cases: list[str]`（实用场景，1～3 个）
+- `summary`, `description`, `steps: list[str]`, `scenarios: list[str]`
+- `template` / 可选 `template_fields` / `table_config`
 
 **SessionState**
 - `messages: list[ChatMessage]`  
@@ -268,8 +268,7 @@ stateDiagram-v2
 -- CREATE TABLE pm_tools (
 --   slug TEXT PRIMARY KEY,
 --   name TEXT NOT NULL,
---   process_group TEXT,
---   knowledge_area TEXT,
+--   use_cases_json TEXT NOT NULL,
 --   summary TEXT,
 --   payload_json TEXT NOT NULL
 -- );
@@ -304,7 +303,7 @@ stateDiagram-v2
 #### `search_tools`
 - **描述**：按关键词检索工具库摘要  
 - **参数**：`{ "query": string }`  
-- **返回**（给模型的 content 文本/JSON 字符串）：最多 N 条 `{slug,name,summary,process_group,knowledge_area}`  
+- **返回**（给模型的 content 文本/JSON 字符串）：最多 N 条 `{slug,name,summary,use_cases,draftable}`  
 
 #### `recommend_tools`
 - **描述**：根据用户卡点推荐 1～3 个库内工具；必须校验 slug  

@@ -20,8 +20,7 @@ def _sample_repo() -> ToolsRepository:
                 slug="project-charter",
                 name="项目章程",
                 name_en="Project Charter",
-                process_group="启动",
-                knowledge_area="整合",
+                use_cases=["立项与授权"],
                 summary="正式授权项目",
                 description="立项授权核心依据。",
                 steps=["明确目的", "获得签字"],
@@ -32,8 +31,7 @@ def _sample_repo() -> ToolsRepository:
                 slug="risk-register",
                 name="风险登记册",
                 name_en="Risk Register",
-                process_group="规划",
-                knowledge_area="风险",
+                use_cases=["风险与问题"],
                 summary="记录并跟踪风险",
                 description="识别与应对风险。",
                 steps=["识别风险", "评估影响"],
@@ -44,8 +42,7 @@ def _sample_repo() -> ToolsRepository:
                 slug="status-report",
                 name="项目状态报告",
                 name_en="Status Report",
-                process_group="监控",
-                knowledge_area="沟通",
+                use_cases=["沟通与汇报"],
                 summary="同步项目状态",
                 description="周报式状态同步。",
                 steps=["汇总进度", "标出风险"],
@@ -71,16 +68,15 @@ def test_parse_tools_arg() -> None:
     assert parse_tools_arg("/tools  立项  ") == "立项"
 
 
-def test_format_catalog_groups_and_draftable() -> None:
+def test_format_catalog_groups_by_use_case_and_draftable() -> None:
     text = format_tools_catalog(_sample_repo())
-    assert "知识库工具共 3 个" in text
-    assert "## 启动（1）" in text
-    assert "## 规划（1）" in text
-    assert "## 监控（1）" in text
+    assert "知识库工具共 3 个（按实用场景）" in text
+    assert "## 立项与授权（1）" in text
+    assert "## 风险与问题（1）" in text
+    assert "## 沟通与汇报（1）" in text
     assert "project-charter  项目章程 · draftable" in text
     assert "status-report  项目状态报告\n" in text or "status-report  项目状态报告" in text
     assert "· draftable" in text
-    # 非 draftable 行不应带标记
     assert "status-report  项目状态报告 · draftable" not in text
 
 
@@ -88,10 +84,12 @@ def test_format_detail_by_slug() -> None:
     repo = _sample_repo()
     text = format_tools_reply(repo, "/tools project-charter")
     assert "slug: project-charter" in text
+    assert "use_cases: 立项与授权" in text
     assert "draftable: True" in text
     assert "正式授权项目" in text
     assert "明确目的" in text
     assert "下周要立项" in text
+    assert "process_group" not in text
 
 
 def test_format_search_by_keyword() -> None:
@@ -99,6 +97,7 @@ def test_format_search_by_keyword() -> None:
     text = format_tools_reply(repo, "/tools 立项")
     assert "搜索「立项」" in text
     assert "project-charter" in text
+    assert "[立项与授权]" in text
 
 
 def test_format_search_no_hit() -> None:
@@ -107,7 +106,7 @@ def test_format_search_no_hit() -> None:
 
 
 def test_format_tool_detail_empty_lists() -> None:
-    tool = PmTool(slug="x", name="空", steps=[], scenarios=[])
+    tool = PmTool(slug="x", name="空", use_cases=["范围与需求"], steps=[], scenarios=[])
     text = format_tool_detail(tool)
     assert "steps:\n  （无）" in text
     assert "scenarios:\n  （无）" in text

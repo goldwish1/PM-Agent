@@ -6,6 +6,7 @@ import json
 
 from pydantic import BaseModel, Field
 
+from pm_agent.knowledge.categories import format_use_cases_label
 from pm_agent.knowledge.repo import ToolsRepository
 from pm_agent.tools.registry import ToolRegistry, ToolSpec
 
@@ -45,7 +46,7 @@ def _filter_whitelist(
 def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> None:
     def _execute(args: RecommendToolsArgs) -> str:
         rejected: list[str] = []
-        tools_out: list[dict[str, str]] = []
+        tools_out: list[dict[str, str | list[str] | bool]] = []
         reasoning_parts: list[str] = []
 
         if args.candidate_slugs:
@@ -54,15 +55,14 @@ def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> N
                 tool = repo.get_by_slug(slug)
                 if tool is None:
                     continue
+                cases = format_use_cases_label(tool.use_cases)
                 tools_out.append(
                     {
                         "slug": tool.slug,
                         "name": tool.name,
                         "summary": tool.summary,
-                        "process_group": tool.process_group,
-                        "knowledge_area": tool.knowledge_area,
-                        "reason": f"与用户卡点匹配，且属于{tool.process_group}/"
-                        f"{tool.knowledge_area}",
+                        "use_cases": tool.use_cases,
+                        "reason": f"与用户卡点匹配，属于{cases}场景",
                         "draftable": tool.draftable,
                     }
                 )
@@ -88,8 +88,7 @@ def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> N
                         "slug": tool.slug,
                         "name": tool.name,
                         "summary": tool.summary,
-                        "process_group": tool.process_group,
-                        "knowledge_area": tool.knowledge_area,
+                        "use_cases": tool.use_cases,
                         "reason": reason,
                         "draftable": tool.draftable,
                     }
@@ -104,7 +103,7 @@ def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> N
                     "reasoning": "无法从库内匹配到可靠推荐。",
                     "tools": [],
                     "rejected_slugs": rejected,
-                    "instruction": "请补充项目阶段（启动/规划/执行等）或卡点类型后重试；"
+                    "instruction": "请补充卡点类型（如立项、风险、决策、汇报）后重试；"
                     "不要编造库外工具。",
                 },
                 ensure_ascii=False,

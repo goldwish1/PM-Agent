@@ -3,8 +3,6 @@
     "slug": "project-charter",
     "name": "项目章程",
     "name_en": "Project Charter",
-    "process_group": "启动",
-    "knowledge_area": "整合",
     "summary": "正式授权项目并明确高层目标、约束与成功标准",
     "description": "何时用：立项前缺正式授权、目标/发起人/预算口径不清时。何时别用：仅做内部头脑风暴、尚未有发起人意向，或范围细节已需 WBS/需求文件时——章程只定高层边界。常见坑：写成详细范围说明书；缺少签字与成功标准；把假设当既定事实却不登记验证。",
     "steps": [
@@ -26,14 +24,15 @@
       "别和项目范围说明书搞混——现在只要高层授权（反例）",
       "还在点子阶段、没有发起人意向时先别硬写章程（反例）"
     ],
-    "draftable": true
+    "draftable": true,
+    "use_cases": [
+      "立项与授权"
+    ]
   },
   {
     "slug": "stakeholder-register",
     "name": "干系人登记册",
     "name_en": "Stakeholder Register",
-    "process_group": "启动",
-    "knowledge_area": "干系人",
     "summary": "识别并记录项目干系人及其影响与期望",
     "description": "何时用：启动会前不知该请谁、决策者缺席、跨部门推动困难时。何时别用：已识别清楚、当前要设计参与与沟通动作时，应转向干系人参与计划/沟通管理计划。常见坑：只列姓名不评估权力利益；漏掉反对者与终端用户；登记后从不更新态度变化。",
     "steps": [
@@ -54,14 +53,16 @@
       "已经知道人都有谁，现在要提升支持度——用干系人参与计划（易混）",
       "只要发周报频率，应看沟通管理计划（易混）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "立项与授权",
+      "干系人与协作"
+    ]
   },
   {
     "slug": "assumption-log",
     "name": "假设日志",
     "name_en": "Assumption Log",
-    "process_group": "启动",
-    "knowledge_area": "整合",
     "summary": "记录项目假设与制约并持续验证",
     "description": "把未经验证的假设与制约显性化，降低后期翻车风险。",
     "steps": [
@@ -73,14 +74,16 @@
       "信息不足却要推进",
       "假设很多"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "立项与授权",
+      "风险与问题"
+    ]
   },
   {
     "slug": "benefits-management-plan",
     "name": "收益管理计划",
     "name_en": "Benefits Management Plan",
-    "process_group": "启动",
-    "knowledge_area": "整合",
     "summary": "定义如何度量与实现项目收益",
     "description": "说明目标收益、度量指标、实现时间表与责任人。",
     "steps": [
@@ -92,14 +95,16 @@
       "要讲清业务收益",
       "立项评审"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "立项与授权",
+      "流程规范（参考）"
+    ]
   },
   {
     "slug": "project-management-plan",
     "name": "项目管理计划",
     "name_en": "Project Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "整合",
     "summary": "汇总各分册计划，作为执行与监控基线",
     "description": "整合范围、进度、成本、质量、风险等分计划，形成单一事实来源。",
     "steps": [
@@ -111,14 +116,15 @@
       "要做整体计划",
       "多方扯皮无统一口径"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）"
+    ]
   },
   {
     "slug": "scope-management-plan",
     "name": "范围管理计划",
     "name_en": "Scope Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "范围",
     "summary": "规定如何定义、确认与控制范围",
     "description": "明确需求收集、WBS、验收与范围变更流程。",
     "steps": [
@@ -130,14 +136,16 @@
       "范围总变",
       "验收扯皮"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "范围与需求"
+    ]
   },
   {
     "slug": "requirements-documentation",
     "name": "需求文件",
     "name_en": "Requirements Documentation",
-    "process_group": "规划",
-    "knowledge_area": "范围",
     "summary": "结构化记录已澄清的业务与功能需求",
     "description": "何时用：需求口口相传易丢、开发与业务理解不一致、评审需要书面需求时。何时别用：立项高层目标用章程；需求与测试/设计追溯用需求跟踪矩阵；范围边界总述用范围说明书。常见坑：把愿望当需求；无验收标准；版本混乱多人改同一份。",
     "steps": [
@@ -158,14 +166,15 @@
       "要看需求覆盖到哪个用例——用需求跟踪矩阵（易混）",
       "只要立项目的和授权——用项目章程（易混）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
   },
   {
     "slug": "requirements-traceability-matrix",
     "name": "需求跟踪矩阵",
     "name_en": "Requirements Traceability Matrix",
-    "process_group": "规划",
-    "knowledge_area": "范围",
     "summary": "把需求追溯到交付物、测试与验收",
     "description": "建立需求↔设计↔测试链路，防止遗漏与范围漂移。",
     "steps": [
@@ -177,14 +186,15 @@
       "验收对不上需求",
       "变更难追溯"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
   },
   {
     "slug": "project-scope-statement",
     "name": "项目范围说明书",
     "name_en": "Project Scope Statement",
-    "process_group": "规划",
-    "knowledge_area": "范围",
     "summary": "详细描述项目范围、边界与验收标准",
     "description": "写清包含与不包含、交付物与验收条件。",
     "steps": [
@@ -197,14 +207,15 @@
       "范围边界不清",
       "甲乙扯皮"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
   },
   {
     "slug": "wbs",
     "name": "工作分解结构",
     "name_en": "Work Breakdown Structure",
-    "process_group": "规划",
-    "knowledge_area": "范围",
     "summary": "把项目范围逐层分解为可管理的工作包",
     "description": "何时用：范围感觉很大但拆不开、估工期/分派任务前缺少统一结构时。何时别用：仍在启动签字阶段用章程即可；活动排序与依赖用活动清单/网络图；需求条目追踪用需求跟踪矩阵。常见坑：按组织架构拆而非按交付物；工作包过大无法估算；把 WBS 当成排期甘特图。",
     "steps": [
@@ -225,14 +236,15 @@
       "现在要排依赖和关键路径——用网络图/活动清单（易混）",
       "还在要立项签字，先写项目章程即可（反例）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
   },
   {
     "slug": "schedule-management-plan",
     "name": "进度管理计划",
     "name_en": "Schedule Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "进度",
     "summary": "规定如何制定、监控与控制进度",
     "description": "定义进度方法、工具、阈值与变更审批。",
     "steps": [
@@ -244,14 +256,16 @@
       "进度常延误",
       "汇报口径乱"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "进度与排期"
+    ]
   },
   {
     "slug": "activity-list",
     "name": "活动清单",
     "name_en": "Activity List",
-    "process_group": "规划",
-    "knowledge_area": "进度",
     "summary": "列出完成工作包所需的全部活动",
     "description": "把 WBS 工作包展开为可排程活动。",
     "steps": [
@@ -263,14 +277,15 @@
       "不知从哪排期",
       "遗漏任务"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "进度与排期"
+    ]
   },
   {
     "slug": "network-diagram",
     "name": "项目网络图",
     "name_en": "Project Schedule Network Diagram",
-    "process_group": "规划",
-    "knowledge_area": "进度",
     "summary": "展示活动逻辑关系与关键路径",
     "description": "用前导关系识别关键路径与并行机会。",
     "steps": [
@@ -282,14 +297,15 @@
       "想压缩工期",
       "弄清先后依赖"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "进度与排期"
+    ]
   },
   {
     "slug": "gantt-chart",
     "name": "进度计划（甘特图）",
     "name_en": "Schedule / Gantt Chart",
-    "process_group": "规划",
-    "knowledge_area": "进度",
     "summary": "用时间轴呈现活动开始/结束与里程碑",
     "description": "直观展示进度、里程碑与责任安排。",
     "steps": [
@@ -301,14 +317,15 @@
       "要排期",
       "要给老板看进度"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "进度与排期"
+    ]
   },
   {
     "slug": "cost-management-plan",
     "name": "成本管理计划",
     "name_en": "Cost Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "成本",
     "summary": "规定成本估算、预算与控制方法",
     "description": "定义估算精度、成本科目、阈值与阈值规则。",
     "steps": [
@@ -320,14 +337,16 @@
       "预算怎么管",
       "花超了怎么办"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "成本与预算"
+    ]
   },
   {
     "slug": "cost-baseline",
     "name": "成本基准",
     "name_en": "Cost Baseline",
-    "process_group": "规划",
-    "knowledge_area": "成本",
     "summary": "经批准的阶段性预算，用于绩效比较",
     "description": "形成按时段分布的批准预算（通常含应急储备）。",
     "steps": [
@@ -339,14 +358,15 @@
       "要批预算",
       "对比实际花费"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "成本与预算"
+    ]
   },
   {
     "slug": "quality-management-plan",
     "name": "质量管理计划",
     "name_en": "Quality Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "质量",
     "summary": "定义质量标准、保证与控制活动",
     "description": "明确质量目标、检查点与不合格处理。",
     "steps": [
@@ -358,14 +378,15 @@
       "质量事故频发",
       "验收标准模糊"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）"
+    ]
   },
   {
     "slug": "resource-management-plan",
     "name": "资源管理计划",
     "name_en": "Resource Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "资源",
     "summary": "规划团队与实物资源的获取与管理",
     "description": "说明角色、获取、培训与释放方式。",
     "steps": [
@@ -377,14 +398,16 @@
       "人不够",
       "角色冲突"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "干系人与协作"
+    ]
   },
   {
     "slug": "raci-matrix",
     "name": "RACI 矩阵",
     "name_en": "RACI Matrix",
-    "process_group": "规划",
-    "knowledge_area": "资源",
     "summary": "明确活动或交付物的责任、批准、咨询与知会角色",
     "description": "何时用：职责不清、多人以为对方负责、审批链路混乱时。何时别用：仅识别有哪些干系人用登记册；团队运作规范用团队章程；日常阻碍跟踪用问题日志。常见坑：同一事项多个 A 或没有 A；把 RACI 写成组织架构图；只填一次从不随流程变更更新。",
     "steps": [
@@ -405,14 +428,15 @@
       "只是想列出有哪些干系人——用干系人登记册（易混）",
       "任务已经卡住没人跟——用问题日志（易混）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "干系人与协作"
+    ]
   },
   {
     "slug": "communications-management-plan",
     "name": "沟通管理计划",
     "name_en": "Communications Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "沟通",
     "summary": "规定说什么、对谁说、何时与何种渠道",
     "description": "设计会议、报告与升级路径，减少信息噪音。",
     "steps": [
@@ -424,14 +448,16 @@
       "会太多",
       "信息不透明"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "沟通与汇报"
+    ]
   },
   {
     "slug": "risk-management-plan",
     "name": "风险管理计划",
     "name_en": "Risk Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "风险",
     "summary": "规定风险识别、评估、应对与监控方法",
     "description": "定义风险类别、评分尺、会议节奏与升级阈值。",
     "steps": [
@@ -442,14 +468,16 @@
     "scenarios": [
       "要建立风险体系"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "风险与问题"
+    ]
   },
   {
     "slug": "risk-register",
     "name": "风险登记册",
     "name_en": "Risk Register",
-    "process_group": "规划",
-    "knowledge_area": "风险",
     "summary": "记录已识别风险、评估结果与应对措施",
     "description": "何时用：不确定因素多、担心延期/超支/质量翻车，或评审要求出示风险清单时。何时别用：已发生且正在卡进度的事应进问题日志；战略级风险管理流程本身用风险管理计划。常见坑：只列担忧不写概率影响与责任人；把问题当风险；登记后从不复审状态。",
     "steps": [
@@ -470,14 +498,15 @@
       "已经卡住的问题请用问题日志，不要只写进风险登记册（反例）",
       "只要风险管理流程怎么建，应看风险管理计划（易混）"
     ],
-    "draftable": true
+    "draftable": true,
+    "use_cases": [
+      "风险与问题"
+    ]
   },
   {
     "slug": "procurement-management-plan",
     "name": "采购管理计划",
     "name_en": "Procurement Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "采购",
     "summary": "规划外采内容、方式与合同策略",
     "description": "明确自制/外购、招标与合同类型选择。",
     "steps": [
@@ -489,14 +518,15 @@
       "要招供应商",
       "外采很多"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）"
+    ]
   },
   {
     "slug": "stakeholder-engagement-plan",
     "name": "干系人参与计划",
     "name_en": "Stakeholder Engagement Plan",
-    "process_group": "规划",
-    "knowledge_area": "干系人",
     "summary": "规划如何提升干系人支持度",
     "description": "针对当前/期望参与度设计策略与行动。",
     "steps": [
@@ -508,14 +538,16 @@
       "老板不支持",
       "跨部门难推动"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "干系人与协作"
+    ]
   },
   {
     "slug": "change-management-plan",
     "name": "变更管理计划",
     "name_en": "Change Management Plan",
-    "process_group": "规划",
-    "knowledge_area": "整合",
     "summary": "规定变更提出、评估、批准与落实流程",
     "description": "何时用：口头变更太多、范围蔓延、不知谁有权批准改基线时。何时别用：单次具体变更用变更请求；日常小阻碍用问题日志。常见坑：流程过重无人遵守；只规定审批不规定影响分析；未定义紧急变更绿色通道。",
     "steps": [
@@ -536,14 +568,16 @@
       "已经有一张具体变更要提——用变更请求（易混）",
       "只是当前阻塞问题——用问题日志（易混）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "变更与管控"
+    ]
   },
   {
     "slug": "deliverables",
     "name": "可交付成果",
     "name_en": "Deliverables",
-    "process_group": "执行",
-    "knowledge_area": "范围",
     "summary": "按计划产出并提交可验收成果",
     "description": "管理成果完成定义、提交与移交。",
     "steps": [
@@ -555,14 +589,15 @@
       "要交付了",
       "交付口径不一致"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
   },
   {
     "slug": "issue-log",
     "name": "问题日志",
     "name_en": "Issue Log",
-    "process_group": "执行",
-    "knowledge_area": "整合",
     "summary": "跟踪当前阻碍项目的问题直至关闭",
     "description": "何时用：执行中已发生卡点、问题没人跟、站会反复提同一阻碍时。何时别用：尚未发生的不确定事件用风险登记册；要改基线的正式变更用变更请求。常见坑：问题描述空泛无影响；无责任人/到期日；关闭标准不清导致长期挂起。",
     "steps": [
@@ -583,14 +618,15 @@
       "还没发生、只是担心——用风险登记册（易混）",
       "要改范围/进度基线——走变更请求（易混）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "风险与问题"
+    ]
   },
   {
     "slug": "lessons-learned-register",
     "name": "经验教训登记册",
     "name_en": "Lessons Learned Register",
-    "process_group": "执行",
-    "knowledge_area": "整合",
     "summary": "持续记录实践中的经验教训并促进复用",
     "description": "何时用：阶段/迭代结束要复盘、同类问题重复出现、希望沉淀可复用做法时。何时别用：当前阻塞跟踪用问题日志；项目正式收尾文件用项目收尾/最终报告。常见坑：只在收尾补记导致遗忘；只写问题不写可复用动作；登记后从不回看。",
     "steps": [
@@ -611,14 +647,15 @@
       "问题还在发生、要闭环跟踪——用问题日志（易混）",
       "写给发起人的结项总结——用最终报告（易混）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘"
+    ]
   },
   {
     "slug": "team-charter",
     "name": "团队章程",
     "name_en": "Team Charter",
-    "process_group": "执行",
-    "knowledge_area": "资源",
     "summary": "约定团队目标、规范与决策方式",
     "description": "对齐价值观、会议规则与冲突处理。",
     "steps": [
@@ -630,14 +667,15 @@
       "新组队",
       "协作混乱"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "干系人与协作"
+    ]
   },
   {
     "slug": "quality-checklists",
     "name": "质量核对单",
     "name_en": "Quality Checklists",
-    "process_group": "执行",
-    "knowledge_area": "质量",
     "summary": "用清单确保关键步骤不遗漏",
     "description": "把重复性检查项固化，提高一致性。",
     "steps": [
@@ -649,14 +687,15 @@
       "漏检",
       "要标准化检查"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
   },
   {
     "slug": "status-report",
     "name": "项目状态报告",
     "name_en": "Project Status Report",
-    "process_group": "监控",
-    "knowledge_area": "整合",
     "summary": "按固定结构汇报进度、风险、问题与下一步",
     "description": "何时用：需要周报/双周汇报、干系人要统一进度视图时。何时别用：深度偏差根因分析用偏差分析/挣值；收尾总结用最终报告。常见坑：只写完成事项不写风险与求助；数据口径每次变；篇幅过长无人读。",
     "steps": [
@@ -677,14 +716,15 @@
       "要算 SPI/CPI——用挣值分析（易混）",
       "项目已结束写总结——用最终报告（易混）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "沟通与汇报"
+    ]
   },
   {
     "slug": "earned-value-analysis",
     "name": "挣值分析",
     "name_en": "Earned Value Analysis",
-    "process_group": "监控",
-    "knowledge_area": "成本",
     "summary": "用 PV/EV/AC 量化进度与成本绩效",
     "description": "计算 SPI/CPI 等，判断趋势与预测完工。",
     "steps": [
@@ -696,14 +736,16 @@
       "不知道是否落后",
       "成本超支难量化"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "成本与预算",
+      "进度与排期"
+    ]
   },
   {
     "slug": "variance-analysis",
     "name": "偏差分析",
     "name_en": "Variance Analysis",
-    "process_group": "监控",
-    "knowledge_area": "整合",
     "summary": "解释计划与实际的差异原因",
     "description": "对范围/进度/成本偏差做原因与纠偏建议。",
     "steps": [
@@ -715,14 +757,16 @@
       "实际偏离计划",
       "要解释差异"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "进度与排期",
+      "成本与预算"
+    ]
   },
   {
     "slug": "change-request",
     "name": "变更请求",
     "name_en": "Change Request",
-    "process_group": "监控",
-    "knowledge_area": "整合",
     "summary": "正式提出对基线的变更",
     "description": "描述变更内容、理由、影响与建议决策。",
     "steps": [
@@ -734,14 +778,15 @@
       "需求变了",
       "要改基线"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "变更与管控"
+    ]
   },
   {
     "slug": "risk-report",
     "name": "风险报告",
     "name_en": "Risk Report",
-    "process_group": "监控",
-    "knowledge_area": "风险",
     "summary": "汇总整体风险态势与高优先级风险",
     "description": "向决策者呈现风险趋势与需升级事项。",
     "steps": [
@@ -753,14 +798,16 @@
       "风险会上要材料",
       "发起人要风险态势"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "风险与问题",
+      "沟通与汇报"
+    ]
   },
   {
     "slug": "final-report",
     "name": "最终报告",
     "name_en": "Final Report",
-    "process_group": "收尾",
-    "knowledge_area": "整合",
     "summary": "总结项目绩效、成果与经验",
     "description": "对照目标说明完成情况、偏差与建议。",
     "steps": [
@@ -772,14 +819,16 @@
       "项目要结项",
       "写总结"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘",
+      "沟通与汇报"
+    ]
   },
   {
     "slug": "project-closure-document",
     "name": "项目收尾文件",
     "name_en": "Project Closure Document",
-    "process_group": "收尾",
-    "knowledge_area": "整合",
     "summary": "正式确认项目关闭并释放资源",
     "description": "完成行政收尾、合同收尾与资源释放清单。",
     "steps": [
@@ -791,14 +840,15 @@
       "要正式结项",
       "资源还占着"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘"
+    ]
   },
   {
     "slug": "acceptance-document",
     "name": "验收文件",
     "name_en": "Acceptance Document",
-    "process_group": "收尾",
-    "knowledge_area": "范围",
     "summary": "记录客户/发起人对交付物的正式验收",
     "description": "固化验收范围、结果与签字，作为关闭依据。",
     "steps": [
@@ -810,14 +860,16 @@
       "要验收签字",
       "交付有争议"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘",
+      "范围与需求"
+    ]
   },
   {
     "slug": "transition-plan",
     "name": "移交计划",
     "name_en": "Transition Plan",
-    "process_group": "收尾",
-    "knowledge_area": "整合",
     "summary": "规划成果移交给运营/维护团队",
     "description": "明确移交内容、培训、支持窗口与责任切换。",
     "steps": [
@@ -829,14 +881,15 @@
       "上线后谁维护",
       "交接不清"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘"
+    ]
   },
   {
     "slug": "decision-matrix",
     "name": "决策矩阵",
     "name_en": "Decision Matrix",
-    "process_group": "规划",
-    "knowledge_area": "决策分析",
     "summary": "按准则权重对多个备选方案打分，量化比较后选出推荐方案",
     "description": "何时用：有 2～5 个备选方案、需要量化比较（成本/风险/周期/质量等）且要向干系人展示打分依据时。何时别用：方案尚未列全、准则无法达成共识、或决策本质是政治/战略直觉而非可打分权衡时。常见坑：准则过多导致分析瘫痪；权重拍脑袋不讨论；只打分不写依据；把主观偏好伪装成客观分数。",
     "steps": [
@@ -857,14 +910,15 @@
       "团队对准则权重有争议需要先对齐再打分",
       "只有一个明显最优方案时不必硬做矩阵（反例）"
     ],
-    "draftable": true
+    "draftable": true,
+    "use_cases": [
+      "决策与分析"
+    ]
   },
   {
     "slug": "swot-analysis",
     "name": "SWOT 分析",
     "name_en": "SWOT Analysis",
-    "process_group": "规划",
-    "knowledge_area": "决策分析",
     "summary": "从优势、劣势、机会、威胁四象限梳理内外部因素，辅助战略取舍",
     "description": "何时用：需要全景审视项目/方案所处的内外部环境、识别战略机会与威胁时。何时别用：问题已是具体二选一打分题（用决策矩阵）；或仅需记录最终决策结论时（用决策记录）。常见坑：把 SWOT 当结论而非输入；优势劣势与机会威胁混淆；列完四象限却没有推导行动或决策。",
     "steps": [
@@ -883,14 +937,15 @@
       "需要向老板展示环境分析而非直接拍板",
       "SWOT 做完不知道下一步怎么办（反例：应推导行动）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "决策与分析"
+    ]
   },
   {
     "slug": "pre-mortem",
     "name": "事前验尸",
     "name_en": "Pre-mortem",
-    "process_group": "规划",
-    "knowledge_area": "决策分析",
     "summary": "假设项目已失败，倒推可能原因并提前识别决策风险",
     "description": "何时用：重大决策前想提前暴露盲区、避免群体乐观偏见时。何时别用：决策已执行、仅需记录结论时；或问题本质是方案量化比较时（用决策矩阵）。常见坑：验尸流于形式、不转化为风险或决策条件；只批判不建设；参与者不敢说真话。",
     "steps": [
@@ -909,14 +964,16 @@
       "立项前想提前识别致命风险",
       "日常小决定不需要验尸（反例）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "决策与分析",
+      "风险与问题"
+    ]
   },
   {
     "slug": "moscow-prioritization",
     "name": "MoSCoW 优先级",
     "name_en": "MoSCoW Prioritization",
-    "process_group": "规划",
-    "knowledge_area": "决策分析",
     "summary": "将需求或任务分为必须有、应该有、可以有、不会有，辅助范围取舍",
     "description": "何时用：范围/需求/任务过多、必须在有限资源下做取舍时。何时别用：备选方案是不同技术路线而非需求列表时（用决策矩阵）；或需记录最终决策归档时（用决策记录）。常见坑：全是 Must 导致无法裁剪；Should/Could 界限模糊；排序后不与干系人确认。",
     "steps": [
@@ -935,14 +992,16 @@
       "多个功能争抢排期",
       "只有两个互斥方案要选（反例：用决策矩阵）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "决策与分析",
+      "范围与需求"
+    ]
   },
   {
     "slug": "five-whys",
     "name": "5 Why 根因分析",
     "name_en": "5 Whys",
-    "process_group": "规划",
-    "knowledge_area": "决策分析",
     "summary": "连续追问「为什么」定位问题根因，避免在症状层做错误决策",
     "description": "何时用：反复出现同类问题、怀疑决策针对的是表象而非根因时。何时别用：问题已是明确的方案二选一（用决策矩阵）；或需要记录最终决策时（用决策记录）。常见坑：Why 停在人为失误不追系统原因；不同分支混在一起；分析完不转化为改进行动。",
     "steps": [
@@ -961,14 +1020,16 @@
       "流程卡点反复出现",
       "根因已明确只需选方案（反例：用决策矩阵）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "决策与分析",
+      "风险与问题"
+    ]
   },
   {
     "slug": "force-field-analysis",
     "name": "强制场分析",
     "name_en": "Force Field Analysis",
-    "process_group": "规划",
-    "knowledge_area": "决策分析",
     "summary": "列出推动变革的力量与阻碍力量，评估变革可行性并制定应对",
     "description": "何时用：组织/流程/技术变革类决策，需要看清支持与阻力双方时。何时别用：纯技术方案量化比较（用决策矩阵）；或仅需归档结论时（用决策记录）。常见坑：只列力量不评估强度；忽视隐性阻力；分析完没有削弱阻力或增强推动力的计划。",
     "steps": [
@@ -987,14 +1048,16 @@
       "老板支持但一线可能不配合",
       "两个技术方案纯打分比较（反例：用决策矩阵）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "决策与分析",
+      "干系人与协作"
+    ]
   },
   {
     "slug": "six-thinking-hats",
     "name": "六顶思考帽",
     "name_en": "Six Thinking Hats",
-    "process_group": "规划",
-    "knowledge_area": "决策分析",
     "summary": "用六种思维视角（事实、情绪、风险、收益、创意、流程）结构化团队讨论",
     "description": "何时用：团队讨论决策时容易混谈、需要分视角有序发言时。何时别用：个人独立决策且已有明确准则（用决策矩阵）；或讨论结束仅需归档结论时（用决策记录）。常见坑：帽子切换流于形式；情绪帽变成互相攻击；讨论完没有汇总成决策或行动。",
     "steps": [
@@ -1014,14 +1077,16 @@
       "讨论经常跑题，需要结构化引导",
       "已有打分表只需选最高分（反例：用决策矩阵）"
     ],
-    "draftable": false
+    "draftable": false,
+    "use_cases": [
+      "决策与分析",
+      "干系人与协作"
+    ]
   },
   {
     "slug": "decision-record",
     "name": "决策记录",
     "name_en": "Decision Record",
-    "process_group": "执行",
-    "knowledge_area": "整合",
     "summary": "记录关键决策的背景、备选方案、决策依据与预期影响",
     "description": "何时用：面对关键取舍（自研/外采、先做A/B、方案X/Y）需要记录决策过程时。何时别用：日常无争议执行决定不需要写正式记录；已有明确流程审批的不需要重复记录。常见坑：只写结论不写背景与备选；缺少决策依据与权衡理由；未记录预期影响导致后续复盘无从追溯。",
     "steps": [
@@ -1042,6 +1107,9 @@
       "需要一份能拿去评审的决策说明",
       "纯技术讨论没有实际决策压力时不需要写正式记录（反例）"
     ],
-    "draftable": true
+    "draftable": true,
+    "use_cases": [
+      "决策与分析"
+    ]
   }
 ]

@@ -4,9 +4,8 @@ from __future__ import annotations
 
 from collections import defaultdict
 
+from pm_agent.knowledge.categories import format_use_cases_label
 from pm_agent.knowledge.repo import PmTool, ToolsRepository
-
-PROCESS_GROUP_ORDER: tuple[str, ...] = ("启动", "规划", "执行", "监控", "收尾")
 
 
 def is_tools_command(raw: str) -> bool:
@@ -35,19 +34,20 @@ def format_tools_reply(repo: ToolsRepository, raw: str) -> str:
 
 
 def format_tools_catalog(repo: ToolsRepository) -> str:
-    """按过程组列出全部工具。"""
-    by_group: dict[str, list[PmTool]] = defaultdict(list)
+    """按实用场景列出全部工具。"""
+    by_case: dict[str, list[PmTool]] = defaultdict(list)
     for tool in repo.all():
-        group = tool.process_group or "未分类"
-        by_group[group].append(tool)
+        for use_case in tool.use_cases:
+            by_case[use_case].append(tool)
 
-    lines: list[str] = [f"知识库工具共 {len(repo)} 个：", ""]
-    ordered_groups = [g for g in PROCESS_GROUP_ORDER if g in by_group]
-    extra = sorted(g for g in by_group if g not in PROCESS_GROUP_ORDER)
-    for group in ordered_groups + extra:
-        tools = sorted(by_group[group], key=lambda t: t.slug)
-        lines.append(f"## {group}（{len(tools)}）")
-        for tool in tools:
+    lines: list[str] = [f"知识库工具共 {len(repo)} 个（按实用场景）：", ""]
+    for use_case in repo.use_case_display_order():
+        tools = by_case.get(use_case)
+        if not tools:
+            continue
+        unique = sorted({t.slug: t for t in tools}.values(), key=lambda t: t.slug)
+        lines.append(f"## {use_case}（{len(unique)}）")
+        for tool in unique:
             draft = " · draftable" if tool.draftable else ""
             lines.append(f"  {tool.slug}  {tool.name}{draft}")
         lines.append("")
@@ -59,12 +59,12 @@ def format_tool_detail(tool: PmTool) -> str:
     """打印单条工具完整字段。"""
     steps = "\n".join(f"  - {s}" for s in tool.steps) or "  （无）"
     scenarios = "\n".join(f"  - {s}" for s in tool.scenarios) or "  （无）"
+    use_cases = format_use_cases_label(tool.use_cases)
     return (
         f"slug: {tool.slug}\n"
         f"name: {tool.name}\n"
         f"name_en: {tool.name_en}\n"
-        f"process_group: {tool.process_group}\n"
-        f"knowledge_area: {tool.knowledge_area}\n"
+        f"use_cases: {use_cases}\n"
         f"draftable: {tool.draftable}\n"
         f"summary: {tool.summary}\n"
         f"description: {tool.description}\n"
@@ -81,10 +81,8 @@ def format_tools_search(repo: ToolsRepository, keyword: str) -> str:
     lines: list[str] = [f"搜索「{keyword}」命中 {len(hits)} 条：", ""]
     for tool in hits:
         draft = " · draftable" if tool.draftable else ""
-        lines.append(
-            f"  {tool.slug}  {tool.name}  [{tool.process_group}/{tool.knowledge_area}]"
-            f"{draft}"
-        )
+        cases = format_use_cases_label(tool.use_cases)
+        lines.append(f"  {tool.slug}  {tool.name}  [{cases}]{draft}")
         if tool.summary:
             lines.append(f"    {tool.summary}")
     lines.append("")

@@ -23,7 +23,7 @@ def register_search_tools(registry: ToolRegistry, repo: ToolsRepository) -> None
                 {
                     "query": args.query,
                     "tools": [],
-                    "instruction": "未检索到匹配工具。请换关键词（阶段/卡点类型），"
+                    "instruction": "未检索到匹配工具。请换关键词（场景/卡点类型），"
                     "或直接调用 recommend_tools。",
                 },
                 ensure_ascii=False,
@@ -38,7 +38,7 @@ def register_search_tools(registry: ToolRegistry, repo: ToolsRepository) -> None
         ToolSpec(
             name="search_tools",
             description=(
-                "按关键词检索 PMBOK 工具库摘要（slug/名称/过程组/知识领域/一句话用途）。"
+                "按关键词检索 PMBOK 工具库摘要（slug/名称/实用场景/一句话用途）。"
                 "在推荐前可用它缩小候选范围。"
             ),
             parameters_model=SearchToolsArgs,

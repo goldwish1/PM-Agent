@@ -8,6 +8,8 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from pm_agent.knowledge.categories import USE_CASE_ORDER, validate_use_cases
+
 
 class PmTool(BaseModel):
     """对应 tools.json 单条工具。"""
@@ -15,8 +17,7 @@ class PmTool(BaseModel):
     slug: str
     name: str
     name_en: str = ""
-    process_group: str = ""
-    knowledge_area: str = ""
+    use_cases: list[str] = Field(default_factory=list, min_length=1)
     summary: str = ""
     description: str = ""
     steps: list[str] = Field(default_factory=list)
@@ -43,6 +44,8 @@ class ToolsRepository:
         if not isinstance(raw, list):
             raise ValueError("tools.json 根节点必须是数组")
         tools = [PmTool.model_validate(item) for item in raw]
+        for tool in tools:
+            validate_use_cases(tool.use_cases, slug=tool.slug)
         return cls(tools)
 
     def __len__(self) -> int:
@@ -57,11 +60,18 @@ class ToolsRepository:
     def get_by_slug(self, slug: str) -> PmTool | None:
         return self._by_slug.get(slug)
 
-    def list_summaries(self) -> list[dict[str, str]]:
+    def list_by_use_case(self, use_case: str) -> list[PmTool]:
+        """返回属于某实用场景的全部工具（按 slug 排序）。"""
+        return sorted(
+            (t for t in self._tools if use_case in t.use_cases),
+            key=lambda t: t.slug,
+        )
+
+    def list_summaries(self) -> list[dict[str, str | list[str] | bool]]:
         return [self._summary_dict(t) for t in self._tools]
 
     def search(self, keyword: str, *, limit: int = 8) -> list[PmTool]:
-        """按关键词在名称/摘要/场景/过程组等字段中检索。"""
+        """按关键词在名称/摘要/场景/use_cases 等字段中检索。"""
         query = keyword.strip().lower()
         if not query:
             return []
@@ -77,8 +87,7 @@ class ToolsRepository:
                     tool.slug,
                     tool.name,
                     tool.name_en,
-                    tool.process_group,
-                    tool.knowledge_area,
+                    " ".join(tool.use_cases),
                     tool.summary,
                     tool.description,
                     " ".join(tool.scenarios),
@@ -89,6 +98,9 @@ class ToolsRepository:
             for token in tokens:
                 if token in hay:
                     score += 2 if token in tool.slug or token in tool.name.lower() else 1
+                for use_case in tool.use_cases:
+                    if token in use_case.lower():
+                        score += 2
             if score:
                 scored.append((score, tool))
 
@@ -170,7 +182,6 @@ class ToolsRepository:
                         scores[slug] += 10 - i
                         reasons.setdefault(slug, reason)
 
-        # 通用检索分
         for tool in self.search(question, limit=12):
             scores[tool.slug] += 3
             reasons.setdefault(tool.slug, f"与「{tool.summary}」语义接近")
@@ -188,21 +199,24 @@ class ToolsRepository:
             if len(results) >= max(1, min(3, limit)):
                 break
 
-        # 若完全无匹配，回退到启动常见三件套里的前 1～2 个
         if not results:
             fallback = ["project-charter", "stakeholder-register", "risk-register"]
             for slug in fallback[:2]:
                 tool = self._by_slug.get(slug)
                 if tool:
-                    results.append((tool, "信息有限，先从通用启动/规划工具切入"))
+                    results.append((tool, "信息有限，先从通用启动工具切入"))
         return results
 
     @staticmethod
-    def _summary_dict(tool: PmTool) -> dict[str, str]:
+    def _summary_dict(tool: PmTool) -> dict[str, str | list[str] | bool]:
         return {
             "slug": tool.slug,
             "name": tool.name,
             "summary": tool.summary,
-            "process_group": tool.process_group,
-            "knowledge_area": tool.knowledge_area,
+            "use_cases": tool.use_cases,
+            "draftable": tool.draftable,
         }
+
+    @staticmethod
+    def use_case_display_order() -> tuple[str, ...]:
+        return USE_CASE_ORDER
