@@ -250,6 +250,7 @@ def run_agent_loop(
         round_n = iteration + 1
         trace_iteration(round_n)
         trace_thinking()
+        started = time.perf_counter()
         try:
             response = llm.complete(state.messages, tools=tools_schema)
         except LlmApiError as exc:
@@ -258,6 +259,7 @@ def run_agent_loop(
             if turn_dump is not None:
                 turn_dump.finalize(final_text, state.messages)
             return final_text
+        elapsed_ms = (time.perf_counter() - started) * 1000
 
         _maybe_log_llm_round(
             debug_llm=debug_llm,
@@ -272,7 +274,10 @@ def run_agent_loop(
 
         content = response.get("content")
         tool_calls = response.get("tool_calls") or []
-        trace_response(content if isinstance(content, str) or content is None else str(content))
+        trace_response(
+            content if isinstance(content, str) or content is None else str(content),
+            elapsed_ms,
+        )
 
         if not tool_calls:
             final_text = (content or "").strip() or "（模型未返回文本。）"

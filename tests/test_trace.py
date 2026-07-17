@@ -43,10 +43,20 @@ def test_format_tool_result_ok_and_err() -> None:
     assert truncated.startswith("ok，")
 
 
+def test_format_response_line_includes_elapsed() -> None:
+    line = format_response_line("hi", 12.4)
+    assert line.startswith("  response: hi，")
+    assert "耗时 12ms。" in line
+
+    empty = format_response_line(None, 0.4)
+    assert "（无文本）" in empty
+    assert "耗时 0ms。" in empty
+
+
 def test_process_layer_lines_have_no_bullet() -> None:
     assert "●" not in format_iteration_header(1)
     assert "●" not in format_thinking_line()
-    assert "●" not in format_response_line("hi")
+    assert "●" not in format_response_line("hi", 1)
     assert "●" not in format_tool_call_line("echo", {"text": "a"})
     assert format_thinking_line().startswith("  ")
     assert format_iteration_header(2) == "── 第2轮迭代 ──"
@@ -87,6 +97,9 @@ def test_loop_emits_trace_events_and_result_layer_distinct(
     assert "耗时" in process_out
     assert "── 第2轮迭代 ──" in process_out
     assert "response: 演示完成" in process_out
+    response_lines = [ln for ln in process_out.splitlines() if "response:" in ln]
+    assert response_lines
+    assert all("耗时" in ln for ln in response_lines)
     process_lines = [ln for ln in process_out.splitlines() if ln.strip()]
     assert all(not ln.startswith("●") for ln in process_lines)
     for ln in process_out.splitlines():

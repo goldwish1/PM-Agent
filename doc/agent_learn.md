@@ -2,6 +2,12 @@
 
 ## 新增功能
 
+### 2026-07-17 · 过程层 response 显示 LLM 耗时
+
+- **新增加了什么功能**：每轮迭代的 `response` 行追加 `耗时 Nms`，与 `tool_result` 风格一致。
+- **原因**：第二轮等待体感长，原先只打印工具耗时，无法区分本地工具与远程 LLM 调用。
+- **一句话方案**：`loop` 对 `llm.complete` 用 `perf_counter` 计时，经 `trace_response` 打印。
+
 ### 2026-07-17 · 陪跑咨询（CONSULTING）
 
 - **新增加了什么功能**：推荐与起草之间新增通用陪跑讨论态；`start_consulting` / `note_consulting_fact` 沉淀事实，起草时基于沉淀提炼字段并预览确认。

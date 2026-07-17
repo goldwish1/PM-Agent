@@ -50,8 +50,10 @@ def format_thinking_line() -> str:
     return f"{_INDENT}thinking: LLM调用开始。"
 
 
-def format_response_line(content: str | None) -> str:
-    return f"{_INDENT}response: {format_response_preview(content)}"
+def format_response_line(content: str | None, elapsed_ms: float) -> str:
+    preview = format_response_preview(content)
+    ms = int(round(elapsed_ms))
+    return f"{_INDENT}response: {preview}，耗时 {ms}ms。"
 
 
 def format_tool_call_line(name: str, arguments: dict[str, Any] | Any) -> str:
@@ -70,8 +72,8 @@ def trace_thinking() -> None:
     print(format_thinking_line(), flush=True)
 
 
-def trace_response(content: str | None) -> None:
-    print(format_response_line(content), flush=True)
+def trace_response(content: str | None, elapsed_ms: float) -> None:
+    print(format_response_line(content, elapsed_ms), flush=True)
 
 
 def trace_tool_call(name: str, arguments: dict[str, Any] | Any) -> None:
