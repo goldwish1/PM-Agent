@@ -43,6 +43,7 @@ SLASH_COMMANDS: tuple[tuple[str, str], ...] = (
     ("/tools", "浏览知识库工具"),
     ("/debug", "切换 [llm] 终端摘要"),
     ("/dump", "切换 debug JSON 落盘"),
+    ("/setup-terminal", "配置集成终端 Shift+Enter"),
 )
 
 ATTACH_SUFFIXES: tuple[str, ...] = (".md", ".txt")

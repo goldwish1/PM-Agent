@@ -23,6 +23,7 @@ from pm_agent.cli_attach import (
 )
 from pm_agent.cli_input import read_user_line
 from pm_agent.cli_render import print_assistant_reply
+from pm_agent.cli_terminal import integrated_terminal_hint, setup_terminal_keybinding
 from pm_agent.cli_tools import format_tools_reply, is_tools_command
 from pm_agent.config import ConfigError, load_settings
 from pm_agent.tools.bootstrap import build_registry_from_path
@@ -56,8 +57,9 @@ HELP = """\
   /tools · 工具库  浏览知识库（/tools · /tools <slug> · /tools <关键词>）
   /debug · 调试    切换终端 [llm] 摘要 on/off
   /dump · 落盘     切换 output/debug JSON 落盘 on/off
+  /setup-terminal  配置 Cursor/VS Code 集成终端 Shift+Enter
 
-交互终端下 Shift+Enter 换行、Enter 提交。
+交互终端下 Shift+Enter 换行、Enter 提交（集成终端需先 /setup-terminal）。
 输入 / 或 /h 可边打边补，Tab 补全完整命令。
 输入 @ 路径前缀时，会递归提示当前工作目录下的 .md/.txt 文件。
 ↑/↓ 可回填本会话已提交的输入（进程结束后清空）。
@@ -105,6 +107,10 @@ def _is_debug(text: str) -> bool:
 
 def _is_dump(text: str) -> bool:
     return text == "/dump"
+
+
+def _is_setup_terminal(text: str) -> bool:
+    return text == "/setup-terminal"
 
 
 def _on_off(flag: bool) -> str:
@@ -189,6 +195,11 @@ def main() -> None:
     )
     print(flush=True)
 
+    hint = integrated_terminal_hint()
+    if hint:
+        print(hint, flush=True)
+        print(flush=True)
+
     real_client: LlmClient | None = None
     if not settings.use_fake_llm:
         real_client = build_llm_client(settings)
@@ -234,6 +245,10 @@ def main() -> None:
                 dump_on=dump_on,
                 output_dir=settings.output_dir,
             )
+            continue
+
+        if _is_setup_terminal(raw):
+            print(setup_terminal_keybinding(), flush=True)
             continue
 
         attach = resolve_attachments(raw)

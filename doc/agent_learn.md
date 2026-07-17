@@ -8,6 +8,12 @@
 - **原因**：长 prompt 需分段书写；对齐 ChatGPT / Cursor 等主流 Agent 习惯。
 - **一句话方案**：`prompt_toolkit` 开启 `multiline=True`；Enter 绑定提交；Shift+Enter CSI 重映射为 `ControlJ` 后插入换行。
 
+### 2026-07-17 · 集成终端 `/setup-terminal`
+
+- **遇到的问题**：Cursor/VS Code 集成终端默认把 Shift+Enter 当成 Enter（`\r`），无法换行。
+- **原因**：终端未发送 `\u001b[13;2u` 等区分序列，应用层无法区分按键。
+- **解决方案**：新增 `/setup-terminal` 写入编辑器 `keybindings.json`；启动时未配置则提示；临时可用 Ctrl+J 换行。
+
 ### 2026-07-17 · 工具库 Top 10 内容写厚
 
 - **新增加了什么功能**：对 10 个高频工具加厚 `description` / `steps` / `scenarios`，并增加最低厚度单测。
