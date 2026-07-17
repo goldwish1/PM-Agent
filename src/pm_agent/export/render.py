@@ -1,8 +1,8 @@
-"""Markdown 模板渲染：项目章程 / 风险登记册。"""
+"""Markdown 模板渲染：项目章程 / 风险登记册 / 决策记录。"""
 
 from __future__ import annotations
 
-from pm_agent.agent.session import CharterDraft, RiskRegisterDraft
+from pm_agent.agent.session import CharterDraft, DecisionDraft, RiskRegisterDraft
 
 
 def render_charter_markdown(draft: CharterDraft) -> str:
@@ -44,6 +44,45 @@ def render_charter_markdown(draft: CharterDraft) -> str:
 
 ---
 *由 pmbox 导出；可直接在编辑器中修改后发给发起人。*
+"""
+
+
+def render_decision_markdown(draft: DecisionDraft) -> str:
+    """渲染决策记录 Markdown。"""
+    d = draft.model_dump()
+    return f"""# 决策记录
+
+## 基本信息
+
+| 字段 | 内容 |
+|------|------|
+| 决策标题 | {d["decision_title"]} |
+| 决策人 | {d["decision_maker"]} |
+| 决策日期 | {d["decision_date"]} |
+| 状态 | {d["status"]} |
+
+## 背景与问题
+
+{d["context"]}
+
+## 备选方案
+
+{d["options_considered"]}
+
+## 最终决定
+
+{d["decision"]}
+
+## 决策依据
+
+{d["rationale"]}
+
+## 预期影响与后果
+
+{d["consequences"]}
+
+---
+*由 pmbox 导出；决策过程可追溯，便于后续复盘与干系人同步。*
 """
 
 

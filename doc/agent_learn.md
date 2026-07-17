@@ -50,7 +50,11 @@ scenarios: 「下周要立项，还没正式授权」…「别和范围说明书
 - **原因**：第二轮等待体感长，原先只打印工具耗时，无法区分本地工具与远程 LLM 调用。
 - **一句话方案**：`loop` 对 `llm.complete` 用 `perf_counter` 计时，经 `trace_response` 打印。
 
-### 2026-07-17 · 陪跑咨询（CONSULTING）
+### 2026-07-17 · 决策记录（Decision Record）可起草工具
+
+- **新增加了什么功能**：新增可起草工具 `draft_decision_record`，支持增量合并 9 个字段（决策标题、背景、备选方案、最终决定、决策依据、预期影响、决策人、决策日期、状态）；配套 `render_decision_markdown` 渲染模板与 `export_markdown(doc_type=decision)` 导出路径；tools.json 新增 `decision-record` 条目。
+- **原因**：用户在与 AI 讨论决策场景（选方案、权衡 trade-off）后，希望 AI 能归档成结构化文档而非只留在对话历史中。
+- **一句话方案**：完全复用 charter 已验证的「陪跑咨询 → 起草 → 预览 → 确认导出」模式，按 6 处改动（session/draft/render/export/bootstrap/prompts）+ tools.json 条目实施。
 
 - **新增加了什么功能**：推荐与起草之间新增通用陪跑讨论态；`start_consulting` / `note_consulting_fact` 沉淀事实，起草时基于沉淀提炼字段并预览确认。
 - **原因**：用户真实旅程是决策陪伴，而非推荐后直接填表；讨论内容需结构化沉淀以免起草时丢失。

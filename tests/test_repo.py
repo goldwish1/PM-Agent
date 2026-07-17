@@ -40,11 +40,12 @@ TOP10_THICK_SLUGS = frozenset(
 )
 
 
-def test_repo_loads_about_39_tools() -> None:
+def test_repo_loads_all_tools() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 39
+    assert len(repo) == 40
     assert repo.exists("project-charter")
     assert repo.exists("risk-register")
+    assert repo.exists("decision-record")
     charter = repo.get_by_slug("project-charter")
     assert charter is not None
     assert charter.name == "项目章程"

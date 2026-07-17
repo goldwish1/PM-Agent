@@ -1,4 +1,4 @@
-"""会话状态：messages、澄清计数、章程/风险草稿。"""
+"""会话状态：messages、澄清计数、章程/风险/决策草稿。"""
 
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ class SessionMode(StrEnum):
     CONSULTING = "consulting"
     DRAFTING_CHARTER = "drafting_charter"
     DRAFTING_RISK = "drafting_risk"
+    DRAFTING_DECISION = "drafting_decision"
     PREVIEW = "preview"
 
 
@@ -102,6 +103,49 @@ class RiskRegisterDraft(BaseModel):
         return lines
 
 
+class DecisionDraft(BaseModel):
+    """决策记录草稿（缺省为「待补充」）。"""
+
+    decision_title: str = PLACEHOLDER
+    context: str = PLACEHOLDER
+    options_considered: str = PLACEHOLDER
+    decision: str = PLACEHOLDER
+    rationale: str = PLACEHOLDER
+    consequences: str = PLACEHOLDER
+    decision_maker: str = PLACEHOLDER
+    decision_date: str = PLACEHOLDER
+    status: str = PLACEHOLDER
+
+    def merge_patch(self, patch: dict[str, str | None]) -> DecisionDraft:
+        data = self.model_dump()
+        for key, value in patch.items():
+            if key not in data:
+                continue
+            if value is None:
+                continue
+            text = str(value).strip()
+            if text:
+                data[key] = text
+        return DecisionDraft.model_validate(data)
+
+    def missing_fields(self) -> list[str]:
+        return [k for k, v in self.model_dump().items() if v == PLACEHOLDER]
+
+    def preview_lines(self) -> list[str]:
+        labels = {
+            "decision_title": "决策标题",
+            "context": "背景与问题",
+            "options_considered": "备选方案",
+            "decision": "最终决定",
+            "rationale": "决策依据",
+            "consequences": "预期影响",
+            "decision_maker": "决策人",
+            "decision_date": "决策日期",
+            "status": "状态",
+        }
+        return [f"- {labels[k]}：{v}" for k, v in self.model_dump().items()]
+
+
 @dataclass
 class SessionState:
     """进程内会话（关进程即丢）。"""
@@ -111,6 +155,7 @@ class SessionState:
     clarify_count: int = 0
     charter_draft: CharterDraft | None = None
     risk_draft: RiskRegisterDraft | None = None
+    decision_draft: DecisionDraft | None = None
     consulting_tool_slug: str | None = None
     consulting_notes: list[str] = field(default_factory=list)
 
@@ -126,3 +171,8 @@ class SessionState:
         if self.risk_draft is None:
             self.risk_draft = RiskRegisterDraft()
         return self.risk_draft
+
+    def ensure_decision_draft(self) -> DecisionDraft:
+        if self.decision_draft is None:
+            self.decision_draft = DecisionDraft()
+        return self.decision_draft

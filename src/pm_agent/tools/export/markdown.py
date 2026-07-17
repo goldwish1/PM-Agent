@@ -11,13 +11,17 @@ from pydantic import BaseModel, Field
 
 from pm_agent.agent.session import SessionMode, SessionState
 from pm_agent.export.path_guard import PathGuardError, resolve_safe_output_file
-from pm_agent.export.render import render_charter_markdown, render_risk_register_markdown
+from pm_agent.export.render import (
+    render_charter_markdown,
+    render_decision_markdown,
+    render_risk_register_markdown,
+)
 from pm_agent.tools.registry import ToolRegistry, ToolSpec
 
 
 class ExportMarkdownArgs(BaseModel):
-    doc_type: Literal["charter", "risk_register"] = Field(
-        description="导出文档类型：charter=项目章程，risk_register=风险登记册"
+    doc_type: Literal["charter", "risk_register", "decision"] = Field(
+        description="导出文档类型：charter=项目章程，risk_register=风险登记册，decision=决策记录"
     )
     filename: str | None = Field(
         default=None,
@@ -31,8 +35,8 @@ class ExportMarkdownArgs(BaseModel):
 
 def _default_filename(doc_type: str) -> str:
     stamp = datetime.now().strftime("%Y%m%d-%H%M")
-    prefix = "项目章程" if doc_type == "charter" else "风险登记册"
-    return f"{prefix}-{stamp}.md"
+    prefix = {"charter": "项目章程", "risk_register": "风险登记册", "decision": "决策记录"}
+    return f"{prefix.get(doc_type, '文档')}-{stamp}.md"
 
 
 def _unique_path(output_dir: Path, filename: str) -> Path:
@@ -79,6 +83,18 @@ def register_export_markdown(
                         ensure_ascii=False,
                     )
                 content = render_charter_markdown(state.charter_draft)
+            elif args.doc_type == "decision":
+                if state.decision_draft is None:
+                    return json.dumps(
+                        {
+                            "ok": False,
+                            "instruction": (
+                                "尚无决策记录草稿。请先调用 draft_decision_record 收集字段。"
+                            ),
+                        },
+                        ensure_ascii=False,
+                    )
+                content = render_decision_markdown(state.decision_draft)
             else:
                 if state.risk_draft is None or not state.risk_draft.items:
                     return json.dumps(

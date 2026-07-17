@@ -77,7 +77,7 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
     )
     allowed_draft_target = _contains_any(
         text,
-        ["项目章程", "章程", "charter", "风险登记册", "risk-register", "风险条目"],
+        ["项目章程", "章程", "charter", "风险登记册", "risk-register", "风险条目", "决策记录", "decision-record"],
     )
     if draft_intent and unsupported_target and not allowed_draft_target:
         slug = "wbs"
@@ -97,10 +97,10 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
             },
             {
                 "content": (
-                    "本 MVP **仅支持自动起草「项目章程」和「风险登记册」**，"
+                    "本 MVP **仅支持自动起草「项目章程」「风险登记册」和「决策记录」**，"
                     f"不支持自动填写「{slug}」完整模板。\n"
                     "你可查看上方工具说明（步骤/场景）；"
-                    "若要开干，请改口：「帮我起草项目章程」或「起草风险登记册」。"
+                    "若要开干，请改口：「帮我起草项目章程」「起草风险登记册」或「起草决策记录」。"
                 )
             },
         ]
@@ -137,20 +137,15 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
 
     if _contains_any(
         text,
-        ["确认导出", "导出章程", "导出项目章程", "导出风险", "导出登记册", "导出 markdown"],
+        ["确认导出", "导出章程", "导出项目章程", "导出风险", "导出登记册", "导出决策记录", "导出决策", "导出 markdown"],
     ):
-        doc_type = (
-            "risk_register"
-            if _contains_any(text, ["风险", "登记册", "risk"])
-            and not _contains_any(text, ["章程", "charter"])
-            else "charter"
-        )
-        # 「确认导出」默认章程；明确提到风险则风险
-        if _contains_any(text, ["确认导出"]) and not _contains_any(
-            text, ["风险", "登记册", "章程", "charter"]
-        ):
-            doc_type = "charter"
-        label = "项目章程" if doc_type == "charter" else "风险登记册"
+        doc_type = "charter"
+        if _contains_any(text, ["风险", "登记册", "risk"]):
+            doc_type = "risk_register"
+        elif _contains_any(text, ["决策", "decision"]):
+            doc_type = "decision"
+        labels = {"charter": "项目章程", "risk_register": "风险登记册", "decision": "决策记录"}
+        label = labels.get(doc_type, "文档")
         return [
             {
                 "tool_calls": [
@@ -251,6 +246,38 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
                 "content": (
                     "已起草风险登记册（2 条）预览如上。"
                     "若确认，请回复「确认导出风险登记册」。"
+                )
+            },
+        ]
+
+    if _contains_any(
+        text,
+        ["起草决策记录", "起草决策", "帮我起草决策记录", "帮我起草决策"],
+    ):
+        return [
+            {
+                "tool_calls": [
+                    {
+                        "id": "call_draft_decision_1",
+                        "name": "draft_decision_record",
+                        "arguments": {
+                            "decision_title": "自研 vs 外采方案决策",
+                            "context": "团队需要决定自研还是外采方案，预算50万，团队3人",
+                            "options_considered": "方案A：自研，可控但周期长\n方案B：外采，快速上线但定制成本高",
+                            "decision": "采用自研方案",
+                            "rationale": "长期可控，团队能力可沉淀",
+                            "consequences": "开发周期3个月，需招聘1人",
+                            "decision_maker": "张三",
+                            "decision_date": "2026-07-17",
+                            "status": "拟定",
+                        },
+                    }
+                ]
+            },
+            {
+                "content": (
+                    "已生成决策记录草稿预览（字段见工具返回）。\n"
+                    "若确认无误，请回复「确认导出决策记录」写入 output/。"
                 )
             },
         ]
