@@ -45,7 +45,7 @@ TOP10_THICK_SLUGS = frozenset(
 
 def test_repo_loads_all_tools() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 20
+    assert len(repo) == 24
     assert repo.exists("project-charter")
     assert repo.exists("risk-register")
     assert repo.exists("decision-record")
@@ -53,6 +53,10 @@ def test_repo_loads_all_tools() -> None:
     assert repo.exists("swot-analysis")
     assert repo.exists("gantt-chart")
     assert repo.exists("stakeholder-register")
+    assert repo.exists("after-action-review")
+    assert repo.exists("start-stop-continue")
+    assert repo.exists("blameless-postmortem")
+    assert repo.exists("knowledge-handover")
     assert not repo.exists("wbs")
     charter = repo.get_by_slug("project-charter")
     assert charter is not None
@@ -83,7 +87,7 @@ def test_repo_search_finds_charter() -> None:
 
 def test_all_tools_have_valid_use_cases() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 20
+    assert len(repo) == 24
     for tool in repo.all():
         assert tool.use_cases
         assert all(isinstance(c, str) and c for c in tool.use_cases)
@@ -274,6 +278,49 @@ def test_recommend_feedback_dilemma() -> None:
     slugs = {t.slug for t, _ in ranked}
     assert "sbi-feedback" in slugs
     assert 1 <= len(ranked) <= 3
+
+
+def test_new_retrospective_tools_exist() -> None:
+    """回归测试：复盘与学习家族已发布工具存在于正式库。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    for slug in (
+        "after-action-review",
+        "start-stop-continue",
+        "blameless-postmortem",
+        "knowledge-handover",
+    ):
+        assert repo.exists(slug), f"缺少新工具：{slug}"
+
+
+@pytest.mark.parametrize(
+    ("query", "expected"),
+    [
+        ("这个活动刚结束，想快速复盘一下", "after-action-review"),
+        ("迭代结束了，想开个轻量复盘", "start-stop-continue"),
+        ("出了大事故，复盘变成追责会", "blameless-postmortem"),
+        ("项目要交给运维了，不知道交什么", "knowledge-handover"),
+    ],
+)
+def test_recommend_retrospective_queries_top1(query: str, expected: str) -> None:
+    """回归：复盘家族典型原话 Top1 应命中对应工具。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    ranked = repo.recommend_by_question(query, limit=3)
+    assert ranked
+    assert ranked[0][0].slug == expected
+
+
+def test_search_finds_after_action_review() -> None:
+    """回归测试：活动结束复盘应命中 AAR。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    hits = repo.search("发布刚结束想对照原计划和实际")
+    assert "after-action-review" in {t.slug for t in hits}
+
+
+def test_search_finds_knowledge_handover() -> None:
+    """回归测试：移交运维类卡点应命中知识移交。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    hits = repo.search("原团队要撤，怕知识断档")
+    assert "knowledge-handover" in {t.slug for t in hits}
 
 
 @pytest.mark.parametrize(

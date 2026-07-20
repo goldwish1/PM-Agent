@@ -1,22 +1,25 @@
 {
-  "dataset_digest": "989e79e286905d434ca021ac5506a161d4a86114d5e5d2a564b720d3f18255f1",
-  "tools_digest": "086a64f04d727da72542c1f291d491d83efd6f9d5c560fc778d263f6c915394b",
+  "dataset_digest": "5db48b837f6912bb6d5548b8d8e520ce3b4f26b5376f0ed77fcffe190297d08c",
+  "tools_digest": "63e04c01aa78518f0dbdd9deb429a5d1412d37e447e3c592ba5dda89e1fb2256",
   "summary": {
-    "total_cases": 60,
-    "active_cases": 36,
+    "total_cases": 108,
+    "active_cases": 84,
     "skipped_cases": 24,
-    "top1_cases": 24,
-    "top1_passed": 24,
-    "top1_accuracy": 1.0,
-    "top3_cases": 29,
-    "top3_passed": 26,
-    "top3_recall": 0.896552,
-    "mrr_cases": 29,
-    "mrr": 0.896552,
-    "forbidden_cases": 14,
+    "top1_cases": 66,
+    "top1_passed": 64,
+    "top1_accuracy": 0.969697,
+    "top3_cases": 71,
+    "top3_passed": 67,
+    "top3_recall": 0.943662,
+    "mrr_cases": 71,
+    "mrr": 0.93662,
+    "forbidden_cases": 30,
     "forbidden_violations": 2,
-    "forbidden_violation_rate": 0.142857,
-    "confusion": {}
+    "forbidden_violation_rate": 0.066667,
+    "confusion": {
+      "blameless-postmortem -> decision-matrix": 1,
+      "start-stop-continue -> cross-functional-alignment": 1
+    }
   },
   "results": [
     {
@@ -983,6 +986,862 @@
       "case_id": "comm-global-negative-001",
       "query": "请帮我计算这份预算表的增值税和总金额",
       "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "swot-analysis",
+        "decision-record"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-001",
+      "query": "这个活动刚结束，想快速复盘一下",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "cross-functional-alignment",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-002",
+      "query": "上线完了，大家对结果看法不一致",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "cross-functional-alignment",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-003",
+      "query": "里程碑过了但没人总结学到了什么",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "gantt-chart",
+        "moscow-prioritization"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-004",
+      "query": "想用四个问题把复盘做完",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-005",
+      "query": "发布刚结束，想趁热把计划与实际对照清楚",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-006",
+      "query": "演练完了各方对成败说法不一，想先对照原计划和实际",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "cross-functional-alignment",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-007",
+      "query": "关键活动刚结束，想回顾原计划达成情况和下次怎么改",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-008",
+      "query": "活动复盘总是变成吐槽会，想拉回计划和差距",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-009",
+      "query": "想把可复用经验教训写成能检索的条目给后续项目用",
+      "family": "复盘与学习",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "lessons-learned-register",
+        "decision-record",
+        "five-whys"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-010",
+      "query": "项目还没启动就想假设已经失败并倒推可能原因",
+      "family": "复盘与学习",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "risk-register",
+        "pre-mortem",
+        "risk-report"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-011",
+      "query": "生产重大事故后复盘变成追责会，需要无责还原时间线和系统根因",
+      "family": "复盘与学习",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-aar-012",
+      "query": "请帮我算一下这份差旅报销的税额合计",
+      "family": "复盘与学习",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-001",
+      "query": "迭代结束了，想开个轻量复盘",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "start-stop-continue",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-002",
+      "query": "复盘会总是只吐槽不谈保持什么",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "start-stop-continue"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-003",
+      "query": "想用开始/停止/继续三列做复盘",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "start-stop-continue",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-004",
+      "query": "两周一次的复盘太重了，要个简单框架",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "start-stop-continue"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-005",
+      "query": "Sprint 收尾，想让每人写下该开始、该停止、该继续的事项",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "start-stop-continue",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-006",
+      "query": "团队说复盘开完没有可执行项，想用三列收敛出行动",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "start-stop-continue",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-007",
+      "query": "跨职能小分队想用起停续改进下个周期的协作节奏",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "start-stop-continue",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-008",
+      "query": "双周结束想快速用开始停止继续：哪些做法保留、哪些停掉、试什么新动作",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "cross-functional-alignment",
+        "raci-matrix",
+        "stakeholder-register"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-009",
+      "query": "要把这次踩坑写成可检索的经验教训条目",
+      "family": "复盘与学习",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "lessons-learned-register",
+        "decision-record",
+        "five-whys"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-010",
+      "query": "同样的协作坑反复出现，想写成可检索条目给下个项目用",
+      "family": "复盘与学习",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "lessons-learned-register",
+        "decision-record",
+        "five-whys"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-011",
+      "query": "线上重大故障后大家不敢说实话，需要无责还原时间线",
+      "family": "复盘与学习",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-ssc-012",
+      "query": "下周要立项，还没有正式授权文件",
+      "family": "复盘与学习",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-001",
+      "query": "出了大事故，复盘变成追责会",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-002",
+      "query": "故障复盘大家不敢说实话",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-003",
+      "query": "想做无责事后分析找出系统原因",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-004",
+      "query": "严重延期后只知道怪某个人",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "blameless-postmortem",
+        "gantt-chart"
+      ],
+      "top1_pass": false,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-005",
+      "query": "同类故障又发生了，上次复盘没生效",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-006",
+      "query": "客户影响很大，需要书面还原事件经过和系统根因",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-007",
+      "query": "重大失败后想用日志重建时间线再谈改进",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-008",
+      "query": "事故会上都在找谁的锅，想改成学系统和流程",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-009",
+      "query": "项目还没启动就想假设已经失败并倒推可能翻车点",
+      "family": "复盘与学习",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "risk-register",
+        "pre-mortem",
+        "risk-report"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-010",
+      "query": "反复出现同类缺陷，想连续追问为什么定位根因",
+      "family": "复盘与学习",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "five-whys",
+        "decision-record",
+        "risk-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-011",
+      "query": "双周协作想改进站会节奏和看板更新方式",
+      "family": "复盘与学习",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-bpm-012",
+      "query": "供应商疑似商业贿赂，需要法务按制度立案处理",
+      "family": "复盘与学习",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "cross-functional-alignment",
+        "raci-matrix",
+        "stakeholder-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-001",
+      "query": "项目要交给运维了，不知道交什么",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-002",
+      "query": "交接会开完对方还是不会运维",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-003",
+      "query": "原团队要撤，怕知识断档",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-004",
+      "query": "接任 PM 两眼一抹黑",
+      "family": "复盘与学习",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-005",
+      "query": "怎么做一份靠谱的移交包",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-006",
+      "query": "维护责任切到平台组，怕接手后反复找原班人，想做知识移交",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-007",
+      "query": "外包撤场前要把运行所需上下文和已知坑交清楚",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-008",
+      "query": "新负责人上任，需要环境入口、联系人和 workaround 清单做移交包",
+      "family": "复盘与学习",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-009",
+      "query": "想把可复用经验教训写成能检索的条目给后续项目用",
+      "family": "复盘与学习",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "lessons-learned-register",
+        "decision-record",
+        "five-whys"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-010",
+      "query": "要把这次踩坑写成可检索经验教训，方便下个项目查阅",
+      "family": "复盘与学习",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "lessons-learned-register",
+        "decision-record",
+        "five-whys"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-011",
+      "query": "下周要立项，还没有正式授权和成功标准",
+      "family": "复盘与学习",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "retro-kh-012",
+      "query": "请帮我把这份 Excel 预算表的分项加总算出来",
+      "family": "复盘与学习",
       "case_type": "negative",
       "critical": true,
       "active": true,

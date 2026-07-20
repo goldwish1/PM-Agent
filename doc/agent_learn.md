@@ -2,6 +2,30 @@
 
 ## 新增功能
 
+### 2026-07-20 · 复盘与学习家族候选入库
+
+- **新增加了什么功能**：按运营流程为「复盘与学习」家族生成并导入 6 个候选（AAR、起停续、无责事后复盘、项目收尾清单、知识移交、结项最终报告）；`validate` 通过，待人工评审批准。
+- **原因**：正式库「收尾与复盘」仅有经验教训登记册，缺少活动复盘、迭代复盘、事故复盘、行政收尾、移交与结项叙事等卡点工具。
+- **一句话方案**：`prompt → generated-candidates.json → ingest → validate`；与正式库/归档最近邻做边界分流，评审确认后再 `review --approve`。
+
+### 2026-07-20 · 复盘家族首批四工具批准
+
+- **新增加了什么功能**：人工确认后批准 `after-action-review`、`start-stop-continue`、`blameless-postmortem`、`knowledge-handover`（均为 10/10）；已生成各自 `eval-prompt`；`project-closure-checklist` 与 `final-project-report` 仍为 drafted。
+- **原因**：用户选择优先上架复盘动作类与知识移交，收尾清单与结项报告暂缓。
+- **一句话方案**：`review --approve` + `eval-prompt`；评测用例须人工审核后再合并黄金集。
+
+### 2026-07-20 · 复盘家族 48 条黄金用例合并
+
+- **新增加了什么功能**：将 AAR / 起停续 / 无责事后复盘 / 知识移交各 12 条用例草案并入 `tool_recommendation_cases.json`（共 +48，总计 108）；已 `export-cases`。
+- **原因**：用户审核草案后确认合并，为候选 A/B 与 promote 门禁提供 `requires_tools` 条件用例。
+- **一句话方案**：旧基线 `evaluate` 先通过 → 合并 JSON → export；基线摘要已变，待人工 `update-baseline --yes`。
+
+### 2026-07-20 · 复盘家族四工具发布与推荐启发式拆分
+
+- **新增加了什么功能**：正式发布 `after-action-review`、`start-stop-continue`、`blameless-postmortem`、`knowledge-handover`（正式库 20→24）；拆分收尾 `KEYWORD_BOOSTS` 并补事前验尸/5 Why 桶；修正边界用例上下文避免「不是XXX」误触发；补充搜索/推荐回归测试。
+- **原因**：候选 A/B 初评因粗粒度「复盘/移交」boost 与上下文误匹配导致正例未进 Top3、边界误召回。
+- **一句话方案**：场景化 boost + 短触发语 + 净化边界上下文；逐个 `promote` 并更新基线；最终 Top1 97% / Top3 94.4% / 误召回 6.7%。
+
 ### 2026-07-20 · 混淆对推荐启发式优化
 
 - **新增加了什么功能**：拆分沟通类 `KEYWORD_BOOSTS` 为冲突/SBI/对齐/金字塔/艰难对话场景桶；收窄「担心/老板/冲突/依赖」等过宽词；补强 5 个沟通正式工具的 `trigger_phrases`；增加 12 条混淆对 Top1 回归测试。
