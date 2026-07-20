@@ -2,6 +2,12 @@
 
 ## 新增功能
 
+### 2026-07-20 · 精简欢迎语与 /status
+
+- **新增加了什么功能**：启动欢迎语与 `[config]` 精简为一屏短文案 + 一行摘要；新增只读 `/status` 查看完整运行配置；`/debug` / `/dump` 切换后打印同一套完整状态。
+- **原因**：原欢迎语混入功能手册、快捷键与运维配置，首屏过载。
+- **一句话方案**：分层披露——启动只保留身份与行动指引；路径 / max_iter / debug·dump 经 `/status`（及 debug 切换）查看。
+
 ### 2026-07-20 · 推荐启发式 Keyword Boosts JSON 化
 
 - **新增加了什么功能**：将 `KEYWORD_BOOSTS` / `FALLBACK_SLUGS` 从 `repo.py` 外置为 `data/recommendation_boosts.json`；启动时加载并校验引用 slug 均在正式库；下架门禁与对齐测试改为读该配置。

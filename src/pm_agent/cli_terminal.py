@@ -130,7 +130,4 @@ def integrated_terminal_hint() -> str | None:
     if has_shift_enter_binding():
         return None
     editor = "Cursor" if _is_cursor() else "VS Code"
-    return (
-        f"[hint] {editor} 集成终端下 Shift+Enter 默认等同 Enter；"
-        "请先运行 /setup-terminal（仅一次），或临时用 Ctrl+J 换行。"
-    )
+    return f"[hint] 换行异常？运行一次 /setup-terminal（{editor}）"

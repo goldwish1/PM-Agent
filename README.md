@@ -20,7 +20,7 @@ cp .env.example .env
 
 环境变量说明见 `.env.example`（`USE_FAKE_LLM`、`DEEPSEEK_*`、`OUTPUT_DIR`、`MAX_TOOL_ITERATIONS`、`PMBOX_DEBUG`、`PMBOX_DEBUG_DUMP`）。
 
-调试：默认将每轮用户对话写入 `output/debug/turn-NNN.json`（`PMBOX_DEBUG_DUMP=0` 可关）；终端 `[llm]` 摘要默认关，会话内 `/debug` 开启，或 `PMBOX_DEBUG=1`。
+调试：默认将每轮用户对话写入 `output/debug/turn-NNN.json`（`PMBOX_DEBUG_DUMP=0` 可关）；终端 `[llm]` 摘要默认关，会话内 `/debug` 开启，或 `PMBOX_DEBUG=1`。完整路径与 `max_iter` 等见 `/status`。
 
 ## 启动
 
@@ -101,6 +101,7 @@ printf '帮我起草 WBS\n/quit\n' | USE_FAKE_LLM=true uv run pmbox
 |------|------|
 | `/help` | 能力说明与演示句 |
 | `/quit` | 结束进程 |
+| `/status` | 查看运行配置（路径、max_iter、debug/dump） |
 | 空回车 | 提示示例卡点（不进 Loop） |
 
 ## 目录结构

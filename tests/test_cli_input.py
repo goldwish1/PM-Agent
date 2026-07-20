@@ -29,6 +29,7 @@ def test_matching_slash_root() -> None:
         "/help",
         "/quit",
         "/tools",
+        "/status",
         "/debug",
         "/dump",
         "/setup-terminal",
@@ -58,6 +59,16 @@ def test_matching_slash_dump_prefix() -> None:
 def test_matching_slash_d_prefix() -> None:
     cmds = [c for c, _ in matching_slash_commands("/d")]
     assert cmds == ["/debug", "/dump"]
+
+
+def test_matching_slash_s_prefix() -> None:
+    cmds = [c for c, _ in matching_slash_commands("/s")]
+    assert cmds == ["/status", "/setup-terminal"]
+
+
+def test_matching_slash_status_prefix() -> None:
+    cmds = [c for c, _ in matching_slash_commands("/sta")]
+    assert cmds == ["/status"]
 
 
 def test_matching_non_slash_empty() -> None:

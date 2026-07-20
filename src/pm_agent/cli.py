@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import sys
 import threading
-from pathlib import Path
 
 from pm_agent import __version__
 from pm_agent.agent.debug_log import debug_dir
@@ -64,21 +63,9 @@ WELCOME = """\
 ║             pmbox  v{version}             ║
 ╚══════════════════════════════════════════╝
 
-面向个人项目经理的 CLI 助手。
+面向个人项目经理的 CLI 助手：推荐 PM 工具，起草章程/风险等并导出 Markdown。
 
-可推荐 {tool_count} 个 PMBOK 工具；可起草「项目章程 / 风险登记册 /
-决策矩阵 / 决策记录」并导出 Markdown。
-
-当前能力：
-  · 卡点澄清（≤5 轮）→ 库内推荐 1～3 个工具 → 可查详情
-  · 起草章程 / 风险 / 决策矩阵 / 决策记录 → 预览 → 确认后写入 output/
-  · FakeLLM / DeepSeek 可切换；Agent 循环过程日志默认可见
-  · /tools 浏览知识库；/debug · /dump 切换 LLM 摘要与落盘（dump 默认开）
-  · 输入中用 @./notes.md 附带 .md/.txt；交互终端下 @ 可 Tab 补全文件
-
-输入 /help 查看指令与演示句，输入 /quit 退出。
-交互终端下 Shift+Enter 换行、Enter 提交；以 / 开头可补全指令，
-以 @ 开头可补全 .md/.txt 文件；↑/↓ 可回填本会话已输入内容。
+直接描述你的问题开始，输入 /help 查看指令与演示句，/quit 退出。
 """
 
 HELP = """\
@@ -86,6 +73,7 @@ HELP = """\
   /help · 帮助     显示本说明
   /quit · 退出     结束进程
   /tools · 工具库  浏览知识库（/tools · /tools <slug> · /tools <关键词>）
+  /status · 状态   查看运行配置（路径、max_iter、debug/dump 等）
   /debug · 调试    切换终端 [llm] 摘要 on/off
   /dump · 落盘     切换 output/debug JSON 落盘 on/off
   /setup-terminal  配置 Cursor/VS Code 集成终端 Shift+Enter
@@ -109,15 +97,13 @@ HELP = """\
 """
 
 EMPTY_INPUT_HINT = (
-    "请用一句话描述你当前的项目卡点，例如：下周要立项还没授权。"
+    "请用一句话描述你当前的项目卡点，例如：下周要立项还没授权。\n"
+    "也可试：/tools · 帮我起草项目章程 · /status"
 )
 
 
-def _print_welcome(*, tool_count: int) -> None:
-    print(
-        WELCOME.format(version=__version__, tool_count=tool_count),
-        flush=True,
-    )
+def _print_welcome() -> None:
+    print(WELCOME.format(version=__version__), flush=True)
 
 
 def _print_help() -> None:
@@ -130,6 +116,10 @@ def _is_quit(text: str) -> bool:
 
 def _is_help(text: str) -> bool:
     return text == "/help"
+
+
+def _is_status(text: str) -> bool:
+    return text == "/status"
 
 
 def _is_debug(text: str) -> bool:
@@ -148,15 +138,41 @@ def _on_off(flag: bool) -> str:
     return "on" if flag else "off"
 
 
-def _print_debug_status(
+def _print_startup_config(*, settings: Settings, tool_count: int) -> None:
+    model = (
+        settings.deepseek_model if not settings.use_fake_llm else "-"
+    )
+    print(
+        f"[config] {settings.provider_label} · {model} · {tool_count} tools",
+        flush=True,
+    )
+    if settings.config_notice:
+        print(f"[config] {settings.config_notice}", flush=True)
+
+
+def _print_runtime_status(
     *,
+    settings: Settings,
+    tool_count: int,
     debug_on: bool,
     dump_on: bool,
-    output_dir: Path,
 ) -> None:
+    model = (
+        settings.deepseek_model if not settings.use_fake_llm else "-"
+    )
+    print(
+        f"[config] provider={settings.provider_label}  "
+        f"model={model}  "
+        f"output={settings.output_dir}  "
+        f"max_iter={settings.max_tool_iterations}",
+        flush=True,
+    )
+    if settings.config_notice:
+        print(f"[config] {settings.config_notice}", flush=True)
+    print(f"[config] tools_loaded={tool_count}", flush=True)
     print(
         f"[config] debug={_on_off(debug_on)} dump={_on_off(dump_on)} "
-        f"dir={debug_dir(output_dir)}",
+        f"dir={debug_dir(settings.output_dir)}",
         flush=True,
     )
 
@@ -203,28 +219,13 @@ def main() -> None:
         )
         raise SystemExit(1)
 
-    _print_welcome(tool_count=len(repo))
-
-    print(
-        f"[config] provider={settings.provider_label}  "
-        f"model={settings.deepseek_model if not settings.use_fake_llm else '-'}  "
-        f"output={settings.output_dir}  "
-        f"max_iter={settings.max_tool_iterations}",
-        flush=True,
-    )
-    if settings.config_notice:
-        print(f"[config] {settings.config_notice}", flush=True)
-
-    print(f"[config] tools_loaded={len(repo)}", flush=True)
+    tool_count = len(repo)
+    _print_welcome()
+    _print_startup_config(settings=settings, tool_count=tool_count)
+    print(flush=True)
 
     debug_on = settings.debug_llm
     dump_on = settings.debug_dump_llm
-    _print_debug_status(
-        debug_on=debug_on,
-        dump_on=dump_on,
-        output_dir=settings.output_dir,
-    )
-    print(flush=True)
 
     hint = integrated_terminal_hint()
     if hint:
@@ -260,21 +261,32 @@ def main() -> None:
             print(format_tools_reply(repo, raw), end="", flush=True)
             continue
 
-        if _is_debug(raw):
-            debug_on = not debug_on
-            _print_debug_status(
+        if _is_status(raw):
+            _print_runtime_status(
+                settings=settings,
+                tool_count=tool_count,
                 debug_on=debug_on,
                 dump_on=dump_on,
-                output_dir=settings.output_dir,
+            )
+            continue
+
+        if _is_debug(raw):
+            debug_on = not debug_on
+            _print_runtime_status(
+                settings=settings,
+                tool_count=tool_count,
+                debug_on=debug_on,
+                dump_on=dump_on,
             )
             continue
 
         if _is_dump(raw):
             dump_on = not dump_on
-            _print_debug_status(
+            _print_runtime_status(
+                settings=settings,
+                tool_count=tool_count,
                 debug_on=debug_on,
                 dump_on=dump_on,
-                output_dir=settings.output_dir,
             )
             continue
 

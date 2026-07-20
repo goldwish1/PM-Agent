@@ -335,8 +335,9 @@ stateDiagram-v2
 |----------|------|
 | `/quit` | 结束进程 |
 | `/help` | 打印能力说明 |
-| `/debug` | 切换终端 `[llm]` 摘要 on/off |
-| `/dump` | 切换 `output/debug/*.json` 落盘 on/off |
+| `/status` | 只读打印运行配置（路径、`max_iter`、debug/dump 等） |
+| `/debug` | 切换终端 `[llm]` 摘要 on/off（切换后打印完整状态） |
+| `/dump` | 切换 `output/debug/*.json` 落盘 on/off（切换后打印完整状态） |
 | 其他文本 | `handle_user_turn` |
 
 元指令仅识别上述 slash 规范名（无中文/英文关键词别名）；交互终端下以 `/` 开头可前缀补全。
