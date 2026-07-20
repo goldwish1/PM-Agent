@@ -7,15 +7,21 @@ from pathlib import Path
 
 import pytest
 
+from pm_agent.evaluation.dataset import load_evaluation_cases
+from pm_agent.evaluation.models import CaseType, EvaluationCase
 from pm_agent.knowledge.catalog_ops import (
     CandidateStatus,
     QualityScore,
     ToolCandidate,
     build_generation_prompt,
     candidate_issues,
+    discard_candidate,
+    load_archive,
     load_candidates,
     promote_candidate,
+    retire_tool,
     review_candidate,
+    scrub_evaluation_cases,
     strict_tool_issues,
 )
 from pm_agent.knowledge.repo import PmTool, ToolsRepository
@@ -190,3 +196,166 @@ def test_repo_rejects_duplicate_slugs(tmp_path: Path) -> None:
     _write_json(path, [tool, tool])
     with pytest.raises(ValueError, match="重复 slug"):
         ToolsRepository.from_json_path(path)
+
+
+def test_retire_moves_tool_to_archive(tmp_path: Path) -> None:
+    tools_path, candidates_path = _setup_files(tmp_path)
+    archive_path = tmp_path / "tools.archive.json"
+    _write_json(archive_path, [])
+    score = QualityScore(
+        trigger_clarity=2,
+        actionability=2,
+        output_clarity=2,
+        boundary_clarity=1,
+        recommendation_value=1,
+    )
+    review_candidate(
+        candidates_path,
+        tools_path,
+        "active-listening",
+        score,
+        approve=True,
+    )
+    promote_candidate(candidates_path, tools_path, "active-listening")
+
+    result = retire_tool(
+        tools_path,
+        archive_path,
+        "active-listening",
+        candidates_path=candidates_path,
+        note="与 SBI 合并",
+    )
+    assert result.written
+    assert not ToolsRepository.from_json_path(tools_path).exists("active-listening")
+    archive = load_archive(archive_path)
+    assert any(item.slug == "active-listening" for item in archive)
+    candidate = load_candidates(candidates_path)[0]
+    assert candidate.status == CandidateStatus.REJECTED
+    assert "与 SBI 合并" in candidate.review_notes
+
+
+def test_retire_dry_run_does_not_write(tmp_path: Path) -> None:
+    tools_path, candidates_path = _setup_files(tmp_path)
+    archive_path = tmp_path / "tools.archive.json"
+    _write_json(archive_path, [])
+    tools_before = tools_path.read_text(encoding="utf-8")
+    archive_before = archive_path.read_text(encoding="utf-8")
+    result = retire_tool(
+        tools_path,
+        archive_path,
+        "status-report",
+        candidates_path=candidates_path,
+        dry_run=True,
+    )
+    assert not result.written
+    assert tools_path.read_text(encoding="utf-8") == tools_before
+    assert archive_path.read_text(encoding="utf-8") == archive_before
+
+
+def test_retire_rejects_duplicate_archive_slug(tmp_path: Path) -> None:
+    tools_path, _ = _setup_files(tmp_path)
+    archive_path = tmp_path / "tools.archive.json"
+    existing = PmTool(
+        slug="status-report",
+        name="旧状态报告",
+        summary="归档副本",
+        use_cases=["沟通与汇报"],
+    )
+    _write_json(archive_path, [existing.model_dump(exclude_none=True)])
+    with pytest.raises(ValueError, match="归档库已存在"):
+        retire_tool(tools_path, archive_path, "status-report")
+
+
+def test_retire_blocks_draftable_and_hardcoded_without_force(tmp_path: Path) -> None:
+    tools_path = tmp_path / "tools.json"
+    archive_path = tmp_path / "tools.archive.json"
+    draftable = _valid_tool("project-charter").model_copy(
+        update={"name": "项目章程", "draftable": True}
+    )
+    _write_json(tools_path, [draftable.model_dump(exclude_none=True)])
+    _write_json(archive_path, [])
+    with pytest.raises(ValueError, match="安全门禁"):
+        retire_tool(tools_path, archive_path, "project-charter")
+    result = retire_tool(
+        tools_path,
+        archive_path,
+        "project-charter",
+        force=True,
+    )
+    assert result.written
+    assert result.blocked_reasons
+    assert not ToolsRepository.from_json_path(tools_path).exists("project-charter")
+
+
+def test_discard_removes_candidate(tmp_path: Path) -> None:
+    tools_path, candidates_path = _setup_files(tmp_path)
+    removed = discard_candidate(candidates_path, tools_path, "active-listening")
+    assert removed.slug == "active-listening"
+    assert load_candidates(candidates_path) == []
+
+
+def test_discard_rejects_published_while_formal_exists(tmp_path: Path) -> None:
+    tools_path, candidates_path = _setup_files(tmp_path)
+    score = QualityScore(
+        trigger_clarity=2,
+        actionability=2,
+        output_clarity=2,
+        boundary_clarity=1,
+        recommendation_value=1,
+    )
+    review_candidate(
+        candidates_path,
+        tools_path,
+        "active-listening",
+        score,
+        approve=True,
+    )
+    promote_candidate(candidates_path, tools_path, "active-listening")
+    with pytest.raises(ValueError, match="请先 retire"):
+        discard_candidate(candidates_path, tools_path, "active-listening")
+
+
+def test_scrub_removes_orphan_typical_and_strips_refs(tmp_path: Path) -> None:
+    cases_path = tmp_path / "cases.json"
+    cases = [
+        EvaluationCase(
+            id="keep-boundary",
+            query="边界场景",
+            family="沟通与冲突",
+            case_type=CaseType.BOUNDARY,
+            acceptable_top1=[],
+            required_top3=["other-tool"],
+            forbidden_top3=["active-listening"],
+        ),
+        EvaluationCase(
+            id="drop-typical",
+            query="典型场景",
+            family="沟通与冲突",
+            case_type=CaseType.TYPICAL,
+            acceptable_top1=["active-listening"],
+            required_top3=["active-listening"],
+            forbidden_top3=[],
+        ),
+        EvaluationCase(
+            id="update-negative",
+            query="反例场景",
+            family="沟通与冲突",
+            case_type=CaseType.NEGATIVE,
+            acceptable_top1=["other-tool"],
+            required_top3=["other-tool"],
+            forbidden_top3=["active-listening"],
+        ),
+    ]
+    _write_json(cases_path, [case.model_dump(mode="json") for case in cases])
+
+    report = scrub_evaluation_cases(cases_path, "active-listening")
+    assert "drop-typical" in report.removed_case_ids
+    assert "update-negative" in report.updated_case_ids
+    assert "keep-boundary" in report.updated_case_ids
+
+    remaining = load_evaluation_cases(cases_path)
+    by_id = {case.id: case for case in remaining}
+    assert "drop-typical" not in by_id
+    assert by_id["keep-boundary"].forbidden_top3 == []
+    assert by_id["update-negative"].forbidden_top3 == []
+    assert by_id["update-negative"].required_top3 == ["other-tool"]

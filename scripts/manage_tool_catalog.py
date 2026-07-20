@@ -10,6 +10,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from pm_agent.evaluation.comparison import compare_reports
+from pm_agent.evaluation.dataset import load_evaluation_cases
 from pm_agent.evaluation.gates import evaluate_baseline_gate
 from pm_agent.evaluation.models import EvaluationReport, GateResult, GateSeverity
 from pm_agent.evaluation.reporting import (
@@ -22,13 +23,17 @@ from pm_agent.evaluation.service import (
     evaluate_candidate,
     evaluate_current,
 )
+from pm_agent.evaluation.views import write_baseline_views, write_cases_views
 from pm_agent.knowledge.catalog_ops import (
     CandidateStatus,
     QualityScore,
+    RetireResult,
     build_generation_prompt,
+    discard_candidate,
     ingest_candidates,
     load_candidates,
     promote_candidate,
+    retire_tool,
     review_candidate,
     validate_catalog,
 )
@@ -36,6 +41,7 @@ from pm_agent.knowledge.repo import ToolsRepository
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_TOOLS = REPO_ROOT / "data" / "tools.json"
+DEFAULT_ARCHIVE = REPO_ROOT / "data" / "tools.archive.json"
 DEFAULT_CANDIDATES = REPO_ROOT / "data" / "tool_candidates.json"
 DEFAULT_CASES = REPO_ROOT / "data" / "evaluation" / "tool_recommendation_cases.json"
 DEFAULT_BASELINE = REPO_ROOT / "data" / "evaluation" / "baseline.json"
@@ -64,6 +70,7 @@ def _score(value: str) -> QualityScore:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="运营 pmbox 的 PM 工具候选池")
     parser.add_argument("--tools", type=Path, default=DEFAULT_TOOLS)
+    parser.add_argument("--archive", type=Path, default=DEFAULT_ARCHIVE)
     parser.add_argument("--candidates", type=Path, default=DEFAULT_CANDIDATES)
     parser.add_argument("--cases", type=Path, default=DEFAULT_CASES)
     parser.add_argument("--baseline", type=Path, default=DEFAULT_BASELINE)
@@ -97,6 +104,35 @@ def build_parser() -> argparse.ArgumentParser:
     promote_parser.add_argument("slug")
     promote_parser.add_argument("--dry-run", action="store_true")
 
+    retire_parser = commands.add_parser("retire", help="从正式库下架并归档")
+    retire_parser.add_argument("slug")
+    retire_parser.add_argument("--dry-run", action="store_true")
+    retire_parser.add_argument(
+        "--yes",
+        action="store_true",
+        help="确认写盘；未指定时只打印计划",
+    )
+    retire_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="绕过 draftable / 硬编码推荐 slug 门禁",
+    )
+    retire_parser.add_argument(
+        "--keep-cases",
+        action="store_true",
+        help="不下架联动清理黄金用例（仅调试）",
+    )
+    retire_parser.add_argument("--note", default="")
+
+    discard_parser = commands.add_parser("discard", help="从候选池移除条目")
+    discard_parser.add_argument("slug")
+    discard_parser.add_argument("--dry-run", action="store_true")
+    discard_parser.add_argument(
+        "--yes",
+        action="store_true",
+        help="确认写盘；未指定时只打印计划",
+    )
+
     evaluate_parser = commands.add_parser("evaluate", help="评测当前正式工具库")
     evaluate_parser.add_argument("--family")
     evaluate_parser.add_argument("--tag")
@@ -124,6 +160,15 @@ def build_parser() -> argparse.ArgumentParser:
     eval_prompt_parser.add_argument("slug")
     eval_prompt_parser.add_argument("--count", type=int, default=12)
     eval_prompt_parser.add_argument("--output", type=Path)
+
+    commands.add_parser(
+        "export-cases",
+        help="导出黄金用例的 Markdown/HTML 可读视图",
+    )
+    commands.add_parser(
+        "export-baseline",
+        help="导出正式基线的 Markdown/HTML 可读视图",
+    )
     return parser
 
 
@@ -192,8 +237,7 @@ def _run(args: argparse.Namespace) -> int:
             note=args.note,
         )
         print(
-            f"ok: {candidate.slug} → {candidate.status.value} "
-            f"({candidate.quality_score.total}/10)"
+            f"ok: {candidate.slug} → {candidate.status.value} ({candidate.quality_score.total}/10)"
         )
         return 0
 
@@ -255,7 +299,21 @@ def _run(args: argparse.Namespace) -> int:
             print("未写入基线；审核黄金集后加 --yes 确认")
             return 2
         write_report_json(args.baseline, bundle.current)
+        view_paths = write_baseline_views(bundle.current, args.evaluation_output)
         print(f"ok: 基线已更新：{args.baseline}")
+        print(f"基线视图：{view_paths[0]} ；{view_paths[1]}")
+        return 0
+
+    if args.command == "export-cases":
+        cases = load_evaluation_cases(args.cases)
+        paths = write_cases_views(cases, args.evaluation_output)
+        print(f"用例视图：{paths[0]} ；{paths[1]}")
+        return 0
+
+    if args.command == "export-baseline":
+        report = load_report(args.baseline)
+        paths = write_baseline_views(report, args.evaluation_output)
+        print(f"基线视图：{paths[0]} ；{paths[1]}")
         return 0
 
     if args.command == "eval-prompt":
@@ -313,7 +371,92 @@ def _run(args: argparse.Namespace) -> int:
         print(f"ok: {tool.slug}「{tool.name}」{action}")
         return 0
 
+    if args.command == "retire":
+        preview = retire_tool(
+            args.tools,
+            args.archive,
+            args.slug,
+            candidates_path=args.candidates,
+            cases_path=args.cases,
+            dry_run=True,
+            note=args.note,
+            force=args.force,
+            keep_cases=args.keep_cases,
+        )
+        _print_retire_plan(preview, keep_cases=args.keep_cases)
+        if args.dry_run:
+            print("dry-run: 未写盘")
+            return 0
+        if not args.yes:
+            print("未写盘；确认后加 --yes")
+            return 2
+        result = retire_tool(
+            args.tools,
+            args.archive,
+            args.slug,
+            candidates_path=args.candidates,
+            cases_path=args.cases,
+            dry_run=False,
+            note=args.note,
+            force=args.force,
+            keep_cases=args.keep_cases,
+        )
+        print(f"ok: {result.tool.slug}「{result.tool.name}」已归档至 {args.archive}")
+        if result.candidate_updated:
+            print(f"候选池 {result.tool.slug} → rejected")
+        if result.scrub and result.scrub.affected_case_ids:
+            print(
+                f"评测用例：删除 {len(result.scrub.removed_case_ids)}，"
+                f"改写 {len(result.scrub.updated_case_ids)}"
+            )
+            print("请运行 evaluate，确认后再 update-baseline --yes")
+        if result.blocked_reasons:
+            print("已用 --force 绕过：")
+            for reason in result.blocked_reasons:
+                print(f"  - {reason}")
+        return 0
+
+    if args.command == "discard":
+        candidate = discard_candidate(
+            args.candidates,
+            args.tools,
+            args.slug,
+            dry_run=True,
+        )
+        print(
+            f"计划丢弃候选：{candidate.slug}「{candidate.name}」（status={candidate.status.value}）"
+        )
+        if args.dry_run:
+            print("dry-run: 未写盘")
+            return 0
+        if not args.yes:
+            print("未写盘；确认后加 --yes")
+            return 2
+        discard_candidate(args.candidates, args.tools, args.slug, dry_run=False)
+        print(f"ok: 已从候选池移除 {args.slug}")
+        return 0
+
     raise ValueError(f"未知命令：{args.command}")
+
+
+def _print_retire_plan(result: RetireResult, *, keep_cases: bool) -> None:
+    print(f"计划下架：{result.tool.slug}「{result.tool.name}」→ 归档库")
+    if result.candidate_updated:
+        print("候选池同 slug 将改为 rejected")
+    if keep_cases:
+        print("评测用例：保持不变（--keep-cases）")
+    elif result.scrub is None:
+        print("评测用例：无变更")
+    else:
+        print(
+            f"评测用例：受影响 {len(result.scrub.affected_case_ids)}，"
+            f"将删除 {len(result.scrub.removed_case_ids)}，"
+            f"将改写 {len(result.scrub.updated_case_ids)}"
+        )
+    if result.blocked_reasons:
+        print("安全提示（已要求 --force）：")
+        for reason in result.blocked_reasons:
+            print(f"  - {reason}")
 
 
 def _print_summary(report: EvaluationReport | None) -> None:

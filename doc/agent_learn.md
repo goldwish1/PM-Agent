@@ -2,6 +2,18 @@
 
 ## 新增功能
 
+### 2026-07-20 · 评测用例与基线可读视图导出
+
+- **新增加了什么功能**：运营脚本新增 `export-cases` / `export-baseline`，把黄金用例与正式基线导出为 `output/evaluation/` 下的 Markdown + 可筛选 HTML；`update-baseline --yes` 写盘后自动刷新基线视图。
+- **原因**：JSON 真相源不便人工审阅，需要不入库的可读视图，且不参与 digest/门禁。
+- **一句话方案**：`views.py` 渲染 md/html；CLI 导出到 gitignore 的 `output/evaluation/`；基线更新路径自动双写视图。
+
+### 2026-07-20 · 工具库下架与候选清理
+
+- **新增加了什么功能**：运营脚本新增 `retire`（正式库归档到 `tools.archive.json`）与 `discard`（候选池移除）；联动清理评测黄金用例；对 `draftable` 与推荐硬编码 slug 默认门禁，需 `--force`；CLI 需 `--yes` 才写盘。
+- **原因**：运营闭环原先只有进库，淘汰只能手改 JSON，易破坏归档约定与评测基线纪律。
+- **一句话方案**：`retire` 原子归档 + 候选改 rejected + scrub 用例；`discard` 专清候选；基线仍须人工 `update-baseline`。
+
 ### 2026-07-20 · 工具推荐黄金评测与发布回归门禁
 
 - **新增加了什么功能**：新增 60 条沟通工具黄金用例、稳定正式基线、确定性离线评测器、Top 1/Top 3/MRR/误召回指标、当前/候选 A/B 对比、JSON/Markdown 报告，以及 `evaluate`、`evaluate-candidate`、`eval-prompt`、`update-baseline` 命令；`promote` 默认先执行正式库基线和候选覆盖门禁。

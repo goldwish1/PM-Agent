@@ -167,9 +167,45 @@ def test_cli_updates_baseline_then_evaluates_current(tmp_path: Path) -> None:
 
     assert main([*args, "update-baseline", "--yes"]) == 0
     assert baseline.is_file()
+    assert (reports / "baseline.md").is_file()
+    assert (reports / "baseline.html").is_file()
     assert main([*args, "evaluate"]) == 0
     assert (reports / "current.json").is_file()
     assert (reports / "current.md").is_file()
+
+
+def test_cli_export_cases_and_baseline_views(tmp_path: Path) -> None:
+    tools, candidates, cases, baseline, reports = _paths(tmp_path)
+    _write(tools, [_formal_tool().model_dump(mode="json", exclude_none=True)])
+    _write(candidates, [])
+    _write(
+        cases,
+        [
+            EvaluationCase(
+                id="formal-hit",
+                query="正式场景问题",
+                family="测试家族",
+                case_type=CaseType.TYPICAL,
+                acceptable_top1=["formal-tool"],
+                required_top3=["formal-tool"],
+            ).model_dump(mode="json")
+        ],
+    )
+    args = _base_args(tools, candidates, cases, baseline, reports)
+    assert main([*args, "update-baseline", "--yes"]) == 0
+
+    assert main([*args, "export-cases"]) == 0
+    assert (reports / "cases.md").is_file()
+    assert (reports / "cases.html").is_file()
+    cases_html = (reports / "cases.html").read_text(encoding="utf-8")
+    assert "formal-hit" in cases_html
+    assert "正式场景问题" in cases_html
+
+    assert main([*args, "export-baseline"]) == 0
+    assert (reports / "baseline.md").is_file()
+    assert (reports / "baseline.html").is_file()
+    baseline_md = (reports / "baseline.md").read_text(encoding="utf-8")
+    assert "formal-hit" in baseline_md
 
 
 def test_cli_promote_blocks_candidate_without_coverage(tmp_path: Path) -> None:
@@ -245,3 +281,56 @@ def test_cli_promote_dry_run_passes_without_writing_catalog(tmp_path: Path) -> N
     assert tools.read_text(encoding="utf-8") == tools_before
     assert candidates.read_text(encoding="utf-8") == candidates_before
     assert (reports / "promote-candidate-tool.json").is_file()
+
+
+def test_cli_retire_requires_yes_and_then_archives(tmp_path: Path) -> None:
+    tools, candidates, cases, baseline, reports = _paths(tmp_path)
+    archive = tmp_path / "tools.archive.json"
+    _write(tools, [_formal_tool().model_dump(mode="json", exclude_none=True)])
+    _write(candidates, [])
+    _write(
+        cases,
+        [
+            EvaluationCase(
+                id="formal-hit",
+                query="正式场景问题",
+                family="测试家族",
+                case_type=CaseType.TYPICAL,
+                acceptable_top1=["formal-tool"],
+                required_top3=["formal-tool"],
+            ).model_dump(mode="json")
+        ],
+    )
+    _write(archive, [])
+    args = [
+        *_base_args(tools, candidates, cases, baseline, reports),
+        "--archive",
+        str(archive),
+    ]
+
+    assert main([*args, "retire", "formal-tool"]) == 2
+    assert ToolsRepository.from_json_path(tools).exists("formal-tool")
+
+    assert main([*args, "retire", "formal-tool", "--yes"]) == 0
+    assert not ToolsRepository.from_json_path(tools).exists("formal-tool")
+    archived = json.loads(archive.read_text(encoding="utf-8"))
+    assert archived[0]["slug"] == "formal-tool"
+    remaining_cases = json.loads(cases.read_text(encoding="utf-8"))
+    assert remaining_cases == []
+
+
+def test_cli_discard_requires_yes(tmp_path: Path) -> None:
+    tools, candidates, cases, baseline, reports = _paths(tmp_path)
+    _write(tools, [_formal_tool().model_dump(mode="json", exclude_none=True)])
+    _write(
+        candidates,
+        [_approved_candidate().model_dump(mode="json", exclude_none=True)],
+    )
+    _write(cases, [])
+    args = _base_args(tools, candidates, cases, baseline, reports)
+
+    assert main([*args, "discard", "candidate-tool"]) == 2
+    assert len(json.loads(candidates.read_text(encoding="utf-8"))) == 1
+
+    assert main([*args, "discard", "candidate-tool", "--yes"]) == 0
+    assert json.loads(candidates.read_text(encoding="utf-8")) == []

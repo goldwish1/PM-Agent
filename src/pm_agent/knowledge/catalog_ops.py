@@ -10,8 +10,14 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
+from pm_agent.evaluation.dataset import load_evaluation_cases
+from pm_agent.evaluation.models import CaseType, EvaluationCase
 from pm_agent.knowledge.categories import USE_CASE_ORDER, validate_use_cases
-from pm_agent.knowledge.repo import PmTool, ToolsRepository
+from pm_agent.knowledge.repo import (
+    PmTool,
+    ToolsRepository,
+    hardcoded_recommendation_slugs,
+)
 
 
 class CandidateStatus(StrEnum):
@@ -289,6 +295,261 @@ def write_candidates(path: Path | str, candidates: list[ToolCandidate]) -> None:
         Path(path),
         [item.model_dump(mode="json", exclude_none=True) for item in candidates],
     )
+
+
+class ScrubReport(BaseModel):
+    """评测用例清理结果。"""
+
+    removed_case_ids: list[str] = Field(default_factory=list)
+    updated_case_ids: list[str] = Field(default_factory=list)
+    affected_case_ids: list[str] = Field(default_factory=list)
+
+
+class RetireResult(BaseModel):
+    """正式库下架结果。"""
+
+    tool: PmTool
+    blocked_reasons: list[str] = Field(default_factory=list)
+    candidate_updated: bool = False
+    scrub: ScrubReport | None = None
+    written: bool = False
+
+
+def retire_block_reasons(tool: PmTool) -> list[str]:
+    """返回默认阻止下架的原因（可用 force 绕过）。"""
+    reasons: list[str] = []
+    if tool.draftable:
+        reasons.append("draftable=true，仍可能有 draft_* 代码链路，需人工确认后加 --force")
+    if tool.slug in hardcoded_recommendation_slugs():
+        reasons.append(
+            "slug 出现在推荐启发式硬编码列表（KEYWORD_BOOSTS/FALLBACK_SLUGS），"
+            "需同步修改 src/pm_agent/knowledge/repo.py 后加 --force"
+        )
+    return reasons
+
+
+def load_archive(path: Path | str) -> list[PmTool]:
+    """读取归档库；文件不存在时返回空列表。"""
+    file_path = Path(path)
+    if not file_path.is_file():
+        return []
+    raw = json.loads(file_path.read_text(encoding="utf-8"))
+    if not isinstance(raw, list):
+        raise ValueError("tools.archive.json 根节点必须是数组")
+    tools = [PmTool.model_validate(item) for item in raw]
+    _ensure_unique_tool_slugs(tools, source="归档库")
+    return tools
+
+
+def scrub_evaluation_cases(
+    cases_path: Path | str,
+    slug: str,
+    *,
+    dry_run: bool = False,
+) -> ScrubReport:
+    """从黄金集去掉对 slug 的引用；必要时删除孤儿正例用例。"""
+    cases = load_evaluation_cases(cases_path)
+    kept: list[EvaluationCase] = []
+    removed: list[str] = []
+    updated: list[str] = []
+    affected: list[str] = []
+
+    for case in cases:
+        fields = (
+            case.acceptable_top1,
+            case.required_top3,
+            case.forbidden_top3,
+            case.requires_tools,
+        )
+        if slug not in set().union(*(set(field) for field in fields)):
+            kept.append(case)
+            continue
+
+        affected.append(case.id)
+        acceptable = [item for item in case.acceptable_top1 if item != slug]
+        required = [item for item in case.required_top3 if item != slug]
+        forbidden = [item for item in case.forbidden_top3 if item != slug]
+        requires = [item for item in case.requires_tools if item != slug]
+
+        drop = False
+        if not (acceptable or required or forbidden):
+            drop = True
+        elif case.case_type in (CaseType.TYPICAL, CaseType.PARAPHRASE) and not required:
+            drop = True
+
+        if drop:
+            removed.append(case.id)
+            continue
+
+        kept.append(
+            case.model_copy(
+                update={
+                    "acceptable_top1": acceptable,
+                    "required_top3": required,
+                    "forbidden_top3": forbidden,
+                    "requires_tools": requires,
+                }
+            )
+        )
+        updated.append(case.id)
+
+    report = ScrubReport(
+        removed_case_ids=removed,
+        updated_case_ids=updated,
+        affected_case_ids=affected,
+    )
+    if not dry_run and (removed or updated):
+        _atomic_write_json(
+            Path(cases_path),
+            [case.model_dump(mode="json") for case in kept],
+        )
+    return report
+
+
+def discard_candidate(
+    pool_path: Path | str,
+    tools_path: Path | str,
+    slug: str,
+    *,
+    dry_run: bool = False,
+) -> ToolCandidate:
+    """从候选池移除条目；published 且正式库仍存在时拒绝。"""
+    candidates = load_candidates(pool_path)
+    index = _candidate_index(candidates, slug)
+    candidate = candidates[index]
+    repo = ToolsRepository.from_json_path(tools_path)
+    if candidate.status == CandidateStatus.PUBLISHED and repo.exists(slug):
+        raise ValueError(
+            f"候选「{slug}」已 published 且正式库仍存在；请先 retire 正式库条目"
+        )
+    if dry_run:
+        return candidate
+    remaining = [item for item in candidates if item.slug != slug]
+    write_candidates(pool_path, remaining)
+    return candidate
+
+
+def retire_tool(
+    tools_path: Path | str,
+    archive_path: Path | str,
+    slug: str,
+    *,
+    candidates_path: Path | str | None = None,
+    cases_path: Path | str | None = None,
+    dry_run: bool = False,
+    note: str = "",
+    force: bool = False,
+    keep_cases: bool = False,
+) -> RetireResult:
+    """将正式库工具归档；可选联动候选状态与评测用例清理。"""
+    tools_file = Path(tools_path)
+    archive_file = Path(archive_path)
+    repo = ToolsRepository.from_json_path(tools_file)
+    tool = repo.get_by_slug(slug)
+    if tool is None:
+        raise ValueError(f"正式库中不存在 slug「{slug}」")
+
+    blocked = retire_block_reasons(tool)
+    if blocked and not force:
+        raise ValueError(
+            f"下架「{slug}」被安全门禁拦截：" + "；".join(blocked) + "。确认后可加 --force"
+        )
+
+    archive = load_archive(archive_file)
+    if any(item.slug == slug for item in archive):
+        raise ValueError(f"归档库已存在 slug「{slug}」，禁止覆盖")
+
+    scrub: ScrubReport | None = None
+    cases_file: Path | None = None
+    if cases_path is not None and not keep_cases:
+        candidate_cases = Path(cases_path)
+        if candidate_cases.is_file():
+            cases_file = candidate_cases
+            scrub = scrub_evaluation_cases(cases_file, slug, dry_run=True)
+
+    candidate_updated = False
+    updated_candidates: list[ToolCandidate] | None = None
+    if candidates_path is not None and Path(candidates_path).is_file():
+        candidates = load_candidates(candidates_path)
+        try:
+            index = _candidate_index(candidates, slug)
+        except ValueError:
+            index = -1
+        if index >= 0:
+            candidate = candidates[index]
+            notes = [*candidate.review_notes]
+            retire_note = note.strip() or "已从正式库下架归档"
+            notes.append(retire_note)
+            candidates[index] = candidate.model_copy(
+                update={"status": CandidateStatus.REJECTED, "review_notes": notes}
+            )
+            updated_candidates = candidates
+            candidate_updated = True
+
+    result = RetireResult(
+        tool=tool,
+        blocked_reasons=blocked,
+        candidate_updated=candidate_updated,
+        scrub=scrub,
+        written=False,
+    )
+    if dry_run:
+        return result
+
+    raw_tools = json.loads(tools_file.read_text(encoding="utf-8"))
+    if not isinstance(raw_tools, list):
+        raise ValueError("tools.json 根节点必须是数组")
+    remaining_tools = [item for item in raw_tools if item.get("slug") != slug]
+    if len(remaining_tools) == len(raw_tools):
+        raise ValueError(f"正式库中不存在 slug「{slug}」")
+
+    archived = [item.model_dump(exclude_none=True) for item in archive]
+    archived.append(tool.model_dump(exclude_none=True))
+
+    original_tools = tools_file.read_text(encoding="utf-8")
+    original_archive = (
+        archive_file.read_text(encoding="utf-8") if archive_file.is_file() else None
+    )
+    original_candidates: str | None = None
+    pool_file = Path(candidates_path) if candidates_path else None
+    if pool_file is not None and pool_file.is_file():
+        original_candidates = pool_file.read_text(encoding="utf-8")
+    original_cases: str | None = None
+    if cases_file is not None:
+        original_cases = cases_file.read_text(encoding="utf-8")
+
+    try:
+        _atomic_write_json(archive_file, archived)
+        _atomic_write_json(tools_file, remaining_tools)
+        if updated_candidates is not None and pool_file is not None:
+            write_candidates(pool_file, updated_candidates)
+        if cases_file is not None:
+            scrub = scrub_evaluation_cases(cases_file, slug, dry_run=False)
+            result = result.model_copy(update={"scrub": scrub})
+    except Exception:
+        tools_file.write_text(original_tools, encoding="utf-8")
+        if original_archive is None:
+            archive_file.unlink(missing_ok=True)
+        else:
+            archive_file.write_text(original_archive, encoding="utf-8")
+        if original_candidates is not None and pool_file is not None:
+            pool_file.write_text(original_candidates, encoding="utf-8")
+        if original_cases is not None and cases_file is not None:
+            cases_file.write_text(original_cases, encoding="utf-8")
+        raise
+
+    return result.model_copy(update={"written": True})
+
+
+def _ensure_unique_tool_slugs(items: list[PmTool], *, source: str) -> None:
+    seen: set[str] = set()
+    duplicates: set[str] = set()
+    for item in items:
+        if item.slug in seen:
+            duplicates.add(item.slug)
+        seen.add(item.slug)
+    if duplicates:
+        raise ValueError(f"{source}存在重复 slug：{sorted(duplicates)}")
 
 
 def _candidate_index(candidates: list[ToolCandidate], slug: str) -> int:

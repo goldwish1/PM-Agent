@@ -10,6 +10,79 @@ from pydantic import BaseModel, Field
 
 from pm_agent.knowledge.categories import USE_CASE_ORDER, validate_use_cases
 
+# 推荐启发式硬编码 slug；下架工具时需人工同步，否则 retire 默认拦截。
+KEYWORD_BOOSTS: list[tuple[list[str], list[str], str]] = [
+    (
+        ["立项", "授权", "章程", "启动", "kickoff", "批准"],
+        ["project-charter", "stakeholder-register", "raci-matrix"],
+        "与立项授权/启动阶段高度相关",
+    ),
+    (
+        ["风险", "不确定", "担心", "隐患", "risk"],
+        ["risk-register", "risk-report", "pre-mortem"],
+        "与风险识别与应对相关",
+    ),
+    (
+        ["进度", "排期", "延期", "工期", "里程碑", "甘特"],
+        ["gantt-chart", "moscow-prioritization", "decision-matrix"],
+        "与进度规划/赶工相关",
+    ),
+    (
+        ["范围", "需求", "验收", "边界"],
+        ["moscow-prioritization", "cross-functional-alignment", "decision-matrix"],
+        "与范围与需求澄清相关",
+    ),
+    (
+        ["成本", "预算", "超支", "花费", "外采", "自研"],
+        ["decision-matrix", "swot-analysis", "decision-record"],
+        "与方案决策/权衡相关",
+    ),
+    (
+        ["干系人", "老板", "跨部门", "推动"],
+        ["stakeholder-register", "raci-matrix", "force-field-analysis"],
+        "与干系人管理相关",
+    ),
+    (
+        ["变更", "改需求", "change"],
+        ["decision-record", "five-whys", "raci-matrix"],
+        "与方案决策/权衡相关",
+    ),
+    (
+        ["结项", "收尾", "移交", "关闭", "复盘"],
+        ["lessons-learned-register", "decision-record", "risk-report"],
+        "与项目收尾相关",
+    ),
+    (
+        ["沟通", "汇报", "周报", "状态", "反馈", "冲突", "对齐"],
+        [
+            "sbi-feedback",
+            "conflict-resolution-process",
+            "cross-functional-alignment",
+            "pyramid-principle",
+            "difficult-conversation-prep",
+        ],
+        "与沟通与状态同步相关",
+    ),
+    (
+        ["决策", "选方案", "拿不定主意", "trade-off", "怎么选", "纠结", "权衡"],
+        ["decision-matrix", "swot-analysis", "pre-mortem", "decision-record"],
+        "与方案决策/权衡相关",
+    ),
+]
+FALLBACK_SLUGS: list[str] = [
+    "project-charter",
+    "stakeholder-register",
+    "risk-register",
+]
+
+
+def hardcoded_recommendation_slugs() -> frozenset[str]:
+    """返回推荐启发式硬编码引用的全部 slug。"""
+    slugs: set[str] = set(FALLBACK_SLUGS)
+    for _keywords, boost_slugs, _reason in KEYWORD_BOOSTS:
+        slugs.update(boost_slugs)
+    return frozenset(slugs)
+
 
 class PmTool(BaseModel):
     """对应 tools.json 单条工具。"""
@@ -125,65 +198,6 @@ class ToolsRepository:
         if not text:
             return []
 
-        keyword_boosts: list[tuple[list[str], list[str], str]] = [
-            (
-                ["立项", "授权", "章程", "启动", "kickoff", "批准"],
-                ["project-charter", "stakeholder-register", "raci-matrix"],
-                "与立项授权/启动阶段高度相关",
-            ),
-            (
-                ["风险", "不确定", "担心", "隐患", "risk"],
-                ["risk-register", "risk-report", "pre-mortem"],
-                "与风险识别与应对相关",
-            ),
-            (
-                ["进度", "排期", "延期", "工期", "里程碑", "甘特"],
-                ["gantt-chart", "moscow-prioritization", "decision-matrix"],
-                "与进度规划/赶工相关",
-            ),
-            (
-                ["范围", "需求", "验收", "边界"],
-                ["moscow-prioritization", "cross-functional-alignment", "decision-matrix"],
-                "与范围与需求澄清相关",
-            ),
-            (
-                ["成本", "预算", "超支", "花费", "外采", "自研"],
-                ["decision-matrix", "swot-analysis", "decision-record"],
-                "与方案决策/权衡相关",
-            ),
-            (
-                ["干系人", "老板", "跨部门", "推动"],
-                ["stakeholder-register", "raci-matrix", "force-field-analysis"],
-                "与干系人管理相关",
-            ),
-            (
-                ["变更", "改需求", "change"],
-                ["decision-record", "five-whys", "raci-matrix"],
-                "与方案决策/权衡相关",
-            ),
-            (
-                ["结项", "收尾", "移交", "关闭", "复盘"],
-                ["lessons-learned-register", "decision-record", "risk-report"],
-                "与项目收尾相关",
-            ),
-            (
-                ["沟通", "汇报", "周报", "状态", "反馈", "冲突", "对齐"],
-                [
-                    "sbi-feedback",
-                    "conflict-resolution-process",
-                    "cross-functional-alignment",
-                    "pyramid-principle",
-                    "difficult-conversation-prep",
-                ],
-                "与沟通与状态同步相关",
-            ),
-            (
-                ["决策", "选方案", "拿不定主意", "trade-off", "怎么选", "纠结", "权衡"],
-                ["decision-matrix", "swot-analysis", "pre-mortem", "decision-record"],
-                "与方案决策/权衡相关",
-            ),
-        ]
-
         scores: dict[str, float] = {t.slug: 0.0 for t in self._tools}
         reasons: dict[str, str] = {}
 
@@ -196,7 +210,7 @@ class ToolsRepository:
                 scores[tool.slug] += 12
                 reasons.setdefault(tool.slug, "与用户口语卡点直接匹配")
 
-        for keywords, slugs, reason in keyword_boosts:
+        for keywords, slugs, reason in KEYWORD_BOOSTS:
             if any(k.lower() in text for k in keywords):
                 for i, slug in enumerate(slugs):
                     if slug in scores:
@@ -221,8 +235,7 @@ class ToolsRepository:
                 break
 
         if not results:
-            fallback = ["project-charter", "stakeholder-register", "risk-register"]
-            for slug in fallback[:2]:
+            for slug in FALLBACK_SLUGS[:2]:
                 tool = self._by_slug.get(slug)
                 if tool:
                     results.append((tool, "信息有限，先从通用启动工具切入"))
