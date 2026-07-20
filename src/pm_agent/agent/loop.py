@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from pm_agent.agent.debug_log import TurnDebugDump, print_llm_round
-from pm_agent.agent.llm import LlmApiError, LlmClient
+from pm_agent.agent.llm_types import LlmApiError, LlmClient
 from pm_agent.agent.prompts import MAX_CLARIFY_ROUNDS, get_system_prompt
 from pm_agent.agent.session import SessionMode, SessionState
 from pm_agent.agent.spinner import llm_spinner

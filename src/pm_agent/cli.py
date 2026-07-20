@@ -3,17 +3,14 @@
 from __future__ import annotations
 
 import sys
+import threading
 from pathlib import Path
 
 from pm_agent import __version__
 from pm_agent.agent.debug_log import debug_dir
-from pm_agent.agent.llm import (
-    FakeLlmClient,
-    LlmClient,
-    OpenAICompatibleClient,
-    build_llm_client,
-    demo_script_for_user_text,
-)
+from pm_agent.agent.fake_llm import FakeLlmClient, demo_script_for_user_text
+from pm_agent.agent.llm import build_llm_client
+from pm_agent.agent.llm_types import LlmApiError, LlmClient
 from pm_agent.agent.loop import handle_user_turn
 from pm_agent.agent.session import SessionState
 from pm_agent.cli_attach import (
@@ -25,8 +22,42 @@ from pm_agent.cli_input import read_user_line
 from pm_agent.cli_render import print_assistant_reply
 from pm_agent.cli_terminal import integrated_terminal_hint, setup_terminal_keybinding
 from pm_agent.cli_tools import format_tools_reply, is_tools_command
-from pm_agent.config import ConfigError, load_settings
+from pm_agent.config import ConfigError, Settings, load_settings
 from pm_agent.tools.bootstrap import build_registry_from_path
+
+
+class _RealLlmWarmup:
+    """欢迎语后后台预热 Real 客户端；首条 Agent 轮次 join 取结果。"""
+
+    def __init__(self, settings: Settings) -> None:
+        self._settings = settings
+        self._client: LlmClient | None = None
+        self._error: BaseException | None = None
+        self._thread = threading.Thread(
+            target=self._run,
+            name="pmbox-llm-warmup",
+            daemon=True,
+        )
+        self._thread.start()
+
+    def _run(self) -> None:
+        try:
+            self._client = build_llm_client(self._settings)
+        except Exception as exc:  # 需带回主线程展示
+            self._error = exc
+
+    def await_client(self) -> LlmClient:
+        self._thread.join()
+        if self._error is not None:
+            if isinstance(self._error, LlmApiError):
+                raise self._error
+            raise LlmApiError(
+                "unknown",
+                "模型客户端初始化失败。请检查本地配置后重启；"
+                "你也可以直接说：起草项目章程 / 起草风险登记册。",
+            ) from self._error
+        assert self._client is not None
+        return self._client
 
 WELCOME = """\
 ╔══════════════════════════════════════════╗
@@ -133,13 +164,13 @@ def _print_debug_status(
 def _client_for_turn(
     *,
     use_fake: bool,
-    real_client: LlmClient | None,
+    real_warmup: _RealLlmWarmup | None,
     user_text: str,
 ) -> LlmClient:
     if use_fake:
         return FakeLlmClient(demo_script_for_user_text(user_text))
-    assert real_client is not None
-    return real_client
+    assert real_warmup is not None
+    return real_warmup.await_client()
 
 
 def main() -> None:
@@ -200,10 +231,10 @@ def main() -> None:
         print(hint, flush=True)
         print(flush=True)
 
-    real_client: LlmClient | None = None
+    # Real：欢迎语后再后台加载 openai，与用户读提示/打字重叠
+    real_warmup: _RealLlmWarmup | None = None
     if not settings.use_fake_llm:
-        real_client = build_llm_client(settings)
-        assert isinstance(real_client, OpenAICompatibleClient)
+        real_warmup = _RealLlmWarmup(settings)
 
     user_turn = 0
     while True:
@@ -259,11 +290,17 @@ def main() -> None:
             continue
 
         user_turn += 1
-        llm = _client_for_turn(
-            use_fake=settings.use_fake_llm,
-            real_client=real_client,
-            user_text=attach.assembled,
-        )
+        try:
+            llm = _client_for_turn(
+                use_fake=settings.use_fake_llm,
+                real_warmup=real_warmup,
+                user_text=attach.assembled,
+            )
+        except LlmApiError as exc:
+            print(f"[llm] {exc.user_message}", flush=True)
+            print(flush=True)
+            continue
+
         reply = handle_user_turn(
             attach.assembled,
             state,
