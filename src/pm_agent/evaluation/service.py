@@ -52,7 +52,11 @@ def evaluate_candidate(
     cases = load_evaluation_cases(cases_path)
     current_repo = ToolsRepository.from_json_path(tools_path)
     tool = promote_candidate(candidates_path, tools_path, slug, dry_run=True)
-    candidate_repo = ToolsRepository([*current_repo.all(), tool])
+    candidate_repo = ToolsRepository(
+        [*current_repo.all(), tool],
+        boosts=current_repo.boost_rules,
+        fallback_slugs=current_repo.fallback_slugs,
+    )
     current = run_evaluation(current_repo, cases)
     candidate = run_evaluation(candidate_repo, cases)
     comparison = compare_reports(current, candidate)

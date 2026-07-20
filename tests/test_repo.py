@@ -110,59 +110,22 @@ def test_list_by_use_case() -> None:
 
 def test_keyword_boosts_align_with_use_cases() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    boosts: list[tuple[list[str], str]] = [
-        (
-            ["project-charter", "stakeholder-register", "raci-matrix"],
-            "与立项授权/启动阶段高度相关",
-        ),
-        (
-            ["risk-register", "risk-report", "pre-mortem"],
-            "与风险识别与应对相关",
-        ),
-        (
-            ["gantt-chart", "moscow-prioritization", "decision-matrix"],
-            "与进度规划/赶工相关",
-        ),
-        (
-            ["moscow-prioritization", "cross-functional-alignment", "decision-matrix"],
-            "与范围与需求澄清相关",
-        ),
-        (
-            ["decision-matrix", "swot-analysis", "decision-record"],
-            "与方案决策/权衡相关",
-        ),
-        (
-            ["stakeholder-register", "raci-matrix", "force-field-analysis"],
-            "与干系人管理相关",
-        ),
-        (
-            ["decision-record", "five-whys", "raci-matrix"],
-            "与方案决策/权衡相关",
-        ),
-        (
-            ["lessons-learned-register", "decision-record", "risk-report"],
-            "与项目收尾相关",
-        ),
-        (
-            [
-                "sbi-feedback",
-                "conflict-resolution-process",
-                "cross-functional-alignment",
-                "pyramid-principle",
-                "difficult-conversation-prep",
-            ],
-            "与沟通与状态同步相关",
-        ),
-        (
-            ["decision-matrix", "swot-analysis", "pre-mortem", "decision-record"],
-            "与方案决策/权衡相关",
-        ),
-    ]
-    for slugs, reason in boosts:
-        expected = BOOST_EXPECTED_USE_CASE[reason]
-        tool = repo.get_by_slug(slugs[0])
-        assert tool is not None, slugs[0]
-        assert expected in tool.use_cases, (slugs[0], tool.use_cases, expected)
+    assert repo.boost_rules
+    for rule in repo.boost_rules:
+        expected = BOOST_EXPECTED_USE_CASE[rule.reason]
+        tool = repo.get_by_slug(rule.slugs[0])
+        assert tool is not None, rule.slugs[0]
+        assert expected in tool.use_cases, (rule.slugs[0], tool.use_cases, expected)
+
+
+def test_recommendation_boosts_slugs_in_formal_catalog() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    formal = {t.slug for t in repo.all()}
+    referenced = set(repo.fallback_slugs)
+    for rule in repo.boost_rules:
+        referenced.update(rule.slugs)
+    assert referenced <= formal
+
 
 
 def test_recommend_rejects_unknown_slug() -> None:

@@ -1,0 +1,395 @@
+{
+  "fallback_slugs": [
+    "project-charter",
+    "stakeholder-register",
+    "risk-register"
+  ],
+  "boosts": [
+    {
+      "keywords": [
+        "立项",
+        "授权",
+        "章程",
+        "启动",
+        "kickoff",
+        "批准"
+      ],
+      "slugs": [
+        "project-charter",
+        "stakeholder-register",
+        "raci-matrix"
+      ],
+      "reason": "与立项授权/启动阶段高度相关"
+    },
+    {
+      "keywords": [
+        "风险",
+        "不确定",
+        "隐患",
+        "risk",
+        "担心延期",
+        "风险担心"
+      ],
+      "slugs": [
+        "risk-register",
+        "risk-report",
+        "pre-mortem"
+      ],
+      "reason": "与风险识别与应对相关"
+    },
+    {
+      "keywords": [
+        "进度",
+        "排期",
+        "延期",
+        "工期",
+        "里程碑",
+        "甘特"
+      ],
+      "slugs": [
+        "gantt-chart",
+        "moscow-prioritization",
+        "decision-matrix"
+      ],
+      "reason": "与进度规划/赶工相关"
+    },
+    {
+      "keywords": [
+        "范围",
+        "需求",
+        "验收",
+        "边界"
+      ],
+      "slugs": [
+        "moscow-prioritization",
+        "cross-functional-alignment",
+        "decision-matrix"
+      ],
+      "reason": "与范围与需求澄清相关"
+    },
+    {
+      "keywords": [
+        "成本",
+        "预算",
+        "超支",
+        "花费",
+        "外采",
+        "自研"
+      ],
+      "slugs": [
+        "decision-matrix",
+        "swot-analysis",
+        "decision-record"
+      ],
+      "reason": "与方案决策/权衡相关"
+    },
+    {
+      "keywords": [
+        "干系人",
+        "干系人登记",
+        "影响方",
+        "跨部门推动"
+      ],
+      "slugs": [
+        "stakeholder-register",
+        "raci-matrix",
+        "force-field-analysis"
+      ],
+      "reason": "与干系人管理相关"
+    },
+    {
+      "keywords": [
+        "变更",
+        "改需求",
+        "change"
+      ],
+      "slugs": [
+        "decision-record",
+        "five-whys",
+        "raci-matrix"
+      ],
+      "reason": "与方案决策/权衡相关"
+    },
+    {
+      "keywords": [
+        "结项",
+        "正式关闭",
+        "关闭项目",
+        "收尾清单"
+      ],
+      "slugs": [
+        "lessons-learned-register",
+        "decision-record",
+        "risk-report"
+      ],
+      "reason": "与项目收尾相关"
+    },
+    {
+      "keywords": [
+        "可检索",
+        "经验教训",
+        "写成条目",
+        "踩坑写成",
+        "沉淀给",
+        "教训登记"
+      ],
+      "slugs": [
+        "lessons-learned-register",
+        "decision-record",
+        "five-whys"
+      ],
+      "reason": "与项目收尾相关"
+    },
+    {
+      "keywords": [
+        "活动刚结束",
+        "上线完了",
+        "四个问题",
+        "原计划",
+        "对照实际",
+        "演练完",
+        "发布刚结束",
+        "趁热",
+        "行动后复盘",
+        "计划与实际",
+        "成败说法不一",
+        "活动复盘"
+      ],
+      "slugs": [
+        "after-action-review",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "reason": "与项目收尾相关"
+    },
+    {
+      "keywords": [
+        "迭代结束",
+        "轻量复盘",
+        "开始/停止/继续",
+        "该开始",
+        "该停止",
+        "该继续",
+        "起停续",
+        "Sprint 收尾",
+        "三列",
+        "双周一次的复盘",
+        "协作节奏"
+      ],
+      "slugs": [
+        "start-stop-continue",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "reason": "与项目收尾相关"
+    },
+    {
+      "keywords": [
+        "追责会",
+        "无责",
+        "故障复盘",
+        "不敢说实话",
+        "还原时间线",
+        "系统根因",
+        "事后分析",
+        "谁的锅",
+        "重大事故",
+        "线上重大"
+      ],
+      "slugs": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "reason": "与项目收尾相关"
+    },
+    {
+      "keywords": [
+        "交给运维",
+        "交接会",
+        "知识断档",
+        "移交包",
+        "接任",
+        "撤场",
+        "知识移交",
+        "不会运维",
+        "跟岗",
+        "接手后"
+      ],
+      "slugs": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "reason": "与项目收尾相关"
+    },
+    {
+      "keywords": [
+        "假设失败",
+        "假设已经失败",
+        "倒推可能",
+        "事前验尸",
+        "预判翻车",
+        "还没启动就想假设"
+      ],
+      "slugs": [
+        "pre-mortem",
+        "risk-register",
+        "risk-report"
+      ],
+      "reason": "与风险识别与应对相关"
+    },
+    {
+      "keywords": [
+        "争吵",
+        "僵持",
+        "拒绝合作",
+        "拒绝再谈",
+        "拒绝沟通",
+        "中立人协调",
+        "中立方介入",
+        "第三方主持",
+        "第三方",
+        "升级规则",
+        "升级机制",
+        "停摆",
+        "公开争夺",
+        "公开争吵",
+        "各执一词",
+        "争议公开",
+        "影响交付"
+      ],
+      "slugs": [
+        "conflict-resolution-process",
+        "difficult-conversation-prep",
+        "sbi-feedback"
+      ],
+      "reason": "与冲突升级与中立协调相关"
+    },
+    {
+      "keywords": [
+        "负面反馈",
+        "就事论事",
+        "具体行为",
+        "提醒同事",
+        "提醒下属",
+        "指出问题",
+        "客观指出",
+        "行为反馈",
+        "不伤关系",
+        "打断别人"
+      ],
+      "slugs": [
+        "sbi-feedback",
+        "difficult-conversation-prep",
+        "pyramid-principle"
+      ],
+      "reason": "与一对一行为反馈相关"
+    },
+    {
+      "keywords": [
+        "对齐",
+        "接口",
+        "责任人",
+        "跨部门",
+        "联调",
+        "共同交付",
+        "供应商",
+        "行动项",
+        "时间依赖",
+        "依赖项"
+      ],
+      "slugs": [
+        "cross-functional-alignment",
+        "raci-matrix",
+        "stakeholder-register"
+      ],
+      "reason": "与跨团队对齐与依赖同步相关"
+    },
+    {
+      "keywords": [
+        "证据",
+        "金字塔",
+        "三十秒",
+        "高管",
+        "没有重点",
+        "不知道建议",
+        "邮件堆",
+        "先说结论",
+        "结论先行"
+      ],
+      "slugs": [
+        "pyramid-principle",
+        "decision-record",
+        "lessons-learned-register"
+      ],
+      "reason": "与结论先行的结构化汇报相关"
+    },
+    {
+      "keywords": [
+        "不知道怎么开口",
+        "我想预演",
+        "预演他",
+        "准备开场",
+        "开场和底线",
+        "拒绝老板",
+        "谈裁员",
+        "担心对方",
+        "高难度对话",
+        "怎么回应"
+      ],
+      "slugs": [
+        "difficult-conversation-prep",
+        "sbi-feedback",
+        "pyramid-principle"
+      ],
+      "reason": "与高难度对话准备相关"
+    },
+    {
+      "keywords": [
+        "周报",
+        "状态同步",
+        "项目状态"
+      ],
+      "slugs": [
+        "pyramid-principle",
+        "sbi-feedback",
+        "cross-functional-alignment"
+      ],
+      "reason": "与日常状态同步相关"
+    },
+    {
+      "keywords": [
+        "决策",
+        "选方案",
+        "拿不定主意",
+        "trade-off",
+        "怎么选",
+        "纠结",
+        "权衡"
+      ],
+      "slugs": [
+        "decision-matrix",
+        "swot-analysis",
+        "pre-mortem",
+        "decision-record"
+      ],
+      "reason": "与方案决策/权衡相关"
+    },
+    {
+      "keywords": [
+        "连续追问",
+        "为什么定位",
+        "定位根因",
+        "5 why",
+        "五个为什么"
+      ],
+      "slugs": [
+        "five-whys",
+        "decision-record",
+        "risk-register"
+      ],
+      "reason": "与方案决策/权衡相关"
+    }
+  ]
+}

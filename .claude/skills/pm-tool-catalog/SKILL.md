@@ -112,7 +112,7 @@ uv run python scripts/manage_tool_catalog.py retire <slug> --note <说明> --yes
 
 - 工具移入 `data/tools.archive.json`，从 `data/tools.json` 移除。
 - 默认清理黄金集中对该 slug 的引用；可用 `--keep-cases` 跳过（仅调试）。
-- `draftable=true` 或出现在推荐硬编码列表时，必须人工确认后加 `--force`。
+- `draftable=true` 或出现在 `data/recommendation_boosts.json` 时，必须人工确认后加 `--force`。
 - 写盘后运行 `evaluate`，再人工 `update-baseline --yes`。
 
 候选池清理：
@@ -133,6 +133,6 @@ uv run python scripts/manage_tool_catalog.py discard <slug> --yes
 - 禁止一次混合多个工具家族。
 - 禁止以数量替代质量；评分低于 8/10 不批准。
 - 禁止绕过 `promote` 的命中门禁，或在未人工审核时更新黄金集/基线。
-- 禁止绕过 dry-run/确认直接归档 `draftable` 或硬编码推荐 slug（须 `--force`）。
+- 禁止绕过 dry-run/确认直接归档 `draftable` 或推荐启发式配置中的 slug（须 `--force`）。
 - 禁止手改 `output/evaluation/cases.*` / `baseline.*` 视图；改期望只改 JSON 再 export。
 - 每次新增或解决问题后更新 `doc/agent_learn.md`。

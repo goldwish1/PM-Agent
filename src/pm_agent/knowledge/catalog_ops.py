@@ -322,8 +322,8 @@ def retire_block_reasons(tool: PmTool) -> list[str]:
         reasons.append("draftable=true，仍可能有 draft_* 代码链路，需人工确认后加 --force")
     if tool.slug in hardcoded_recommendation_slugs():
         reasons.append(
-            "slug 出现在推荐启发式硬编码列表（KEYWORD_BOOSTS/FALLBACK_SLUGS），"
-            "需同步修改 src/pm_agent/knowledge/repo.py 后加 --force"
+            "slug 出现在推荐启发式配置（data/recommendation_boosts.json），"
+            "需同步修改该文件后加 --force"
         )
     return reasons
 

@@ -43,7 +43,7 @@ PM Agent 是一个面向个人项目经理的 CLI 工具。用户可通过终端
 | LLM | `openai` Python SDK → DeepSeek（兼容 OpenAI） | Tool Calls 成熟，Provider 可切换 |
 | 校验 | **Pydantic** | 校验 tool arguments，防幻觉字段 |
 | CLI | 标准库 `input()` | 最小可用，零依赖 |
-| 数据 | `data/tools.json` + 内存会话 + `output/` | 无数据库也能闭环 |
+| 数据 | `data/tools.json` + `recommendation_boosts.json` + 内存会话 + `output/` | 无数据库也能闭环 |
 | 配置 | `.env` + `.gitignore` | 密钥安全 |
 | 包管理 | **uv**（推荐）或 pip + venv | 现代 Python 工具链 |
 | 测试 | **pytest** | 优先测纯函数与路径守卫 |
@@ -58,7 +58,8 @@ pm-agent/
 ├── .env.example
 ├── .gitignore
 ├── data/
-│   └── tools.json          # 自包含工具库（正式库约 20 个）
+│   ├── tools.json          # 自包含工具库（正式库约 20 个）
+│   └── recommendation_boosts.json  # 推荐启发式场景桶
 ├── output/                 # 导出目录（gitignore）
 ├── src/
 │   └── pm_agent/
@@ -79,7 +80,7 @@ pm-agent/
 │       │   ├── export/     # markdown（路径白名单）
 │       │   └── demo/       # echo / add
 │       ├── knowledge/
-│       │   └── repo.py     # ToolsRepository（加载/查询 tools.json）
+│       │   └── repo.py     # ToolsRepository（加载 tools.json + recommendation_boosts.json）
 │       └── export/
 │           └── render.py   # Markdown 模板渲染
 └── tests/

@@ -108,6 +108,7 @@ printf '帮我起草 WBS\n/quit\n' | USE_FAKE_LLM=true uv run pmbox
 ```
 src/pm_agent/     # cli / agent / tools / knowledge / export
 data/tools.json   # 正式 PM 工具库（约 20 个）
+data/recommendation_boosts.json # 推荐启发式场景桶（关键词 → 工具排序）
 data/tools.archive.json # 已归档的流程文档类工具
 output/           # 导出 Markdown（gitignore）
 tests/            # pytest

@@ -115,7 +115,7 @@ def build_parser() -> argparse.ArgumentParser:
     retire_parser.add_argument(
         "--force",
         action="store_true",
-        help="绕过 draftable / 硬编码推荐 slug 门禁",
+        help="绕过 draftable / 推荐启发式配置 slug 门禁",
     )
     retire_parser.add_argument(
         "--keep-cases",
