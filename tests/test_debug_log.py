@@ -37,6 +37,27 @@ def test_format_llm_round_includes_turn_iter_usage() -> None:
     assert "prompt=10" in text
     assert "completion=3" in text
     assert "total=13" in text
+    assert "cache_" not in text
+
+
+def test_format_llm_round_includes_cache_tokens() -> None:
+    text = format_llm_round(
+        user_turn=1,
+        iteration=2,
+        messages=[{"role": "user", "content": "hi"}],
+        tools_count=8,
+        content=None,
+        tool_calls=None,
+        usage={
+            "prompt_tokens": 100,
+            "completion_tokens": 5,
+            "total_tokens": 105,
+            "prompt_cache_hit_tokens": 80,
+            "prompt_cache_miss_tokens": 20,
+        },
+    )
+    assert "cache_hit=80" in text
+    assert "cache_miss=20" in text
 
 
 def test_format_llm_round_fake_usage(capsys: pytest.CaptureFixture[str]) -> None:
@@ -107,6 +128,59 @@ def test_sum_usage_none_when_all_fake() -> None:
     assert sum_usage([{"usage": None}, {"usage": None}]) is None
 
 
+def test_sum_usage_aggregates_cache_tokens() -> None:
+    total = sum_usage(
+        [
+            {
+                "usage": {
+                    "prompt_tokens": 100,
+                    "completion_tokens": 5,
+                    "total_tokens": 105,
+                    "prompt_cache_hit_tokens": 80,
+                    "prompt_cache_miss_tokens": 20,
+                }
+            },
+            {
+                "usage": {
+                    "prompt_tokens": 120,
+                    "completion_tokens": 8,
+                    "total_tokens": 128,
+                    "prompt_cache_hit_tokens": 100,
+                    "prompt_cache_miss_tokens": 20,
+                }
+            },
+        ]
+    )
+    assert total == {
+        "prompt_tokens": 220,
+        "completion_tokens": 13,
+        "total_tokens": 233,
+        "prompt_cache_hit_tokens": 180,
+        "prompt_cache_miss_tokens": 40,
+    }
+
+
+def test_sum_usage_omits_cache_when_absent() -> None:
+    total = sum_usage(
+        [
+            {
+                "usage": {
+                    "prompt_tokens": 10,
+                    "completion_tokens": 2,
+                    "total_tokens": 12,
+                }
+            }
+        ]
+    )
+    assert total == {
+        "prompt_tokens": 10,
+        "completion_tokens": 2,
+        "total_tokens": 12,
+    }
+    assert "prompt_cache_hit_tokens" not in total
+    assert "prompt_cache_miss_tokens" not in total
+
+
 def test_openai_compatible_client_extracts_usage() -> None:
     mock_client = MagicMock()
     message = SimpleNamespace(content="ok", tool_calls=None)
@@ -131,6 +205,38 @@ def test_openai_compatible_client_extracts_usage() -> None:
     }
     assert result["content"] == "ok"
     assert result["tool_calls"] is None
+
+
+def test_openai_compatible_client_extracts_cache_tokens() -> None:
+    mock_client = MagicMock()
+    message = SimpleNamespace(content="ok", tool_calls=None)
+    choice = SimpleNamespace(message=message)
+    usage = SimpleNamespace(
+        prompt_tokens=100,
+        completion_tokens=5,
+        total_tokens=105,
+        prompt_cache_hit_tokens=80,
+        prompt_cache_miss_tokens=20,
+    )
+    mock_client.chat.completions.create.return_value = SimpleNamespace(
+        choices=[choice],
+        usage=usage,
+    )
+
+    llm = OpenAICompatibleClient(
+        api_key="sk-test",
+        base_url="https://example.com/v1",
+        model="test-model",
+        client=mock_client,
+    )
+    result = llm.complete([{"role": "user", "content": "hi"}])
+    assert result["usage"] == {
+        "prompt_tokens": 100,
+        "completion_tokens": 5,
+        "total_tokens": 105,
+        "prompt_cache_hit_tokens": 80,
+        "prompt_cache_miss_tokens": 20,
+    }
 
 
 def test_debug_dump_defaults_on(

@@ -28,6 +28,12 @@
 
 ## 新增功能
 
+### 2026-07-21 · 观测 DeepSeek prompt cache hit/miss
+
+- **新增加了什么功能**：LLM `usage` 提取并展示 `prompt_cache_hit_tokens` / `prompt_cache_miss_tokens`；L1 `[llm]` 摘要与 L2 `usage_total` 均可聚合查看。
+- **原因**：验证 Agent 多轮 tool loop 的前缀缓存是否真正命中。
+- **一句话方案**：`_extract_usage` 透传两字段；`sum_usage` / `_format_usage_line` 有则合计与展示，网关缺省则省略。
+
 ### 2026-07-20 · 向上管理与汇报五工具正式发布
 
 - **新增加了什么功能**：`status-report` / `one-page-project-narrative` / `decision-request-memo` / `stakeholder-progress-note` / `project-experience-case-outline` 经 A/B 门禁后 promote；正式库 24→29；补 `test_repo` 推荐回归；刷新基线（144 启用）。

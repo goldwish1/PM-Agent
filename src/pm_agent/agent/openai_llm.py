@@ -92,6 +92,10 @@ def _extract_usage(response: Any) -> dict[str, int] | None:
         out["total_tokens"] = int(total)
     elif "prompt_tokens" in out and "completion_tokens" in out:
         out["total_tokens"] = out["prompt_tokens"] + out["completion_tokens"]
+    for key in ("prompt_cache_hit_tokens", "prompt_cache_miss_tokens"):
+        val = getattr(usage, key, None)
+        if val is not None:
+            out[key] = int(val)
     return out or None
 
 

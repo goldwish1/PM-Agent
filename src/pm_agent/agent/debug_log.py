@@ -38,7 +38,12 @@ def _format_usage_line(
     prompt = usage.get("prompt_tokens", "?")
     completion = usage.get("completion_tokens", "?")
     total = usage.get("total_tokens", "?")
-    return f"   usage: prompt={prompt} completion={completion} total={total}"
+    parts = [f"prompt={prompt}", f"completion={completion}", f"total={total}"]
+    if "prompt_cache_hit_tokens" in usage:
+        parts.append(f"cache_hit={usage['prompt_cache_hit_tokens']}")
+    if "prompt_cache_miss_tokens" in usage:
+        parts.append(f"cache_miss={usage['prompt_cache_miss_tokens']}")
+    return "   usage: " + " ".join(parts)
 
 
 def format_llm_round(
@@ -100,11 +105,15 @@ def debug_dir(output_dir: Path) -> Path:
 def sum_usage(
     iterations: list[dict[str, Any]],
 ) -> dict[str, int] | None:
-    """对 iterations 中有值的 prompt/completion/total 分别求和；全无则 None。"""
+    """对 iterations 中有值的 prompt/completion/total/cache 分别求和；全无则 None。"""
     prompt = 0
     completion = 0
     total = 0
+    cache_hit = 0
+    cache_miss = 0
     saw_any = False
+    saw_cache_hit = False
+    saw_cache_miss = False
     for item in iterations:
         usage = item.get("usage")
         if not isinstance(usage, dict):
@@ -118,13 +127,26 @@ def sum_usage(
         if "total_tokens" in usage:
             total += int(usage["total_tokens"])
             saw_any = True
+        if "prompt_cache_hit_tokens" in usage:
+            cache_hit += int(usage["prompt_cache_hit_tokens"])
+            saw_cache_hit = True
+            saw_any = True
+        if "prompt_cache_miss_tokens" in usage:
+            cache_miss += int(usage["prompt_cache_miss_tokens"])
+            saw_cache_miss = True
+            saw_any = True
     if not saw_any:
         return None
-    return {
+    out: dict[str, int] = {
         "prompt_tokens": prompt,
         "completion_tokens": completion,
         "total_tokens": total,
     }
+    if saw_cache_hit:
+        out["prompt_cache_hit_tokens"] = cache_hit
+    if saw_cache_miss:
+        out["prompt_cache_miss_tokens"] = cache_miss
+    return out
 
 
 class TurnDebugDump:
