@@ -1,32 +1,22 @@
 {
   "dataset_digest": "989e79e286905d434ca021ac5506a161d4a86114d5e5d2a564b720d3f18255f1",
-  "tools_digest": "a90448ae456dc137a83d1c730bd937ff44c299910530921de6980174e3220eec",
+  "tools_digest": "086a64f04d727da72542c1f291d491d83efd6f9d5c560fc778d263f6c915394b",
   "summary": {
     "total_cases": 60,
     "active_cases": 36,
     "skipped_cases": 24,
     "top1_cases": 24,
-    "top1_passed": 12,
-    "top1_accuracy": 0.5,
+    "top1_passed": 24,
+    "top1_accuracy": 1.0,
     "top3_cases": 29,
-    "top3_passed": 18,
-    "top3_recall": 0.62069,
+    "top3_passed": 26,
+    "top3_recall": 0.896552,
     "mrr_cases": 29,
-    "mrr": 0.505747,
+    "mrr": 0.896552,
     "forbidden_cases": 14,
-    "forbidden_violations": 7,
-    "forbidden_violation_rate": 0.5,
-    "confusion": {
-      "conflict-resolution-process -> moscow-prioritization": 1,
-      "conflict-resolution-process -> sbi-feedback": 3,
-      "cross-functional-alignment -> project-charter": 1,
-      "cross-functional-alignment -> sbi-feedback": 1,
-      "difficult-conversation-prep -> risk-register": 1,
-      "difficult-conversation-prep -> stakeholder-register": 1,
-      "pyramid-principle -> project-charter": 1,
-      "pyramid-principle -> sbi-feedback": 1,
-      "sbi-feedback -> project-charter": 2
-    }
+    "forbidden_violations": 2,
+    "forbidden_violation_rate": 0.142857,
+    "confusion": {}
   },
   "results": [
     {
@@ -38,7 +28,9 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "sbi-feedback"
+        "sbi-feedback",
+        "difficult-conversation-prep",
+        "pyramid-principle"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -55,8 +47,8 @@
       "skipped_reason": "",
       "rankings": [
         "sbi-feedback",
-        "conflict-resolution-process",
-        "cross-functional-alignment"
+        "difficult-conversation-prep",
+        "pyramid-principle"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -73,8 +65,8 @@
       "skipped_reason": "",
       "rankings": [
         "sbi-feedback",
-        "conflict-resolution-process",
-        "cross-functional-alignment"
+        "difficult-conversation-prep",
+        "pyramid-principle"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -90,12 +82,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "project-charter",
-        "stakeholder-register"
+        "sbi-feedback",
+        "difficult-conversation-prep",
+        "pyramid-principle"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -107,13 +100,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
+        "conflict-resolution-process",
         "gantt-chart",
-        "sbi-feedback",
-        "conflict-resolution-process"
+        "difficult-conversation-prep"
       ],
       "top1_pass": null,
-      "top3_pass": true,
-      "reciprocal_rank": 0.5,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": [
         "conflict-resolution-process"
       ]
@@ -127,13 +120,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "sbi-feedback",
         "conflict-resolution-process",
-        "cross-functional-alignment"
+        "difficult-conversation-prep",
+        "sbi-feedback"
       ],
-      "top1_pass": false,
+      "top1_pass": true,
       "top3_pass": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": [
         "sbi-feedback"
       ]
@@ -147,16 +140,14 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "project-charter",
-        "sbi-feedback",
-        "conflict-resolution-process"
+        "raci-matrix",
+        "stakeholder-register",
+        "cross-functional-alignment"
       ],
       "top1_pass": null,
       "top3_pass": null,
       "reciprocal_rank": null,
-      "forbidden_hits": [
-        "sbi-feedback"
-      ]
+      "forbidden_hits": []
     },
     {
       "case_id": "comm-pyramid-001",
@@ -168,8 +159,8 @@
       "skipped_reason": "",
       "rankings": [
         "pyramid-principle",
-        "sbi-feedback",
-        "stakeholder-register"
+        "decision-record",
+        "lessons-learned-register"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -201,13 +192,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "sbi-feedback",
-        "conflict-resolution-process",
-        "cross-functional-alignment"
+        "pyramid-principle",
+        "decision-record",
+        "lessons-learned-register"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -219,12 +210,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "project-charter",
-        "stakeholder-register"
+        "pyramid-principle",
+        "decision-record",
+        "lessons-learned-register"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -271,13 +263,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "sbi-feedback",
-        "conflict-resolution-process",
-        "cross-functional-alignment"
+        "cross-functional-alignment",
+        "raci-matrix",
+        "stakeholder-register"
       ],
-      "top1_pass": false,
+      "top1_pass": true,
       "top3_pass": true,
-      "reciprocal_rank": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -291,7 +283,7 @@
       "rankings": [
         "cross-functional-alignment",
         "moscow-prioritization",
-        "decision-matrix"
+        "raci-matrix"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -308,8 +300,8 @@
       "skipped_reason": "",
       "rankings": [
         "cross-functional-alignment",
-        "stakeholder-register",
-        "raci-matrix"
+        "raci-matrix",
+        "stakeholder-register"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -327,7 +319,7 @@
       "rankings": [
         "cross-functional-alignment",
         "moscow-prioritization",
-        "sbi-feedback"
+        "raci-matrix"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -343,12 +335,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "project-charter",
+        "cross-functional-alignment",
+        "raci-matrix",
         "stakeholder-register"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -360,16 +353,14 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
+        "cross-functional-alignment",
         "decision-matrix",
-        "sbi-feedback",
-        "conflict-resolution-process"
+        "raci-matrix"
       ],
       "top1_pass": null,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
-      "forbidden_hits": [
-        "conflict-resolution-process"
-      ]
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
     },
     {
       "case_id": "comm-alignment-006",
@@ -397,16 +388,14 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "sbi-feedback",
         "conflict-resolution-process",
-        "cross-functional-alignment"
+        "difficult-conversation-prep",
+        "sbi-feedback"
       ],
-      "top1_pass": false,
+      "top1_pass": true,
       "top3_pass": true,
-      "reciprocal_rank": 0.5,
-      "forbidden_hits": [
-        "cross-functional-alignment"
-      ]
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
     },
     {
       "case_id": "comm-conflict-001",
@@ -435,7 +424,9 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "conflict-resolution-process"
+        "conflict-resolution-process",
+        "difficult-conversation-prep",
+        "sbi-feedback"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -451,13 +442,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "sbi-feedback",
         "conflict-resolution-process",
-        "cross-functional-alignment"
+        "difficult-conversation-prep",
+        "sbi-feedback"
       ],
-      "top1_pass": false,
+      "top1_pass": true,
       "top3_pass": true,
-      "reciprocal_rank": 0.5,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -469,13 +460,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
+        "conflict-resolution-process",
         "moscow-prioritization",
-        "cross-functional-alignment",
-        "decision-matrix"
+        "cross-functional-alignment"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -487,13 +478,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
+        "conflict-resolution-process",
         "decision-matrix",
-        "sbi-feedback",
-        "conflict-resolution-process"
+        "difficult-conversation-prep"
       ],
       "top1_pass": null,
       "top3_pass": true,
-      "reciprocal_rank": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -505,12 +496,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "project-charter",
-        "stakeholder-register"
+        "sbi-feedback",
+        "difficult-conversation-prep",
+        "pyramid-principle"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -522,16 +514,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "sbi-feedback",
-        "conflict-resolution-process",
-        "cross-functional-alignment"
+        "project-charter",
+        "stakeholder-register"
       ],
       "top1_pass": null,
       "top3_pass": null,
       "reciprocal_rank": null,
-      "forbidden_hits": [
-        "conflict-resolution-process"
-      ]
+      "forbidden_hits": []
     },
     {
       "case_id": "comm-difficult-001",
@@ -542,7 +531,9 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "difficult-conversation-prep"
+        "difficult-conversation-prep",
+        "sbi-feedback",
+        "pyramid-principle"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -574,13 +565,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "risk-register",
-        "risk-report",
-        "pre-mortem"
+        "difficult-conversation-prep",
+        "sbi-feedback",
+        "pyramid-principle"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -592,13 +583,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "stakeholder-register",
-        "raci-matrix",
-        "force-field-analysis"
+        "difficult-conversation-prep",
+        "sbi-feedback",
+        "pyramid-principle"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -610,9 +601,8 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
-        "sbi-feedback",
-        "conflict-resolution-process",
-        "cross-functional-alignment"
+        "project-charter",
+        "stakeholder-register"
       ],
       "top1_pass": null,
       "top3_pass": false,
@@ -999,16 +989,13 @@
       "skipped_reason": "",
       "rankings": [
         "decision-matrix",
-        "sbi-feedback",
-        "conflict-resolution-process"
+        "swot-analysis",
+        "decision-record"
       ],
       "top1_pass": null,
       "top3_pass": null,
       "reciprocal_rank": null,
-      "forbidden_hits": [
-        "sbi-feedback",
-        "conflict-resolution-process"
-      ]
+      "forbidden_hits": []
     }
   ]
 }

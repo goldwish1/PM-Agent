@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from pm_agent.agent.llm import FakeLlmClient, demo_script_for_user_text
 from pm_agent.agent.loop import handle_user_turn
 from pm_agent.agent.prompts import MAX_CLARIFY_ROUNDS
@@ -272,6 +274,83 @@ def test_recommend_feedback_dilemma() -> None:
     slugs = {t.slug for t, _ in ranked}
     assert "sbi-feedback" in slugs
     assert 1 <= len(ranked) <= 3
+
+
+@pytest.mark.parametrize(
+    ("query", "context", "expected"),
+    [
+        (
+            "两个团队已经公开争吵并拒绝合作，需要中立人协调资源分歧",
+            "冲突已经影响交付。",
+            "conflict-resolution-process",
+        ),
+        (
+            "双方已经拒绝沟通并公开争夺资源，需要中立方介入和升级机制",
+            "冲突已经影响交付。",
+            "conflict-resolution-process",
+        ),
+        (
+            "产品和设计僵持一周，双方拒绝再谈，需要第三方主持折中和升级规则",
+            "普通一对一反馈已无法解决。",
+            "conflict-resolution-process",
+        ),
+        (
+            "下属这周两次未按约定更新任务，我该怎样就事论事地提醒",
+            "关系正常，希望形成具体改进约定。",
+            "sbi-feedback",
+        ),
+        (
+            "我只需要提醒同事一次具体行为及其影响，双方关系正常",
+            "没有持续矛盾，也不需中立人介入。",
+            "sbi-feedback",
+        ),
+        (
+            "客户和交付团队对范围各执一词，争议公开化且项目停摆",
+            "需要识别利益分歧并形成仲裁路径。",
+            "conflict-resolution-process",
+        ),
+        (
+            "三个供应商共同交付一个模块，但彼此不知道接口和时间依赖",
+            "需要固定议程和可追踪行动项。",
+            "cross-functional-alignment",
+        ),
+        (
+            "产品和研发对接口定义理解不同，需要把依赖、责任人和行动项对齐",
+            "不是写汇报材料。",
+            "cross-functional-alignment",
+        ),
+        (
+            "我知道必须谈裁员安排，但担心对方的反应，想先准备开场和底线",
+            "对话尚未开始。",
+            "difficult-conversation-prep",
+        ),
+        (
+            "要拒绝老板的不合理要求，我想预演他沉默、反击或施压时怎么回应",
+            "目标是先做好对话准备，不是立即升级。",
+            "difficult-conversation-prep",
+        ),
+        (
+            "我的邮件堆了很多事实，读者看完仍不知道建议是什么",
+            "希望重组为结论、理由和证据。",
+            "pyramid-principle",
+        ),
+        (
+            "高管只有三十秒，我要先说结论，再用三点证据支撑",
+            "用于方案审批汇报。",
+            "pyramid-principle",
+        ),
+    ],
+)
+def test_recommend_confusion_pair_queries_top1(
+    query: str,
+    context: str,
+    expected: str,
+) -> None:
+    """回归：基线混淆对应用例的 Top1 应命中期望工具。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    ranked = repo.recommend_by_question(query, context=context, limit=3)
+    assert ranked
+    assert ranked[0][0].slug == expected
 
 
 def test_clarify_count_increments_on_question_without_tools() -> None:
