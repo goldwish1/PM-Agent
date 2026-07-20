@@ -1,0 +1,10 @@
+---
+description: Git 提交信息与 Generate Commit Message 一律使用简体中文
+alwaysApply: true
+---
+
+# Git 提交信息语言
+
+- 撰写或生成 commit message（含 Cursor **Generate Commit Message**）时，**必须使用简体中文**。
+- 风格：简洁 1～2 句，说明「为什么」而非堆砌文件列表。
+- 示例：`修复 /tools 裸 print 露出 Markdown 源码，改走 Rich 渲染`

@@ -34,7 +34,7 @@ def format_tools_reply(repo: ToolsRepository, raw: str) -> str:
 
 
 def format_tools_catalog(repo: ToolsRepository) -> str:
-    """按实用场景列出全部工具。"""
+    """按实用场景列出全部工具（Markdown，供 Rich 渲染）。"""
     by_case: dict[str, list[PmTool]] = defaultdict(list)
     for tool in repo.all():
         for use_case in tool.use_cases:
@@ -47,44 +47,63 @@ def format_tools_catalog(repo: ToolsRepository) -> str:
             continue
         unique = sorted({t.slug: t for t in tools}.values(), key=lambda t: t.slug)
         lines.append(f"## {use_case}（{len(unique)}）")
+        lines.append("")
         for tool in unique:
             draft = " · draftable" if tool.draftable else ""
-            lines.append(f"  {tool.slug}  {tool.name}{draft}")
+            lines.append(f"- `{tool.slug}`  {tool.name}{draft}")
         lines.append("")
-    lines.append("提示：/tools <slug> 看详情；/tools <关键词> 本地搜索。")
+    lines.append("提示：`/tools <slug>` 看详情；`/tools <关键词>` 本地搜索。")
     return "\n".join(lines).rstrip() + "\n"
 
 
 def format_tool_detail(tool: PmTool) -> str:
-    """打印单条工具完整字段。"""
-    steps = "\n".join(f"  - {s}" for s in tool.steps) or "  （无）"
-    scenarios = "\n".join(f"  - {s}" for s in tool.scenarios) or "  （无）"
+    """打印单条工具完整字段（Markdown）。"""
     use_cases = format_use_cases_label(tool.use_cases)
+    if tool.steps:
+        steps = "\n".join(f"- {s}" for s in tool.steps)
+    else:
+        steps = "- （无）"
+    if tool.scenarios:
+        scenarios = "\n".join(f"- {s}" for s in tool.scenarios)
+    else:
+        scenarios = "- （无）"
     return (
-        f"slug: {tool.slug}\n"
-        f"name: {tool.name}\n"
-        f"name_en: {tool.name_en}\n"
-        f"use_cases: {use_cases}\n"
-        f"draftable: {tool.draftable}\n"
-        f"summary: {tool.summary}\n"
-        f"description: {tool.description}\n"
-        f"steps:\n{steps}\n"
-        f"scenarios:\n{scenarios}\n"
+        f"## `{tool.slug}` · {tool.name}\n"
+        f"\n"
+        f"- **name_en**: {tool.name_en or '（无）'}\n"
+        f"- **use_cases**: {use_cases}\n"
+        f"- **draftable**: {tool.draftable}\n"
+        f"\n"
+        f"### summary\n"
+        f"\n"
+        f"{tool.summary or '（无）'}\n"
+        f"\n"
+        f"### description\n"
+        f"\n"
+        f"{tool.description or '（无）'}\n"
+        f"\n"
+        f"### steps\n"
+        f"\n"
+        f"{steps}\n"
+        f"\n"
+        f"### scenarios\n"
+        f"\n"
+        f"{scenarios}\n"
     )
 
 
 def format_tools_search(repo: ToolsRepository, keyword: str) -> str:
-    """关键词搜索摘要列表。"""
+    """关键词搜索摘要列表（Markdown）。"""
     hits = repo.search(keyword, limit=12)
     if not hits:
-        return f"未找到与「{keyword}」匹配的工具。可用 /tools 查看全部。\n"
+        return f"未找到与「{keyword}」匹配的工具。可用 `/tools` 查看全部。\n"
     lines: list[str] = [f"搜索「{keyword}」命中 {len(hits)} 条：", ""]
     for tool in hits:
         draft = " · draftable" if tool.draftable else ""
         cases = format_use_cases_label(tool.use_cases)
-        lines.append(f"  {tool.slug}  {tool.name}  [{cases}]{draft}")
+        lines.append(f"- `{tool.slug}`  {tool.name}  [{cases}]{draft}")
         if tool.summary:
-            lines.append(f"    {tool.summary}")
+            lines.append(f"  {tool.summary}")
     lines.append("")
-    lines.append("提示：/tools <slug> 查看完整字段。")
+    lines.append("提示：`/tools <slug>` 查看完整字段。")
     return "\n".join(lines).rstrip() + "\n"

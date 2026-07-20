@@ -74,18 +74,18 @@ def test_format_catalog_groups_by_use_case_and_draftable() -> None:
     assert "## 立项与授权（1）" in text
     assert "## 风险与问题（1）" in text
     assert "## 沟通与汇报（1）" in text
-    assert "project-charter  项目章程 · draftable" in text
-    assert "status-report  项目状态报告\n" in text or "status-report  项目状态报告" in text
+    assert "- `project-charter`  项目章程 · draftable" in text
+    assert "- `status-report`  项目状态报告" in text
     assert "· draftable" in text
-    assert "status-report  项目状态报告 · draftable" not in text
+    assert "`status-report`  项目状态报告 · draftable" not in text
 
 
 def test_format_detail_by_slug() -> None:
     repo = _sample_repo()
     text = format_tools_reply(repo, "/tools project-charter")
-    assert "slug: project-charter" in text
-    assert "use_cases: 立项与授权" in text
-    assert "draftable: True" in text
+    assert "## `project-charter` · 项目章程" in text
+    assert "**use_cases**: 立项与授权" in text
+    assert "**draftable**: True" in text
     assert "正式授权项目" in text
     assert "明确目的" in text
     assert "下周要立项" in text
@@ -96,7 +96,7 @@ def test_format_search_by_keyword() -> None:
     repo = _sample_repo()
     text = format_tools_reply(repo, "/tools 立项")
     assert "搜索「立项」" in text
-    assert "project-charter" in text
+    assert "`project-charter`" in text
     assert "[立项与授权]" in text
 
 
@@ -108,5 +108,5 @@ def test_format_search_no_hit() -> None:
 def test_format_tool_detail_empty_lists() -> None:
     tool = PmTool(slug="x", name="空", use_cases=["范围与需求"], steps=[], scenarios=[])
     text = format_tool_detail(tool)
-    assert "steps:\n  （无）" in text
-    assert "scenarios:\n  （无）" in text
+    assert "### steps\n\n- （无）" in text
+    assert "### scenarios\n\n- （无）" in text

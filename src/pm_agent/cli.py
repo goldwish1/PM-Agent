@@ -272,7 +272,7 @@ def main() -> None:
             continue
 
         if is_tools_command(raw):
-            print(format_tools_reply(repo, raw), end="", flush=True)
+            print_assistant_reply(format_tools_reply(repo, raw))
             continue
 
         if _is_status(raw):

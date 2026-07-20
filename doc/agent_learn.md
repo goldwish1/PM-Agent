@@ -2,6 +2,18 @@
 
 ## 解决问题
 
+### 2026-07-20 · Rich Markdown 行内代码黑底刺眼
+
+- **遇到的问题**：`/tools` 等渲染结果里 slug（`` `code` ``）带大块黑底，观感差。
+- **原因**：Rich 默认 `markdown.code` / `markdown.code_block` 为 `… on black`。
+- **解决方案**：`cli_render` 自定义 Theme，改为无底色的 `bold cyan` / `cyan`。
+
+### 2026-07-20 · /tools 输出露出 Markdown 源码
+
+- **遇到的问题**：`/tools` 目录仍显示 `##` 等标记，不像助手回复那样有终端格式。
+- **原因**：`/tools` 走裸 `print`，而助手回复走 `print_assistant_reply`（TTY 下 Rich Markdown）。
+- **解决方案**：`/tools` 改走 `print_assistant_reply`；目录/搜索/详情文案改为列表与标题 Markdown。
+
 ### 2026-07-20 · 欢迎语定位文案调整
 
 - **遇到的问题**：欢迎语第一句偏「CLI 助手 + 功能清单」，且易用「卡住/卡点」收窄场景。
