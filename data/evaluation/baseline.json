@@ -1,0 +1,1014 @@
+{
+  "dataset_digest": "989e79e286905d434ca021ac5506a161d4a86114d5e5d2a564b720d3f18255f1",
+  "tools_digest": "a90448ae456dc137a83d1c730bd937ff44c299910530921de6980174e3220eec",
+  "summary": {
+    "total_cases": 60,
+    "active_cases": 36,
+    "skipped_cases": 24,
+    "top1_cases": 24,
+    "top1_passed": 12,
+    "top1_accuracy": 0.5,
+    "top3_cases": 29,
+    "top3_passed": 18,
+    "top3_recall": 0.62069,
+    "mrr_cases": 29,
+    "mrr": 0.505747,
+    "forbidden_cases": 14,
+    "forbidden_violations": 7,
+    "forbidden_violation_rate": 0.5,
+    "confusion": {
+      "conflict-resolution-process -> moscow-prioritization": 1,
+      "conflict-resolution-process -> sbi-feedback": 3,
+      "cross-functional-alignment -> project-charter": 1,
+      "cross-functional-alignment -> sbi-feedback": 1,
+      "difficult-conversation-prep -> risk-register": 1,
+      "difficult-conversation-prep -> stakeholder-register": 1,
+      "pyramid-principle -> project-charter": 1,
+      "pyramid-principle -> sbi-feedback": 1,
+      "sbi-feedback -> project-charter": 2
+    }
+  },
+  "results": [
+    {
+      "case_id": "comm-sbi-001",
+      "query": "我想指出同事的问题，但怕说重了",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-sbi-002",
+      "query": "怎么给负面反馈又不伤关系",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-sbi-003",
+      "query": "我只想客观指出他昨天在会上三次打断别人，并说明造成的影响",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-sbi-004",
+      "query": "下属这周两次未按约定更新任务，我该怎样就事论事地提醒",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-sbi-005",
+      "query": "对方的一个具体协作行为影响了进度，我需要当面反馈，但双方还没吵起来",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "gantt-chart",
+        "sbi-feedback",
+        "conflict-resolution-process"
+      ],
+      "top1_pass": null,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
+      "forbidden_hits": [
+        "conflict-resolution-process"
+      ]
+    },
+    {
+      "case_id": "comm-sbi-006",
+      "query": "两个团队已经公开争吵并拒绝合作，需要中立人协调资源分歧",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
+      "forbidden_hits": [
+        "sbi-feedback"
+      ]
+    },
+    {
+      "case_id": "comm-sbi-007",
+      "query": "供应商疑似泄露数据，需要启动正式合规调查",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "sbi-feedback",
+        "conflict-resolution-process"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": [
+        "sbi-feedback"
+      ]
+    },
+    {
+      "case_id": "comm-pyramid-001",
+      "query": "老板说我的汇报没有重点",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "pyramid-principle",
+        "sbi-feedback",
+        "stakeholder-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-pyramid-002",
+      "query": "写方案越写越长，不知道怎么组织",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "pyramid-principle"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-pyramid-003",
+      "query": "高管只有三十秒，我要先说结论，再用三点证据支撑",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-pyramid-004",
+      "query": "我的邮件堆了很多事实，读者看完仍不知道建议是什么",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-pyramid-005",
+      "query": "我要把复杂技术选型讲给管理层听，核心是表达层次，不是重新做决策",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "swot-analysis",
+        "pre-mortem"
+      ],
+      "top1_pass": null,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-pyramid-006",
+      "query": "团队还在自由发散创意，现在不想过早收敛成一个结论",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-pyramid-007",
+      "query": "产品和研发对接口定义理解不同，需要把依赖、责任人和行动项对齐",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
+      "top3_pass": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-alignment-001",
+      "query": "两个团队对同一个需求理解完全不一样",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "cross-functional-alignment",
+        "moscow-prioritization",
+        "decision-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-alignment-002",
+      "query": "跨部门协作经常扯皮，谁该做什么不清楚",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "cross-functional-alignment",
+        "stakeholder-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-alignment-003",
+      "query": "前后端各自按不同接口假设开发，集成前要统一依赖和验收口径",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "cross-functional-alignment",
+        "moscow-prioritization",
+        "sbi-feedback"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-alignment-004",
+      "query": "三个供应商共同交付一个模块，但彼此不知道接口和时间依赖",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-alignment-005",
+      "query": "多方目标尚未对齐但关系正常，需要开一次有决策输出的协作会",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "sbi-feedback",
+        "conflict-resolution-process"
+      ],
+      "top1_pass": null,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": [
+        "conflict-resolution-process"
+      ]
+    },
+    {
+      "case_id": "comm-alignment-006",
+      "query": "一个团队内部有个简单问题，两个人发消息就能确认",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-alignment-007",
+      "query": "双方已经拒绝沟通并公开争夺资源，需要中立方介入和升级机制",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
+      "forbidden_hits": [
+        "cross-functional-alignment"
+      ]
+    },
+    {
+      "case_id": "comm-conflict-001",
+      "query": "两个组因为资源分配吵起来了",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "conflict-resolution-process",
+        "gantt-chart",
+        "moscow-prioritization"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-conflict-002",
+      "query": "团队内部矛盾已经影响交付了",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "conflict-resolution-process"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-conflict-003",
+      "query": "产品和设计僵持一周，双方拒绝再谈，需要第三方主持折中和升级规则",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-conflict-004",
+      "query": "客户和交付团队对范围各执一词，争议公开化且项目停摆",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "moscow-prioritization",
+        "cross-functional-alignment",
+        "decision-matrix"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-conflict-005",
+      "query": "多方分歧已从意见不同升级为拒绝合作，需要共同目标、候选方案和复查协议",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "sbi-feedback",
+        "conflict-resolution-process"
+      ],
+      "top1_pass": null,
+      "top3_pass": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-conflict-006",
+      "query": "我只需要提醒同事一次具体行为及其影响，双方关系正常",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-conflict-007",
+      "query": "有人涉嫌商业贿赂，需要法务和合规部门正式调查",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": [
+        "conflict-resolution-process"
+      ]
+    },
+    {
+      "case_id": "comm-difficult-001",
+      "query": "这话我不知道怎么开口说",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "difficult-conversation-prep"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-difficult-002",
+      "query": "想到要跟他说这个事我就焦虑",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "difficult-conversation-prep"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-difficult-003",
+      "query": "我知道必须谈裁员安排，但担心对方的反应，想先准备开场和底线",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "risk-register",
+        "risk-report",
+        "pre-mortem"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-difficult-004",
+      "query": "要拒绝老板的不合理要求，我想预演他沉默、反击或施压时怎么回应",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-register",
+        "raci-matrix",
+        "force-field-analysis"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-difficult-005",
+      "query": "问题很敏感但还没进入正式谈话，我需要先梳理目标、情绪触发点和暂停条件",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "conflict-resolution-process",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": null,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-difficult-006",
+      "query": "生产事故正在扩大，需要马上止损并通知应急负责人",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-difficult-007",
+      "query": "对方已有暴力威胁，需要安保和人力资源介入",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-001",
+      "query": "我一开口就会指责对方，想把事实、感受、需要和请求分开说",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-002",
+      "query": "我很生气，但不想把沟通变成人身攻击",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-003",
+      "query": "每次提意见都变成互相指责，我想换一种不评判的说法",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-004",
+      "query": "我想说清楚自己受到了什么影响，而不是给同事贴不负责的标签",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-005",
+      "query": "同事延期让我焦虑，我需要把观察和评价分开，再提出明确请求",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-006",
+      "query": "我想告诉对方我感到失望，因为我看重承诺，并邀请他一起重新约时间",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-007",
+      "query": "对话有情绪，我希望先识别彼此没有被满足的需要，再谈下一步",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-008",
+      "query": "我不想争论谁对谁错，只想诚实表达感受并提出对方可以拒绝的请求",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-009",
+      "query": "我既要反馈一次具体行为，也要先处理自己强烈的委屈和指责冲动",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-010",
+      "query": "双方有分歧但仍愿意谈，我需要不带评判地表达需求，而不是启动仲裁",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-011",
+      "query": "两个部门已停止合作，需要中立主持人建立仲裁和升级机制",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-nvc-012",
+      "query": "对方有现实暴力威胁，我需要立即离开并联系安保",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：nonviolent-communication",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-001",
+      "query": "对方说了很多，我还是不知道他真正担心什么",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-002",
+      "query": "我总是忍不住马上给建议，结果对方觉得没被听见",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-003",
+      "query": "沟通会上大家都在说但没人确认自己听懂了什么",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-004",
+      "query": "老板讲了很多顾虑，我想确认哪一个才是最核心的诉求",
+      "family": "沟通与冲突",
+      "case_type": "typical",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-005",
+      "query": "成员抱怨安排但说得很散，我要用开放问题澄清他的事实、感受和期待",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-006",
+      "query": "我准备先用自己的话总结他的观点，再问是否理解准确",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-007",
+      "query": "客户的表述前后矛盾，我需要追问并确认，而不是替他猜需求",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-008",
+      "query": "我还没弄清对方为何反对，想先听完、复述、澄清，再讨论行动",
+      "family": "沟通与冲突",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-009",
+      "query": "对方有很多情绪和顾虑，我当前目标只是理解完整诉求，不急着表达自己的请求",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-010",
+      "query": "同事讲述复杂问题时我容易打断，现在需要先确认理解，而不是马上给行为反馈",
+      "family": "沟通与冲突",
+      "case_type": "boundary",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-011",
+      "query": "我已经确认事实，只需明确反馈他昨天的具体行为造成了什么影响",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-listening-012",
+      "query": "系统正在发生安全事故，必须立即执行隔离和应急预案",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": false,
+      "skipped_reason": "缺少条件工具：active-listening",
+      "rankings": [],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "comm-global-negative-001",
+      "query": "请帮我计算这份预算表的增值税和总金额",
+      "family": "沟通与冲突",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "sbi-feedback",
+        "conflict-resolution-process"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": [
+        "sbi-feedback",
+        "conflict-resolution-process"
+      ]
+    }
+  ]
+}
