@@ -88,8 +88,8 @@ def _setup_files(tmp_path: Path) -> tuple[Path, Path]:
     tools_path = tmp_path / "tools.json"
     candidates_path = tmp_path / "tool_candidates.json"
     existing = PmTool(
-        slug="status-report",
-        name="项目状态报告",
+        slug="progress-rollup",
+        name="进度汇总稿",
         summary="同步项目状态",
         use_cases=["沟通与汇报"],
     )
@@ -185,7 +185,7 @@ def test_generation_prompt_contains_catalog_context(tmp_path: Path) -> None:
         candidates=load_candidates(candidates_path),
     )
     assert "生成 5 个“沟通与冲突”" in prompt
-    assert "status-report｜项目状态报告" in prompt
+    assert "progress-rollup｜进度汇总稿" in prompt
     assert "active-listening｜积极倾听" in prompt
     assert "仅输出合法 JSON 数组" in prompt
 
@@ -243,7 +243,7 @@ def test_retire_dry_run_does_not_write(tmp_path: Path) -> None:
     result = retire_tool(
         tools_path,
         archive_path,
-        "status-report",
+        "progress-rollup",
         candidates_path=candidates_path,
         dry_run=True,
     )
@@ -256,14 +256,14 @@ def test_retire_rejects_duplicate_archive_slug(tmp_path: Path) -> None:
     tools_path, _ = _setup_files(tmp_path)
     archive_path = tmp_path / "tools.archive.json"
     existing = PmTool(
-        slug="status-report",
-        name="旧状态报告",
+        slug="progress-rollup",
+        name="旧进度汇总稿",
         summary="归档副本",
         use_cases=["沟通与汇报"],
     )
     _write_json(archive_path, [existing.model_dump(exclude_none=True)])
     with pytest.raises(ValueError, match="归档库已存在"):
-        retire_tool(tools_path, archive_path, "status-report")
+        retire_tool(tools_path, archive_path, "progress-rollup")
 
 
 def test_retire_blocks_draftable_and_hardcoded_without_force(tmp_path: Path) -> None:

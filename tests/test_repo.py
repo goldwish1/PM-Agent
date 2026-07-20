@@ -45,7 +45,7 @@ TOP10_THICK_SLUGS = frozenset(
 
 def test_repo_loads_all_tools() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 24
+    assert len(repo) == 29
     assert repo.exists("project-charter")
     assert repo.exists("risk-register")
     assert repo.exists("decision-record")
@@ -57,6 +57,11 @@ def test_repo_loads_all_tools() -> None:
     assert repo.exists("start-stop-continue")
     assert repo.exists("blameless-postmortem")
     assert repo.exists("knowledge-handover")
+    assert repo.exists("status-report")
+    assert repo.exists("one-page-project-narrative")
+    assert repo.exists("decision-request-memo")
+    assert repo.exists("stakeholder-progress-note")
+    assert repo.exists("project-experience-case-outline")
     assert not repo.exists("wbs")
     charter = repo.get_by_slug("project-charter")
     assert charter is not None
@@ -87,7 +92,7 @@ def test_repo_search_finds_charter() -> None:
 
 def test_all_tools_have_valid_use_cases() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 24
+    assert len(repo) == 29
     for tool in repo.all():
         assert tool.use_cases
         assert all(isinstance(c, str) and c for c in tool.use_cases)
@@ -125,7 +130,6 @@ def test_recommendation_boosts_slugs_in_formal_catalog() -> None:
     for rule in repo.boost_rules:
         referenced.update(rule.slugs)
     assert referenced <= formal
-
 
 
 def test_recommend_rejects_unknown_slug() -> None:
@@ -286,6 +290,38 @@ def test_search_finds_knowledge_handover() -> None:
     assert "knowledge-handover" in {t.slug for t in hits}
 
 
+def test_new_upward_reporting_tools_exist() -> None:
+    """回归测试：向上管理与汇报家族已发布工具存在于正式库。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    for slug in (
+        "status-report",
+        "one-page-project-narrative",
+        "decision-request-memo",
+        "stakeholder-progress-note",
+        "project-experience-case-outline",
+    ):
+        assert repo.exists(slug), f"缺少新工具：{slug}"
+
+
+@pytest.mark.parametrize(
+    ("query", "expected"),
+    [
+        ("周五例行同步，读者要一眼看到进展、偏差和需要支持的事", "status-report"),
+        ("想给周边团队发一页对齐认知，讲清项目本身而非本周偏差", "one-page-project-narrative"),
+        ("预算超支要赞助人书面授权，对方时间紧必须看完就能批复", "decision-request-memo"),
+        ("想给老板三句话：结论进展、卡点、需不需要他出手", "stakeholder-progress-note"),
+        ("想把这次交付经历写成同行能读完的经验文章提纲", "project-experience-case-outline"),
+    ],
+)
+def test_recommend_upward_reporting_queries_top3(query: str, expected: str) -> None:
+    """回归：向上管理与汇报典型卡点应命中对应工具 Top3。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    ranked = repo.recommend_by_question(query, limit=3)
+    slugs = {tool.slug for tool, _ in ranked}
+    assert expected in slugs
+    assert 1 <= len(ranked) <= 3
+
+
 @pytest.mark.parametrize(
     ("query", "context", "expected"),
     [
@@ -365,9 +401,7 @@ def test_recommend_confusion_pair_queries_top1(
 
 def test_clarify_count_increments_on_question_without_tools() -> None:
     registry = ToolRegistry()
-    llm = FakeLlmClient(
-        [{"content": "请问你现在卡在哪个阶段？"}]
-    )
+    llm = FakeLlmClient([{"content": "请问你现在卡在哪个阶段？"}])
     state = SessionState()
     handle_user_turn("嗯", state, llm, registry, max_iterations=3)
     assert state.clarify_count == 1
@@ -380,11 +414,7 @@ def test_clarify_force_reminder_after_max() -> None:
     state.clarify_count = MAX_CLARIFY_ROUNDS
     llm = FakeLlmClient([{"content": "只能空回复"}])
     handle_user_turn("还是不清楚", state, llm, registry, max_iterations=3)
-    system_texts = [
-        m.get("content", "")
-        for m in state.messages
-        if m.get("role") == "system"
-    ]
+    system_texts = [m.get("content", "") for m in state.messages if m.get("role") == "system"]
     assert any("澄清已达上限" in t for t in system_texts)
 
 
@@ -408,9 +438,5 @@ def test_clarify_force_reminder_skipped_in_drafting_mode() -> None:
     )
     llm = FakeLlmClient([{"content": "矩阵已更新，是否确认导出？"}])
     handle_user_turn("先2后3", state, llm, registry, max_iterations=3)
-    system_texts = [
-        m.get("content", "")
-        for m in state.messages
-        if m.get("role") == "system"
-    ]
+    system_texts = [m.get("content", "") for m in state.messages if m.get("role") == "system"]
     assert not any("澄清已达上限" in t for t in system_texts)

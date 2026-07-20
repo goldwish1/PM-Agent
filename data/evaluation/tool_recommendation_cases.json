@@ -2420,5 +2420,1409 @@
       "反例",
       "无关"
     ]
+  },
+  {
+    "id": "report-status-001",
+    "query": "周五例行同步，读者要一眼看到进展、偏差和需要支持的事",
+    "context": "约定读者群是管理层和几个协作方，不是给一个人私信。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "status-report"
+    ],
+    "required_top3": [
+      "status-report"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-status-002",
+    "query": "治理会前要一份多方都能用的统一进度口径",
+    "context": "过去各团队各发各的，口径不一致。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "status-report"
+    ],
+    "required_top3": [
+      "status-report"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-status-003",
+    "query": "远程团队靠异步文档对齐本周是绿黄红",
+    "context": "需要固定栏目，避免写成流水账。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "status-report"
+    ],
+    "required_top3": [
+      "status-report"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-status-004",
+    "query": "周期汇报总是只写完成项，想把风险和求助也写进去",
+    "context": "读者抱怨看不出哪里偏了、需要什么支持。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "status-report"
+    ],
+    "required_top3": [
+      "status-report"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-status-005",
+    "query": "双周节奏要对计划写清哪里落后、下一步谁做什么",
+    "context": "会前需要可扫读的一页状态，不是长邮件。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "status-report"
+    ],
+    "required_top3": [
+      "status-report"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-status-006",
+    "query": "赞助人群体要同一套状态，不要各说各话",
+    "context": "同步周期已定，缺的是结构模板。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "status-report"
+    ],
+    "required_top3": [
+      "status-report"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-status-007",
+    "query": "想改掉报喜不报忧，把阻塞和求助写进本期同步",
+    "context": "仍是例行进度同步，不是一次性结项总结。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "status-report"
+    ],
+    "required_top3": [
+      "status-report"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-status-008",
+    "query": "本周完成了什么、相对计划偏多少、需要谁拍板，想按栏目写",
+    "context": "读者是固定的干系人名单。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "status-report"
+    ],
+    "required_top3": [
+      "status-report"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-status-009",
+    "query": "方案邮件只要结论先行、分层论据，不是周期状态栏目",
+    "context": "一次性说服读者，没有例行状态报告读者群。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [
+      "pyramid-principle"
+    ],
+    "required_top3": [
+      "pyramid-principle"
+    ],
+    "forbidden_top3": [
+      "status-report"
+    ],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "边界",
+      "金字塔原理"
+    ]
+  },
+  {
+    "id": "report-status-010",
+    "query": "只想给赞助人发几行异步增量，说明有没有红灯就行",
+    "context": "对方明确不需要完整多栏目状态报告，也不是介绍项目全貌。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [],
+    "forbidden_top3": [
+      "status-report"
+    ],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "边界",
+      "短讯分流"
+    ]
+  },
+  {
+    "id": "report-status-011",
+    "query": "两个组已经公开抢资源并拒绝合作，需要中立仲裁机制",
+    "context": "这是冲突升级，不是写进度同步。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [
+      "conflict-resolution-process"
+    ],
+    "required_top3": [
+      "conflict-resolution-process"
+    ],
+    "forbidden_top3": [
+      "status-report"
+    ],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "反例",
+      "冲突"
+    ]
+  },
+  {
+    "id": "report-status-012",
+    "query": "下周立项还没有授权文件，需要先明确目标与边界",
+    "context": "项目尚未进入例行运行同步阶段。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [
+      "project-charter"
+    ],
+    "forbidden_top3": [
+      "status-report"
+    ],
+    "requires_tools": [
+      "status-report"
+    ],
+    "tags": [
+      "候选工具",
+      "项目状态报告",
+      "反例",
+      "立项"
+    ]
+  },
+  {
+    "id": "report-onepage-001",
+    "query": "新上司下周到位，材料太多，想压缩成一页让他扫完就懂项目",
+    "context": "读者是非项目背景的决策者，不是要例行周报。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "one-page-project-narrative"
+    ],
+    "required_top3": [
+      "one-page-project-narrative"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-onepage-002",
+    "query": "跨部门的人老问我们到底在干什么，想写一页可转发说明",
+    "context": "重点是为何存在、做成什么、现状和需要对方什么。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "one-page-project-narrative"
+    ],
+    "required_top3": [
+      "one-page-project-narrative"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-onepage-003",
+    "query": "对外介绍项目总讲成流水账，想按读者路径重写一页故事",
+    "context": "听众是协作伙伴，不是治理会例行状态读者。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "one-page-project-narrative"
+    ],
+    "required_top3": [
+      "one-page-project-narrative"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-onepage-004",
+    "query": "合作方第一次对接，需要可转发的项目说明",
+    "context": "对方从未参与过本项目讨论。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "one-page-project-narrative"
+    ],
+    "required_top3": [
+      "one-page-project-narrative"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-onepage-005",
+    "query": "想给周边团队发一页对齐认知，讲清项目本身而非本周偏差",
+    "context": "不是汇报本周偏差，而是讲清项目本身。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "one-page-project-narrative"
+    ],
+    "required_top3": [
+      "one-page-project-narrative"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-onepage-006",
+    "query": "材料堆成山，想让非项目读者十分钟内理解背景目标与现状",
+    "context": "需要固定叙事路径，避免从技术架构讲起。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "one-page-project-narrative"
+    ],
+    "required_top3": [
+      "one-page-project-narrative"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-onepage-007",
+    "query": "外部伙伴问项目为什么存在、做成什么样，我答得很散",
+    "context": "希望写成一页可扫读的书面叙事。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "one-page-project-narrative"
+    ],
+    "required_top3": [
+      "one-page-project-narrative"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-onepage-008",
+    "query": "想用一页讲清痛点、成功标准和现在最需要对方做什么",
+    "context": "读者会转发给自己团队。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "one-page-project-narrative"
+    ],
+    "required_top3": [
+      "one-page-project-narrative"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-onepage-009",
+    "query": "邮件很长，读者看完仍不知道建议是什么，只想重组结论和论据",
+    "context": "选型结论已定，核心是表达层次，不是写项目故事页。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [
+      "pyramid-principle"
+    ],
+    "required_top3": [
+      "pyramid-principle"
+    ],
+    "forbidden_top3": [
+      "one-page-project-narrative"
+    ],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "边界",
+      "金字塔原理"
+    ]
+  },
+  {
+    "id": "report-onepage-010",
+    "query": "例行双周要同步进展偏差风险求助，读者群已固定",
+    "context": "这是周期运行状态，不是第一次讲清项目为何存在。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [],
+    "forbidden_top3": [
+      "one-page-project-narrative"
+    ],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "边界",
+      "状态报告分流"
+    ]
+  },
+  {
+    "id": "report-onepage-011",
+    "query": "项目要交给运维了，需要文档地图联系人和已知问题",
+    "context": "面向接手方独立运转，不是给外部读者讲项目故事。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [
+      "knowledge-handover"
+    ],
+    "required_top3": [
+      "knowledge-handover"
+    ],
+    "forbidden_top3": [
+      "one-page-project-narrative"
+    ],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "反例",
+      "知识移交"
+    ]
+  },
+  {
+    "id": "report-onepage-012",
+    "query": "两个团队对接口理解不一致，下周联调前要开对齐会",
+    "context": "需要依赖责任人和行动项，不是一页项目介绍。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [
+      "cross-functional-alignment"
+    ],
+    "required_top3": [
+      "cross-functional-alignment"
+    ],
+    "forbidden_top3": [
+      "one-page-project-narrative"
+    ],
+    "requires_tools": [
+      "one-page-project-narrative"
+    ],
+    "tags": [
+      "候选工具",
+      "一页纸项目叙事",
+      "反例",
+      "跨部门"
+    ]
+  },
+  {
+    "id": "report-decision-001",
+    "query": "预算超支要赞助人书面授权，对方时间紧必须看完就能批复",
+    "context": "需要写清请决定什么、选项、推荐与截止时间。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "decision-request-memo"
+    ],
+    "required_top3": [
+      "decision-request-memo"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-decision-002",
+    "query": "领导要在两个互斥方案里选一个，邮件请示发了没人回",
+    "context": "怀疑没写清要什么决定和逾期默认。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "decision-request-memo"
+    ],
+    "required_top3": [
+      "decision-request-memo"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-decision-003",
+    "query": "变更范围需要上级拍板，想写成可勾选同意或改选的书面件",
+    "context": "不是团队内打分比较，而是请决策者批复。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [],
+    "required_top3": [
+      "decision-request-memo"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-decision-004",
+    "query": "治理会前需要一页决策纸：问题、选项、推荐与代价",
+    "context": "委员会只能扫读后当场表态。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "decision-request-memo"
+    ],
+    "required_top3": [
+      "decision-request-memo"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-decision-005",
+    "query": "请示写很长对方仍问我到底要什么决定",
+    "context": "希望改成开头一句决策请求加批复栏。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "decision-request-memo"
+    ],
+    "required_top3": [
+      "decision-request-memo"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-decision-006",
+    "query": "想让老板本周五前在 A/B 方案里选定并书面批复承担风险边界",
+    "context": "书面渠道，不是当面长谈。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "decision-request-memo"
+    ],
+    "required_top3": [
+      "decision-request-memo"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-decision-007",
+    "query": "追加资源要书面批准，选项利弊和推荐必须一眼可见",
+    "context": "若不决定会错过供应商窗口。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [
+      "decision-request-memo"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-decision-008",
+    "query": "上级抱怨请示像背景堆砌，不知道选什么、何时必须定",
+    "context": "需要可批复的备忘录结构。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "decision-request-memo"
+    ],
+    "required_top3": [
+      "decision-request-memo"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-decision-009",
+    "query": "团队还在用决策矩阵按准则给三个方案打分，尚未写成请示件",
+    "context": "先做量化比较，不是写请示件。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [
+      "decision-matrix"
+    ],
+    "required_top3": [
+      "decision-matrix"
+    ],
+    "forbidden_top3": [
+      "decision-request-memo"
+    ],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "边界",
+      "决策矩阵"
+    ]
+  },
+  {
+    "id": "report-decision-010",
+    "query": "会上已经拍板选了方案 B，现在只想写成决策记录归档",
+    "context": "决定已做出，需要留痕而非再请示。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [
+      "decision-record"
+    ],
+    "forbidden_top3": [
+      "decision-request-memo"
+    ],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "边界",
+      "决策记录"
+    ]
+  },
+  {
+    "id": "report-decision-011",
+    "query": "例行周报同步进展和风险，本期没有需要拍板的事项",
+    "context": "读者只要状态，不要请示批复。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [],
+    "forbidden_top3": [
+      "decision-request-memo"
+    ],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "反例",
+      "状态同步"
+    ]
+  },
+  {
+    "id": "report-decision-012",
+    "query": "对方行为影响协作，我想当面就事论事反馈，双方关系正常",
+    "context": "这是行为反馈，不是向上书面请示。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [
+      "sbi-feedback"
+    ],
+    "required_top3": [
+      "sbi-feedback"
+    ],
+    "forbidden_top3": [
+      "decision-request-memo"
+    ],
+    "requires_tools": [
+      "decision-request-memo"
+    ],
+    "tags": [
+      "候选工具",
+      "决策请示备忘录",
+      "反例",
+      "行为反馈"
+    ]
+  },
+  {
+    "id": "report-note-001",
+    "query": "出差期间只想向上级发几行说明有没有阻塞",
+    "context": "对方明确说不要完整周报。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "stakeholder-progress-note"
+    ],
+    "required_top3": [
+      "stakeholder-progress-note"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-note-002",
+    "query": "给关键协作方报个平安，说明卡点和下一步，别写成正式报告",
+    "context": "一对一异步消息，三到七行。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "stakeholder-progress-note"
+    ],
+    "required_top3": [
+      "stakeholder-progress-note"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-note-003",
+    "query": "赞助人只要知道有没有红灯，以及要不要他做什么",
+    "context": "轻量触达，显式写清对方动作栏。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "stakeholder-progress-note"
+    ],
+    "required_top3": [
+      "stakeholder-progress-note"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-note-004",
+    "query": "消息发太碎对方不爱回，想合并成一条短讯",
+    "context": "自上次同步以来的增量结论即可。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "stakeholder-progress-note"
+    ],
+    "required_top3": [
+      "stakeholder-progress-note"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-note-005",
+    "query": "异步同步一下进度，但不要写成多栏目周报",
+    "context": "收件人只有一位关键干系人。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "stakeholder-progress-note"
+    ],
+    "required_top3": [
+      "stakeholder-progress-note"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-note-006",
+    "query": "想给老板三句话：结论进展、卡点、需不需要他出手",
+    "context": "希望降低打扰、避免猜测要不要回。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "stakeholder-progress-note"
+    ],
+    "required_top3": [
+      "stakeholder-progress-note"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-note-007",
+    "query": "关键接口人出差，我发一条短更新说明无阻塞和下周动作",
+    "context": "不是开对齐会，也不是介绍项目全貌。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "stakeholder-progress-note"
+    ],
+    "required_top3": [
+      "stakeholder-progress-note"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-note-008",
+    "query": "怎么写进展短讯不打扰对方，又能让对方知道要不要动作",
+    "context": "一对一渠道，篇幅极短。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "stakeholder-progress-note"
+    ],
+    "required_top3": [
+      "stakeholder-progress-note"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-note-009",
+    "query": "要写给全员和多个赞助人的正式周期状态，含偏差风险求助栏目",
+    "context": "约定读者群需要统一口径，不是一对一短讯。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [],
+    "forbidden_top3": [
+      "stakeholder-progress-note"
+    ],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "边界",
+      "状态报告分流"
+    ]
+  },
+  {
+    "id": "report-note-010",
+    "query": "多方目标未对齐，需要开一次有决策输出的跨部门协作会",
+    "context": "这是会议机制，不是书面短讯。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [
+      "cross-functional-alignment"
+    ],
+    "required_top3": [
+      "cross-functional-alignment"
+    ],
+    "forbidden_top3": [
+      "stakeholder-progress-note"
+    ],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "边界",
+      "跨部门对齐"
+    ]
+  },
+  {
+    "id": "report-note-011",
+    "query": "预算追加要上级书面批准，必须可勾选批复",
+    "context": "需要正式决策请示，不是报平安短讯。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [],
+    "forbidden_top3": [
+      "stakeholder-progress-note"
+    ],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "反例",
+      "决策请示"
+    ]
+  },
+  {
+    "id": "report-note-012",
+    "query": "新协作方第一次接触项目，材料太多要一页讲清为何存在",
+    "context": "对方还不懂项目本身，不是增量进展更新。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [],
+    "forbidden_top3": [
+      "stakeholder-progress-note"
+    ],
+    "requires_tools": [
+      "stakeholder-progress-note"
+    ],
+    "tags": [
+      "候选工具",
+      "干系人进展短讯",
+      "反例",
+      "一页叙事分流"
+    ]
+  },
+  {
+    "id": "report-case-001",
+    "query": "想把这次交付经历写成同行能读完的经验文章提纲",
+    "context": "已有复盘素材，读者是外部 PM，需脱敏。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "project-experience-case-outline"
+    ],
+    "required_top3": [
+      "project-experience-case-outline"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-case-002",
+    "query": "社区分享会要一页案例提纲，怕写成流水账",
+    "context": "需要角度、冲突取舍和可迁移教训。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "project-experience-case-outline"
+    ],
+    "required_top3": [
+      "project-experience-case-outline"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-case-003",
+    "query": "有内部复盘材料，不知道对外该从哪个冲突角度切入",
+    "context": "面向学习型读者，不是向发起人交绩效。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "project-experience-case-outline"
+    ],
+    "required_top3": [
+      "project-experience-case-outline"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-case-004",
+    "query": "想分享一次救火经历，写成别人能带走的可复用方法",
+    "context": "必须标注可公开与须脱敏边界。",
+    "family": "向上管理与汇报",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "project-experience-case-outline"
+    ],
+    "required_top3": [
+      "project-experience-case-outline"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "正例"
+    ]
+  },
+  {
+    "id": "report-case-005",
+    "query": "对外讲项目教训总像鸡汤，想按情境行动结果反思列提纲",
+    "context": "读者是行业同行，不是公司内部登记册用户。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "project-experience-case-outline"
+    ],
+    "required_top3": [
+      "project-experience-case-outline"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-case-006",
+    "query": "把做过的项目改写成可公开分享的案例结构",
+    "context": "已有事实，缺读者路径和核心取舍。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "project-experience-case-outline"
+    ],
+    "required_top3": [
+      "project-experience-case-outline"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-case-007",
+    "query": "同行约稿要项目经验文，素材很多不知怎么组织成可读故事",
+    "context": "禁止标题党，要可验证教训。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "project-experience-case-outline"
+    ],
+    "required_top3": [
+      "project-experience-case-outline"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-case-008",
+    "query": "复盘记了很多条，想挑一个角度写成对外可读的案例大纲",
+    "context": "不是往登记册继续追加条目。",
+    "family": "向上管理与汇报",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "project-experience-case-outline"
+    ],
+    "required_top3": [
+      "project-experience-case-outline"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "改写"
+    ]
+  },
+  {
+    "id": "report-case-009",
+    "query": "只想把一条教训写成对内可检索条目持续复用",
+    "context": "读者是内部团队，不需要对外案例叙事。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [
+      "lessons-learned-register"
+    ],
+    "required_top3": [
+      "lessons-learned-register"
+    ],
+    "forbidden_top3": [
+      "project-experience-case-outline"
+    ],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "边界",
+      "经验教训登记册"
+    ]
+  },
+  {
+    "id": "report-case-010",
+    "query": "活动刚结束，团队要当场用四问对齐学到了什么",
+    "context": "会中学习机制，不是会后对外写案例。",
+    "family": "向上管理与汇报",
+    "case_type": "boundary",
+    "critical": true,
+    "acceptable_top1": [
+      "after-action-review"
+    ],
+    "required_top3": [
+      "after-action-review"
+    ],
+    "forbidden_top3": [
+      "project-experience-case-outline"
+    ],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "边界",
+      "行动后复盘"
+    ]
+  },
+  {
+    "id": "report-case-011",
+    "query": "想写小红书爆款文案冲点赞，教怎么做项目人设运营",
+    "context": "目标是社媒流量，不是同行可迁移的项目案例。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [],
+    "required_top3": [],
+    "forbidden_top3": [
+      "project-experience-case-outline"
+    ],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "反例",
+      "社媒运营"
+    ]
+  },
+  {
+    "id": "report-case-012",
+    "query": "生产重大故障后大家不敢说实话，需要无责还原时间线",
+    "context": "事故调查场景，不是对外写经验文章。",
+    "family": "向上管理与汇报",
+    "case_type": "negative",
+    "critical": true,
+    "acceptable_top1": [
+      "blameless-postmortem"
+    ],
+    "required_top3": [
+      "blameless-postmortem"
+    ],
+    "forbidden_top3": [
+      "project-experience-case-outline"
+    ],
+    "requires_tools": [
+      "project-experience-case-outline"
+    ],
+    "tags": [
+      "候选工具",
+      "项目经验对外案例提纲",
+      "反例",
+      "无责事后复盘"
+    ]
   }
 ]

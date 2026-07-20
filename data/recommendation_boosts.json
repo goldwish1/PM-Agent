@@ -349,14 +349,17 @@
       "keywords": [
         "周报",
         "状态同步",
-        "项目状态"
+        "项目状态",
+        "报喜不报忧",
+        "进度口径",
+        "周期汇报"
       ],
       "slugs": [
+        "status-report",
         "pyramid-principle",
-        "sbi-feedback",
-        "cross-functional-alignment"
+        "stakeholder-progress-note"
       ],
-      "reason": "与日常状态同步相关"
+      "reason": "与周期性项目状态同步相关"
     },
     {
       "keywords": [

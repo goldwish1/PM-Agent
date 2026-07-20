@@ -1,21 +1,21 @@
 {
-  "dataset_digest": "5db48b837f6912bb6d5548b8d8e520ce3b4f26b5376f0ed77fcffe190297d08c",
-  "tools_digest": "63e04c01aa78518f0dbdd9deb429a5d1412d37e447e3c592ba5dda89e1fb2256",
+  "dataset_digest": "a2ffff4761fdccbbe2f23f4a98ac45f92102ea4b51385418c7d2d4e08144ce1a",
+  "tools_digest": "fffbf26e558b1dbb4d9d3f1a28c353d01a9ffd04fe2627a6ac14be9792048dc7",
   "summary": {
-    "total_cases": 108,
-    "active_cases": 84,
+    "total_cases": 168,
+    "active_cases": 144,
     "skipped_cases": 24,
-    "top1_cases": 66,
-    "top1_passed": 64,
-    "top1_accuracy": 0.969697,
-    "top3_cases": 71,
-    "top3_passed": 67,
-    "top3_recall": 0.943662,
-    "mrr_cases": 71,
-    "mrr": 0.93662,
-    "forbidden_cases": 30,
+    "top1_cases": 115,
+    "top1_passed": 113,
+    "top1_accuracy": 0.982609,
+    "top3_cases": 124,
+    "top3_passed": 120,
+    "top3_recall": 0.967742,
+    "mrr_cases": 124,
+    "mrr": 0.944892,
+    "forbidden_cases": 50,
     "forbidden_violations": 2,
-    "forbidden_violation_rate": 0.066667,
+    "forbidden_violation_rate": 0.04,
     "confusion": {
       "blameless-postmortem -> decision-matrix": 1,
       "start-stop-continue -> cross-functional-alignment": 1
@@ -1854,6 +1854,1037 @@
       "top1_pass": null,
       "top3_pass": null,
       "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-001",
+      "query": "周五例行同步，读者要一眼看到进展、偏差和需要支持的事",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "status-report"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-002",
+      "query": "治理会前要一份多方都能用的统一进度口径",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "status-report",
+        "gantt-chart",
+        "moscow-prioritization"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-003",
+      "query": "远程团队靠异步文档对齐本周是绿黄红",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "status-report",
+        "cross-functional-alignment",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-004",
+      "query": "周期汇报总是只写完成项，想把风险和求助也写进去",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "status-report",
+        "risk-register",
+        "pyramid-principle"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-005",
+      "query": "双周节奏要对计划写清哪里落后、下一步谁做什么",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "status-report"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-006",
+      "query": "赞助人群体要同一套状态，不要各说各话",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "status-report"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-007",
+      "query": "想改掉报喜不报忧，把阻塞和求助写进本期同步",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "status-report",
+        "gantt-chart",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-008",
+      "query": "本周完成了什么、相对计划偏多少、需要谁拍板，想按栏目写",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "status-report",
+        "stakeholder-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-009",
+      "query": "方案邮件只要结论先行、分层论据，不是周期状态栏目",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "pyramid-principle",
+        "decision-record",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-010",
+      "query": "只想给赞助人发几行异步增量，说明有没有红灯就行",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-011",
+      "query": "两个组已经公开抢资源并拒绝合作，需要中立仲裁机制",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "conflict-resolution-process",
+        "gantt-chart",
+        "difficult-conversation-prep"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-status-012",
+      "query": "下周立项还没有授权文件，需要先明确目标与边界",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "moscow-prioritization",
+        "project-charter",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": null,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-001",
+      "query": "新上司下周到位，材料太多，想压缩成一页让他扫完就懂项目",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative",
+        "decision-matrix",
+        "status-report"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-002",
+      "query": "跨部门的人老问我们到底在干什么，想写一页可转发说明",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative",
+        "cross-functional-alignment",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-003",
+      "query": "对外介绍项目总讲成流水账，想按读者路径重写一页故事",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-004",
+      "query": "合作方第一次对接，需要可转发的项目说明",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-005",
+      "query": "想给周边团队发一页对齐认知，讲清项目本身而非本周偏差",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative",
+        "cross-functional-alignment",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-006",
+      "query": "材料堆成山，想让非项目读者十分钟内理解背景目标与现状",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-007",
+      "query": "外部伙伴问项目为什么存在、做成什么样，我答得很散",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-008",
+      "query": "想用一页讲清痛点、成功标准和现在最需要对方做什么",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-009",
+      "query": "邮件很长，读者看完仍不知道建议是什么，只想重组结论和论据",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "pyramid-principle",
+        "decision-record",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-010",
+      "query": "例行双周要同步进展偏差风险求助，读者群已固定",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "risk-register",
+        "risk-report",
+        "pre-mortem"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-011",
+      "query": "项目要交给运维了，需要文档地图联系人和已知问题",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "knowledge-handover",
+        "lessons-learned-register",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-onepage-012",
+      "query": "两个团队对接口理解不一致，下周联调前要开对齐会",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "cross-functional-alignment",
+        "raci-matrix",
+        "stakeholder-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-001",
+      "query": "预算超支要赞助人书面授权，对方时间紧必须看完就能批复",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-request-memo",
+        "decision-matrix",
+        "project-charter"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-002",
+      "query": "领导要在两个互斥方案里选一个，邮件请示发了没人回",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-request-memo"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-003",
+      "query": "变更范围需要上级拍板，想写成可勾选同意或改选的书面件",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "decision-record",
+        "decision-request-memo"
+      ],
+      "top1_pass": null,
+      "top3_pass": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-004",
+      "query": "治理会前需要一页决策纸：问题、选项、推荐与代价",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-request-memo",
+        "decision-matrix",
+        "swot-analysis"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-005",
+      "query": "请示写很长对方仍问我到底要什么决定",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-request-memo",
+        "decision-matrix",
+        "swot-analysis"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-006",
+      "query": "想让老板本周五前在 A/B 方案里选定并书面批复承担风险边界",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-request-memo",
+        "moscow-prioritization",
+        "risk-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-007",
+      "query": "追加资源要书面批准，选项利弊和推荐必须一眼可见",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "raci-matrix",
+        "stakeholder-register",
+        "decision-request-memo"
+      ],
+      "top1_pass": null,
+      "top3_pass": true,
+      "reciprocal_rank": 0.3333333333333333,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-008",
+      "query": "上级抱怨请示像背景堆砌，不知道选什么、何时必须定",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-request-memo"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-009",
+      "query": "团队还在用决策矩阵按准则给三个方案打分，尚未写成请示件",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "swot-analysis",
+        "pre-mortem"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-010",
+      "query": "会上已经拍板选了方案 B，现在只想写成决策记录归档",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "decision-record",
+        "swot-analysis"
+      ],
+      "top1_pass": null,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-011",
+      "query": "例行周报同步进展和风险，本期没有需要拍板的事项",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "risk-register",
+        "status-report",
+        "pyramid-principle"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-decision-012",
+      "query": "对方行为影响协作，我想当面就事论事反馈，双方关系正常",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "difficult-conversation-prep",
+        "pyramid-principle"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-001",
+      "query": "出差期间只想向上级发几行说明有没有阻塞",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note",
+        "status-report",
+        "pyramid-principle"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-002",
+      "query": "给关键协作方报个平安，说明卡点和下一步，别写成正式报告",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-003",
+      "query": "赞助人只要知道有没有红灯，以及要不要他做什么",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-004",
+      "query": "消息发太碎对方不爱回，想合并成一条短讯",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-005",
+      "query": "异步同步一下进度，但不要写成多栏目周报",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note",
+        "gantt-chart",
+        "stakeholder-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-006",
+      "query": "想给老板三句话：结论进展、卡点、需不需要他出手",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-007",
+      "query": "关键接口人出差，我发一条短更新说明无阻塞和下周动作",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note",
+        "cross-functional-alignment",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-008",
+      "query": "怎么写进展短讯不打扰对方，又能让对方知道要不要动作",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "stakeholder-progress-note"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-009",
+      "query": "要写给全员和多个赞助人的正式周期状态，含偏差风险求助栏目",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "risk-register",
+        "risk-report",
+        "pre-mortem"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-010",
+      "query": "多方目标未对齐，需要开一次有决策输出的跨部门协作会",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "cross-functional-alignment",
+        "decision-matrix",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-011",
+      "query": "预算追加要上级书面批准，必须可勾选批复",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "swot-analysis",
+        "decision-record"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-note-012",
+      "query": "新协作方第一次接触项目，材料太多要一页讲清为何存在",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "one-page-project-narrative"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-001",
+      "query": "想把这次交付经历写成同行能读完的经验文章提纲",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-experience-case-outline"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-002",
+      "query": "社区分享会要一页案例提纲，怕写成流水账",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-experience-case-outline"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-003",
+      "query": "有内部复盘材料，不知道对外该从哪个冲突角度切入",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-experience-case-outline"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-004",
+      "query": "想分享一次救火经历，写成别人能带走的可复用方法",
+      "family": "向上管理与汇报",
+      "case_type": "typical",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-experience-case-outline",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-005",
+      "query": "对外讲项目教训总像鸡汤，想按情境行动结果反思列提纲",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-experience-case-outline"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-006",
+      "query": "把做过的项目改写成可公开分享的案例结构",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-experience-case-outline"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-007",
+      "query": "同行约稿要项目经验文，素材很多不知怎么组织成可读故事",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-experience-case-outline"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-008",
+      "query": "复盘记了很多条，想挑一个角度写成对外可读的案例大纲",
+      "family": "向上管理与汇报",
+      "case_type": "paraphrase",
+      "critical": false,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-experience-case-outline"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-009",
+      "query": "只想把一条教训写成对内可检索条目持续复用",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "lessons-learned-register",
+        "decision-record",
+        "five-whys"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-010",
+      "query": "活动刚结束，团队要当场用四问对齐学到了什么",
+      "family": "向上管理与汇报",
+      "case_type": "boundary",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "after-action-review",
+        "cross-functional-alignment",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-011",
+      "query": "想写小红书爆款文案冲点赞，教怎么做项目人设运营",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": null,
+      "top3_pass": null,
+      "reciprocal_rank": null,
+      "forbidden_hits": []
+    },
+    {
+      "case_id": "report-case-012",
+      "query": "生产重大故障后大家不敢说实话，需要无责还原时间线",
+      "family": "向上管理与汇报",
+      "case_type": "negative",
+      "critical": true,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "blameless-postmortem",
+        "five-whys",
+        "lessons-learned-register"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     }
   ]
