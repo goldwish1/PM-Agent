@@ -22,6 +22,7 @@ class PmTool(BaseModel):
     description: str = ""
     steps: list[str] = Field(default_factory=list)
     scenarios: list[str] = Field(default_factory=list)
+    trigger_phrases: list[str] = Field(default_factory=list)
     draftable: bool = False
     template: dict[str, Any] | None = None
     template_fields: list[str] | None = None
@@ -44,6 +45,10 @@ class ToolsRepository:
         if not isinstance(raw, list):
             raise ValueError("tools.json 根节点必须是数组")
         tools = [PmTool.model_validate(item) for item in raw]
+        slugs = [tool.slug for tool in tools]
+        if len(slugs) != len(set(slugs)):
+            duplicates = sorted({slug for slug in slugs if slugs.count(slug) > 1})
+            raise ValueError(f"tools.json 存在重复 slug：{duplicates}")
         for tool in tools:
             validate_use_cases(tool.use_cases, slug=tool.slug)
         return cls(tools)
@@ -92,6 +97,7 @@ class ToolsRepository:
                     tool.description,
                     " ".join(tool.scenarios),
                     " ".join(tool.steps),
+                    " ".join(tool.trigger_phrases),
                 ]
             ).lower()
             score = 0
@@ -122,47 +128,53 @@ class ToolsRepository:
         keyword_boosts: list[tuple[list[str], list[str], str]] = [
             (
                 ["立项", "授权", "章程", "启动", "kickoff", "批准"],
-                ["project-charter", "stakeholder-register", "assumption-log"],
+                ["project-charter", "stakeholder-register", "raci-matrix"],
                 "与立项授权/启动阶段高度相关",
             ),
             (
                 ["风险", "不确定", "担心", "隐患", "risk"],
-                ["risk-register", "risk-management-plan", "risk-report"],
+                ["risk-register", "risk-report", "pre-mortem"],
                 "与风险识别与应对相关",
             ),
             (
                 ["进度", "排期", "延期", "工期", "里程碑", "甘特"],
-                ["gantt-chart", "activity-list", "network-diagram"],
+                ["gantt-chart", "moscow-prioritization", "decision-matrix"],
                 "与进度规划/赶工相关",
             ),
             (
                 ["范围", "需求", "验收", "边界"],
-                ["project-scope-statement", "wbs", "requirements-documentation"],
+                ["moscow-prioritization", "cross-functional-alignment", "decision-matrix"],
                 "与范围与需求澄清相关",
             ),
             (
-                ["成本", "预算", "超支", "花费"],
-                ["cost-baseline", "cost-management-plan", "earned-value-analysis"],
-                "与成本预算与绩效相关",
+                ["成本", "预算", "超支", "花费", "外采", "自研"],
+                ["decision-matrix", "swot-analysis", "decision-record"],
+                "与方案决策/权衡相关",
             ),
             (
                 ["干系人", "老板", "跨部门", "推动"],
-                ["stakeholder-register", "stakeholder-engagement-plan", "raci-matrix"],
+                ["stakeholder-register", "raci-matrix", "force-field-analysis"],
                 "与干系人管理相关",
             ),
             (
                 ["变更", "改需求", "change"],
-                ["change-request", "change-management-plan", "issue-log"],
-                "与变更控制相关",
+                ["decision-record", "five-whys", "raci-matrix"],
+                "与方案决策/权衡相关",
             ),
             (
-                ["结项", "收尾", "移交", "关闭"],
-                ["project-closure-document", "final-report", "transition-plan"],
+                ["结项", "收尾", "移交", "关闭", "复盘"],
+                ["lessons-learned-register", "decision-record", "risk-report"],
                 "与项目收尾相关",
             ),
             (
-                ["沟通", "汇报", "周报", "状态"],
-                ["status-report", "communications-management-plan"],
+                ["沟通", "汇报", "周报", "状态", "反馈", "冲突", "对齐"],
+                [
+                    "sbi-feedback",
+                    "conflict-resolution-process",
+                    "cross-functional-alignment",
+                    "pyramid-principle",
+                    "difficult-conversation-prep",
+                ],
                 "与沟通与状态同步相关",
             ),
             (
@@ -174,6 +186,15 @@ class ToolsRepository:
 
         scores: dict[str, float] = {t.slug: 0.0 for t in self._tools}
         reasons: dict[str, str] = {}
+
+        for tool in self._tools:
+            if any(
+                phrase.strip().lower() in text
+                for phrase in tool.trigger_phrases
+                if phrase.strip()
+            ):
+                scores[tool.slug] += 12
+                reasons.setdefault(tool.slug, "与用户口语卡点直接匹配")
 
         for keywords, slugs, reason in keyword_boosts:
             if any(k.lower() in text for k in keywords):

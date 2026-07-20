@@ -24,31 +24,34 @@ def _registry(repo: ToolsRepository, state: SessionState | None = None):
     )
 
 
-# 首批写厚目标：推荐/陪跑高频工具（其余条目不强制厚度）
+# 正式库高频写厚目标（其余保留条目不强制厚度）
 TOP10_THICK_SLUGS = frozenset(
     {
         "project-charter",
         "risk-register",
         "stakeholder-register",
-        "wbs",
         "raci-matrix",
-        "issue-log",
-        "change-management-plan",
-        "status-report",
-        "requirements-documentation",
         "lessons-learned-register",
+        "decision-matrix",
+        "decision-record",
+        "sbi-feedback",
+        "five-whys",
+        "pre-mortem",
     }
 )
 
 
 def test_repo_loads_all_tools() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 47
+    assert len(repo) == 20
     assert repo.exists("project-charter")
     assert repo.exists("risk-register")
     assert repo.exists("decision-record")
     assert repo.exists("decision-matrix")
     assert repo.exists("swot-analysis")
+    assert repo.exists("gantt-chart")
+    assert repo.exists("stakeholder-register")
+    assert not repo.exists("wbs")
     charter = repo.get_by_slug("project-charter")
     assert charter is not None
     assert charter.name == "项目章程"
@@ -78,7 +81,7 @@ def test_repo_search_finds_charter() -> None:
 
 def test_all_tools_have_valid_use_cases() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 47
+    assert len(repo) == 20
     for tool in repo.all():
         assert tool.use_cases
         assert all(isinstance(c, str) and c for c in tool.use_cases)
@@ -103,39 +106,45 @@ def test_keyword_boosts_align_with_use_cases() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
     boosts: list[tuple[list[str], str]] = [
         (
-            ["project-charter", "stakeholder-register", "assumption-log"],
+            ["project-charter", "stakeholder-register", "raci-matrix"],
             "与立项授权/启动阶段高度相关",
         ),
         (
-            ["risk-register", "risk-management-plan", "risk-report"],
+            ["risk-register", "risk-report", "pre-mortem"],
             "与风险识别与应对相关",
         ),
         (
-            ["gantt-chart", "activity-list", "network-diagram"],
+            ["gantt-chart", "moscow-prioritization", "decision-matrix"],
             "与进度规划/赶工相关",
         ),
         (
-            ["project-scope-statement", "wbs", "requirements-documentation"],
+            ["moscow-prioritization", "cross-functional-alignment", "decision-matrix"],
             "与范围与需求澄清相关",
         ),
         (
-            ["cost-baseline", "cost-management-plan", "earned-value-analysis"],
-            "与成本预算与绩效相关",
+            ["decision-matrix", "swot-analysis", "decision-record"],
+            "与方案决策/权衡相关",
         ),
         (
-            ["stakeholder-register", "stakeholder-engagement-plan", "raci-matrix"],
+            ["stakeholder-register", "raci-matrix", "force-field-analysis"],
             "与干系人管理相关",
         ),
         (
-            ["change-request", "change-management-plan", "issue-log"],
-            "与变更控制相关",
+            ["decision-record", "five-whys", "raci-matrix"],
+            "与方案决策/权衡相关",
         ),
         (
-            ["project-closure-document", "final-report", "transition-plan"],
+            ["lessons-learned-register", "decision-record", "risk-report"],
             "与项目收尾相关",
         ),
         (
-            ["status-report", "communications-management-plan"],
+            [
+                "sbi-feedback",
+                "conflict-resolution-process",
+                "cross-functional-alignment",
+                "pyramid-principle",
+                "difficult-conversation-prep",
+            ],
             "与沟通与状态同步相关",
         ),
         (
@@ -199,6 +208,70 @@ def test_fake_立项_script_calls_recommend() -> None:
     assert "项目章程" in reply
     tool_names = [m.get("name") for m in state.messages if m.get("role") == "tool"]
     assert "recommend_tools" in tool_names
+
+
+def test_new_communication_tools_exist() -> None:
+    """回归测试：新发布的沟通类工具存在于正式库中。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    new_slugs = {
+        "sbi-feedback",
+        "pyramid-principle",
+        "cross-functional-alignment",
+        "conflict-resolution-process",
+        "difficult-conversation-prep",
+    }
+    for slug in new_slugs:
+        assert repo.exists(slug), f"缺少新工具：{slug}"
+
+
+def test_search_finds_sbi_feedback() -> None:
+    """回归测试：用户反馈类卡点应命中 SBI 反馈模型。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    hits = repo.search("怎么给负面反馈又不伤关系")
+    slugs = {t.slug for t in hits}
+    assert "sbi-feedback" in slugs
+
+
+def test_search_finds_difficult_conversation_prep() -> None:
+    """回归测试：开口难类卡点应命中高难度对话准备。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    hits = repo.search("这话我不知道怎么开口说")
+    slugs = {t.slug for t in hits}
+    assert "difficult-conversation-prep" in slugs
+
+
+def test_search_finds_cross_functional_alignment() -> None:
+    """回归测试：跨部门理解不一致应命中跨部门对齐会。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    hits = repo.search("两个团队对同一个需求理解完全不一样")
+    slugs = {t.slug for t in hits}
+    assert "cross-functional-alignment" in slugs
+
+
+def test_search_finds_conflict_resolution() -> None:
+    """回归测试：团队冲突类卡点应命中冲突解决流程。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    hits = repo.search("两个组因为资源分配吵起来了")
+    slugs = {t.slug for t in hits}
+    assert "conflict-resolution-process" in slugs
+
+
+def test_recommend_communication_dilemma() -> None:
+    """回归测试：冲突类卡点推荐应包含冲突解决流程。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    ranked = repo.recommend_by_question("两个组因为资源分配冲突吵起来了，影响交付了")
+    slugs = {t.slug for t, _ in ranked}
+    assert "conflict-resolution-process" in slugs
+    assert 1 <= len(ranked) <= 3
+
+
+def test_recommend_feedback_dilemma() -> None:
+    """回归测试：反馈类卡点推荐应包含 SBI 反馈模型。"""
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    ranked = repo.recommend_by_question("怎么给负面反馈又不伤关系")
+    slugs = {t.slug for t, _ in ranked}
+    assert "sbi-feedback" in slugs
+    assert 1 <= len(ranked) <= 3
 
 
 def test_clarify_count_increments_on_question_without_tools() -> None:

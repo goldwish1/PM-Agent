@@ -46,10 +46,10 @@ def test_start_consulting_rejects_non_draftable() -> None:
     assert state.consulting_tool_slug is None
 
 
-def test_start_consulting_rejects_wbs() -> None:
+def test_start_consulting_rejects_non_draftable_raci() -> None:
     state = SessionState(mode=SessionMode.RECOMMENDING)
     registry = _registry(state)
-    raw = registry.execute("start_consulting", {"tool_slug": "wbs"})
+    raw = registry.execute("start_consulting", {"tool_slug": "raci-matrix"})
     payload = json.loads(raw)
     assert payload["ok"] is False
     assert "draftable" in payload or "error" in payload

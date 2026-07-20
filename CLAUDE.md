@@ -2,7 +2,7 @@
 
 PM Agent 是一个面向个人项目经理的 CLI 工具。用户可通过终端多轮对话：
 
-- 根据工作卡点获得 PMBOK 工具推荐（如项目章程、风险登记册等，约 39 个工具）
+- 根据工作卡点获得 PM 工具推荐（如项目章程、风险登记册、决策与沟通方法等，正式库约 20 个）
 - 自动起草「项目章程」和「风险登记册」Markdown 文档并导出
 
 技术栈：Python 3.11+ + `openai` SDK → DeepSeek API
@@ -58,7 +58,7 @@ pm-agent/
 ├── .env.example
 ├── .gitignore
 ├── data/
-│   └── tools.json          # 自包含工具库（约 39 个 PMBOK 工具）
+│   └── tools.json          # 自包含工具库（正式库约 20 个）
 ├── output/                 # 导出目录（gitignore）
 ├── src/
 │   └── pm_agent/

@@ -27,7 +27,7 @@ def test_fake_rejects_unsupported_draft() -> None:
         session=state,
         output_dir=REPO_ROOT / "output",
     )
-    text = "帮我起草 WBS"
+    text = "帮我起草干系人登记册"
     reply = handle_user_turn(
         text,
         state,

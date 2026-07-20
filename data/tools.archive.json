@@ -1,0 +1,701 @@
+[
+  {
+    "slug": "assumption-log",
+    "name": "假设日志",
+    "name_en": "Assumption Log",
+    "summary": "记录项目假设与制约并持续验证",
+    "description": "把未经验证的假设与制约显性化，降低后期翻车风险。",
+    "steps": [
+      "列出关键假设",
+      "标记制约条件",
+      "安排验证责任人"
+    ],
+    "scenarios": [
+      "信息不足却要推进",
+      "假设很多"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "立项与授权",
+      "风险与问题"
+    ]
+  },
+  {
+    "slug": "benefits-management-plan",
+    "name": "收益管理计划",
+    "name_en": "Benefits Management Plan",
+    "summary": "定义如何度量与实现项目收益",
+    "description": "说明目标收益、度量指标、实现时间表与责任人。",
+    "steps": [
+      "定义收益指标",
+      "设定实现节奏",
+      "指定责任人"
+    ],
+    "scenarios": [
+      "要讲清业务收益",
+      "立项评审"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "立项与授权",
+      "流程规范（参考）"
+    ]
+  },
+  {
+    "slug": "project-management-plan",
+    "name": "项目管理计划",
+    "name_en": "Project Management Plan",
+    "summary": "汇总各分册计划，作为执行与监控基线",
+    "description": "整合范围、进度、成本、质量、风险等分计划，形成单一事实来源。",
+    "steps": [
+      "汇总分计划",
+      "定义基线与变更路径",
+      "获批后冻结版本"
+    ],
+    "scenarios": [
+      "要做整体计划",
+      "多方扯皮无统一口径"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）"
+    ]
+  },
+  {
+    "slug": "scope-management-plan",
+    "name": "范围管理计划",
+    "name_en": "Scope Management Plan",
+    "summary": "规定如何定义、确认与控制范围",
+    "description": "明确需求收集、WBS、验收与范围变更流程。",
+    "steps": [
+      "定义范围流程",
+      "明确验收标准责任",
+      "约定变更路径"
+    ],
+    "scenarios": [
+      "范围总变",
+      "验收扯皮"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "范围与需求"
+    ]
+  },
+  {
+    "slug": "requirements-documentation",
+    "name": "需求文件",
+    "name_en": "Requirements Documentation",
+    "summary": "结构化记录已澄清的业务与功能需求",
+    "description": "何时用：需求口口相传易丢、开发与业务理解不一致、评审需要书面需求时。何时别用：立项高层目标用章程；需求与测试/设计追溯用需求跟踪矩阵；范围边界总述用范围说明书。常见坑：把愿望当需求；无验收标准；版本混乱多人改同一份。",
+    "steps": [
+      "收集业务目标与用户场景 → 产出需求来源清单",
+      "写成可验证条目（含优先级与验收标准）→ 产出需求条目表",
+      "区分必须/应该/可以及非功能约束 → 产出分级需求集",
+      "与业务方走查确认歧义与冲突 → 产出已确认需求基线候选",
+      "冻结版本号并记录变更入口 → 产出受控需求文件",
+      "把条目 ID 提供给跟踪矩阵与测试 → 产出可追溯输入"
+    ],
+    "scenarios": [
+      "需求和口头说的总对不上",
+      "开发按自己理解做，验收扯皮",
+      "需要一份可评审的需求说明",
+      "业务方需求很散，要结构化",
+      "非功能（性能/安全）没人写清楚",
+      "想给外包一份需求基线",
+      "要看需求覆盖到哪个用例——用需求跟踪矩阵（易混）",
+      "只要立项目的和授权——用项目章程（易混）"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
+  },
+  {
+    "slug": "requirements-traceability-matrix",
+    "name": "需求跟踪矩阵",
+    "name_en": "Requirements Traceability Matrix",
+    "summary": "把需求追溯到交付物、测试与验收",
+    "description": "建立需求↔设计↔测试链路，防止遗漏与范围漂移。",
+    "steps": [
+      "建立矩阵列",
+      "映射交付与测试",
+      "定期核对"
+    ],
+    "scenarios": [
+      "验收对不上需求",
+      "变更难追溯"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
+  },
+  {
+    "slug": "project-scope-statement",
+    "name": "项目范围说明书",
+    "name_en": "Project Scope Statement",
+    "summary": "详细描述项目范围、边界与验收标准",
+    "description": "写清包含与不包含、交付物与验收条件。",
+    "steps": [
+      "写高层范围",
+      "列出交付物",
+      "定义验收标准",
+      "声明排除项"
+    ],
+    "scenarios": [
+      "范围边界不清",
+      "甲乙扯皮"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
+  },
+  {
+    "slug": "wbs",
+    "name": "工作分解结构",
+    "name_en": "Work Breakdown Structure",
+    "summary": "把项目范围逐层分解为可管理的工作包",
+    "description": "何时用：范围感觉很大但拆不开、估工期/分派任务前缺少统一结构时。何时别用：仍在启动签字阶段用章程即可；活动排序与依赖用活动清单/网络图；需求条目追踪用需求跟踪矩阵。常见坑：按组织架构拆而非按交付物；工作包过大无法估算；把 WBS 当成排期甘特图。",
+    "steps": [
+      "确认高层范围与主要可交付成果 → 产出分解起点清单",
+      "按交付物逐层分解到可估算工作包 → 产出多层 WBS 结构",
+      "为工作包编码并定义完成定义（DoD）→ 产出带编码的工作包表",
+      "与干系人核对有无遗漏/越界 → 产出已确认的 WBS",
+      "用 WBS 支撑估算、分派与进度骨架 → 产出估算与责任映射输入",
+      "范围变更时同步更新对应工作包 → 产出变更后的 WBS 版本"
+    ],
+    "scenarios": [
+      "范围很大，不知道怎么拆任务",
+      "估工期前缺少统一工作结构",
+      "多人并行，交付物边界打架",
+      "想看清项目到底包含哪些工作包",
+      "外包前需要把工作包切清楚",
+      "评审说范围说明书太粗，要可管理分解",
+      "现在要排依赖和关键路径——用网络图/活动清单（易混）",
+      "还在要立项签字，先写项目章程即可（反例）"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
+  },
+  {
+    "slug": "schedule-management-plan",
+    "name": "进度管理计划",
+    "name_en": "Schedule Management Plan",
+    "summary": "规定如何制定、监控与控制进度",
+    "description": "定义进度方法、工具、阈值与变更审批。",
+    "steps": [
+      "选定进度方法",
+      "定义更新频率",
+      "约定延误升级"
+    ],
+    "scenarios": [
+      "进度常延误",
+      "汇报口径乱"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "进度与排期"
+    ]
+  },
+  {
+    "slug": "activity-list",
+    "name": "活动清单",
+    "name_en": "Activity List",
+    "summary": "列出完成工作包所需的全部活动",
+    "description": "把 WBS 工作包展开为可排程活动。",
+    "steps": [
+      "基于 WBS 识别活动",
+      "补充属性",
+      "评审完整性"
+    ],
+    "scenarios": [
+      "不知从哪排期",
+      "遗漏任务"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "进度与排期"
+    ]
+  },
+  {
+    "slug": "network-diagram",
+    "name": "项目网络图",
+    "name_en": "Project Schedule Network Diagram",
+    "summary": "展示活动逻辑关系与关键路径",
+    "description": "用前导关系识别关键路径与并行机会。",
+    "steps": [
+      "定义依赖",
+      "绘制网络",
+      "识别关键路径"
+    ],
+    "scenarios": [
+      "想压缩工期",
+      "弄清先后依赖"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "进度与排期"
+    ]
+  },
+  {
+    "slug": "cost-management-plan",
+    "name": "成本管理计划",
+    "name_en": "Cost Management Plan",
+    "summary": "规定成本估算、预算与控制方法",
+    "description": "定义估算精度、成本科目、阈值与阈值规则。",
+    "steps": [
+      "定义估算方法",
+      "设置成本科目",
+      "约定报告与审批"
+    ],
+    "scenarios": [
+      "预算怎么管",
+      "花超了怎么办"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "成本与预算"
+    ]
+  },
+  {
+    "slug": "cost-baseline",
+    "name": "成本基准",
+    "name_en": "Cost Baseline",
+    "summary": "经批准的阶段性预算，用于绩效比较",
+    "description": "形成按时段分布的批准预算（通常含应急储备）。",
+    "steps": [
+      "汇总估算",
+      "分配到时间段",
+      "获批形成基准"
+    ],
+    "scenarios": [
+      "要批预算",
+      "对比实际花费"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "成本与预算"
+    ]
+  },
+  {
+    "slug": "quality-management-plan",
+    "name": "质量管理计划",
+    "name_en": "Quality Management Plan",
+    "summary": "定义质量标准、保证与控制活动",
+    "description": "明确质量目标、检查点与不合格处理。",
+    "steps": [
+      "定义质量标准",
+      "安排保证活动",
+      "设计控制点"
+    ],
+    "scenarios": [
+      "质量事故频发",
+      "验收标准模糊"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）"
+    ]
+  },
+  {
+    "slug": "resource-management-plan",
+    "name": "资源管理计划",
+    "name_en": "Resource Management Plan",
+    "summary": "规划团队与实物资源的获取与管理",
+    "description": "说明角色、获取、培训与释放方式。",
+    "steps": [
+      "识别角色技能",
+      "规划获取途径",
+      "定义团队规则"
+    ],
+    "scenarios": [
+      "人不够",
+      "角色冲突"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "干系人与协作"
+    ]
+  },
+  {
+    "slug": "communications-management-plan",
+    "name": "沟通管理计划",
+    "name_en": "Communications Management Plan",
+    "summary": "规定说什么、对谁说、何时与何种渠道",
+    "description": "设计会议、报告与升级路径，减少信息噪音。",
+    "steps": [
+      "识别信息需求",
+      "选择渠道频率",
+      "约定升级机制"
+    ],
+    "scenarios": [
+      "会太多",
+      "信息不透明"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "沟通与汇报"
+    ]
+  },
+  {
+    "slug": "risk-management-plan",
+    "name": "风险管理计划",
+    "name_en": "Risk Management Plan",
+    "summary": "规定风险识别、评估、应对与监控方法",
+    "description": "定义风险类别、评分尺、会议节奏与升级阈值。",
+    "steps": [
+      "定义风险方法",
+      "设评分尺",
+      "安排复盘频率"
+    ],
+    "scenarios": [
+      "要建立风险体系"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "风险与问题"
+    ]
+  },
+  {
+    "slug": "procurement-management-plan",
+    "name": "采购管理计划",
+    "name_en": "Procurement Management Plan",
+    "summary": "规划外采内容、方式与合同策略",
+    "description": "明确自制/外购、招标与合同类型选择。",
+    "steps": [
+      "识别采购包",
+      "选择合同类型",
+      "定义选型流程"
+    ],
+    "scenarios": [
+      "要招供应商",
+      "外采很多"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）"
+    ]
+  },
+  {
+    "slug": "stakeholder-engagement-plan",
+    "name": "干系人参与计划",
+    "name_en": "Stakeholder Engagement Plan",
+    "summary": "规划如何提升干系人支持度",
+    "description": "针对当前/期望参与度设计策略与行动。",
+    "steps": [
+      "评估参与度差距",
+      "设计策略",
+      "安排沟通动作"
+    ],
+    "scenarios": [
+      "老板不支持",
+      "跨部门难推动"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "干系人与协作"
+    ]
+  },
+  {
+    "slug": "change-management-plan",
+    "name": "变更管理计划",
+    "name_en": "Change Management Plan",
+    "summary": "规定变更提出、评估、批准与落实流程",
+    "description": "何时用：口头变更太多、范围蔓延、不知谁有权批准改基线时。何时别用：单次具体变更用变更请求；日常小阻碍用问题日志。常见坑：流程过重无人遵守；只规定审批不规定影响分析；未定义紧急变更绿色通道。",
+    "steps": [
+      "定义何谓变更及适用基线（范围/进度/成本等）→ 产出变更定义",
+      "设计提出→评估→批准→实施→确认的流程步骤 → 产出流程图/说明",
+      "明确审批角色、频率与紧急通道 → 产出权限与节奏表",
+      "规定影响分析必填项与文档模板 → 产出变更单模板要求",
+      "约定沟通知会对象与记录存放处 → 产出沟通与归档规则",
+      "试运行一周并根据卡点修订流程 → 产出可执行的变更管理计划"
+    ],
+    "scenarios": [
+      "变更失控，口头变更太多",
+      "范围一直在加，没有批准记录",
+      "不知道谁能批准改上线日期",
+      "客户一句话就改需求，团队很被动",
+      "想建立变更控制委员会或等效机制",
+      "需要统一变更单怎么填",
+      "已经有一张具体变更要提——用变更请求（易混）",
+      "只是当前阻塞问题——用问题日志（易混）"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "流程规范（参考）",
+      "变更与管控"
+    ]
+  },
+  {
+    "slug": "deliverables",
+    "name": "可交付成果",
+    "name_en": "Deliverables",
+    "summary": "按计划产出并提交可验收成果",
+    "description": "管理成果完成定义、提交与移交。",
+    "steps": [
+      "按验收标准完成",
+      "组织内部评审",
+      "提交干系人"
+    ],
+    "scenarios": [
+      "要交付了",
+      "交付口径不一致"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
+  },
+  {
+    "slug": "issue-log",
+    "name": "问题日志",
+    "name_en": "Issue Log",
+    "summary": "跟踪当前阻碍项目的问题直至关闭",
+    "description": "何时用：执行中已发生卡点、问题没人跟、站会反复提同一阻碍时。何时别用：尚未发生的不确定事件用风险登记册；要改基线的正式变更用变更请求。常见坑：问题描述空泛无影响；无责任人/到期日；关闭标准不清导致长期挂起。",
+    "steps": [
+      "登记问题现象、影响范围与发现时间 → 产出问题条目",
+      "判定优先级并指定责任人与到期日 → 产出可跟踪工单式记录",
+      "记录根因假设与下一步动作 → 产出行动项",
+      "在站会/周会复审状态与阻塞依赖 → 产出状态更新",
+      "验证关闭条件并归档结果 → 产出已关闭记录",
+      "周期性扫尾逾期与重复问题 → 产出清理后的有效清单"
+    ],
+    "scenarios": [
+      "卡点一堆，问题没人跟",
+      "站会每次都提同一阻碍",
+      "环境/权限问题拖了好几天",
+      "跨团队依赖阻塞交付",
+      "需要一张当前问题清单给老板看",
+      "问题关了又反复出现，要留痕",
+      "还没发生、只是担心——用风险登记册（易混）",
+      "要改范围/进度基线——走变更请求（易混）"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "风险与问题"
+    ]
+  },
+  {
+    "slug": "team-charter",
+    "name": "团队章程",
+    "name_en": "Team Charter",
+    "summary": "约定团队目标、规范与决策方式",
+    "description": "对齐价值观、会议规则与冲突处理。",
+    "steps": [
+      "共创目标",
+      "约定规范",
+      "明确决策机制"
+    ],
+    "scenarios": [
+      "新组队",
+      "协作混乱"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "干系人与协作"
+    ]
+  },
+  {
+    "slug": "quality-checklists",
+    "name": "质量核对单",
+    "name_en": "Quality Checklists",
+    "summary": "用清单确保关键步骤不遗漏",
+    "description": "把重复性检查项固化，提高一致性。",
+    "steps": [
+      "编制核对项",
+      "执行勾选",
+      "记录偏差"
+    ],
+    "scenarios": [
+      "漏检",
+      "要标准化检查"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "范围与需求"
+    ]
+  },
+  {
+    "slug": "status-report",
+    "name": "项目状态报告",
+    "name_en": "Project Status Report",
+    "summary": "按固定结构汇报进度、风险、问题与下一步",
+    "description": "何时用：需要周报/双周汇报、干系人要统一进度视图时。何时别用：深度偏差根因分析用偏差分析/挣值；收尾总结用最终报告。常见坑：只写完成事项不写风险与求助；数据口径每次变；篇幅过长无人读。",
+    "steps": [
+      "固定报告结构（进展/计划/风险问题/求助/下步）→ 产出模板骨架",
+      "汇总本期完成与相对计划的偏差 → 产出进展与偏差摘要",
+      "摘录高优先风险与未关闭问题 → 产出风险问题精选",
+      "写清需要决策或支持的事项 → 产出明确求助清单",
+      "列出下周关键动作与负责人 → 产出下一步计划",
+      "按约定渠道发送并归档版本 → 产出可追溯的状态报告"
+    ],
+    "scenarios": [
+      "要写周报，不知道写什么结构",
+      "老板要一眼看懂进度和风险",
+      "多方干系人需要统一状态口径",
+      "汇报总是报喜不报忧，想改掉",
+      "双周会前需要一页纸状态",
+      "远程协作，异步同步进度",
+      "要算 SPI/CPI——用挣值分析（易混）",
+      "项目已结束写总结——用最终报告（易混）"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "沟通与汇报"
+    ]
+  },
+  {
+    "slug": "earned-value-analysis",
+    "name": "挣值分析",
+    "name_en": "Earned Value Analysis",
+    "summary": "用 PV/EV/AC 量化进度与成本绩效",
+    "description": "计算 SPI/CPI 等，判断趋势与预测完工。",
+    "steps": [
+      "采集 PV/EV/AC",
+      "计算指数",
+      "解释趋势"
+    ],
+    "scenarios": [
+      "不知道是否落后",
+      "成本超支难量化"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "成本与预算",
+      "进度与排期"
+    ]
+  },
+  {
+    "slug": "variance-analysis",
+    "name": "偏差分析",
+    "name_en": "Variance Analysis",
+    "summary": "解释计划与实际的差异原因",
+    "description": "对范围/进度/成本偏差做原因与纠偏建议。",
+    "steps": [
+      "识别偏差",
+      "分析原因",
+      "提出纠偏"
+    ],
+    "scenarios": [
+      "实际偏离计划",
+      "要解释差异"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "进度与排期",
+      "成本与预算"
+    ]
+  },
+  {
+    "slug": "change-request",
+    "name": "变更请求",
+    "name_en": "Change Request",
+    "summary": "正式提出对基线的变更",
+    "description": "描述变更内容、理由、影响与建议决策。",
+    "steps": [
+      "描述变更",
+      "评估影响",
+      "提交审批"
+    ],
+    "scenarios": [
+      "需求变了",
+      "要改基线"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "变更与管控"
+    ]
+  },
+  {
+    "slug": "final-report",
+    "name": "最终报告",
+    "name_en": "Final Report",
+    "summary": "总结项目绩效、成果与经验",
+    "description": "对照目标说明完成情况、偏差与建议。",
+    "steps": [
+      "汇总绩效",
+      "总结经验",
+      "提出后续建议"
+    ],
+    "scenarios": [
+      "项目要结项",
+      "写总结"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘",
+      "沟通与汇报"
+    ]
+  },
+  {
+    "slug": "project-closure-document",
+    "name": "项目收尾文件",
+    "name_en": "Project Closure Document",
+    "summary": "正式确认项目关闭并释放资源",
+    "description": "完成行政收尾、合同收尾与资源释放清单。",
+    "steps": [
+      "核对验收完成",
+      "关闭合同与账户",
+      "归档并释放资源"
+    ],
+    "scenarios": [
+      "要正式结项",
+      "资源还占着"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘"
+    ]
+  },
+  {
+    "slug": "acceptance-document",
+    "name": "验收文件",
+    "name_en": "Acceptance Document",
+    "summary": "记录客户/发起人对交付物的正式验收",
+    "description": "固化验收范围、结果与签字，作为关闭依据。",
+    "steps": [
+      "准备验收包",
+      "组织验收",
+      "取得签字"
+    ],
+    "scenarios": [
+      "要验收签字",
+      "交付有争议"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘",
+      "范围与需求"
+    ]
+  },
+  {
+    "slug": "transition-plan",
+    "name": "移交计划",
+    "name_en": "Transition Plan",
+    "summary": "规划成果移交给运营/维护团队",
+    "description": "明确移交内容、培训、支持窗口与责任切换。",
+    "steps": [
+      "列出移交清单",
+      "安排培训",
+      "确认支持责任"
+    ],
+    "scenarios": [
+      "上线后谁维护",
+      "交接不清"
+    ],
+    "draftable": false,
+    "use_cases": [
+      "收尾与复盘"
+    ]
+  }
+]

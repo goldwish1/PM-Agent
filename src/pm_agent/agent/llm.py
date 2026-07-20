@@ -55,7 +55,7 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
     text = user_text.strip()
     snippet = text[:80] or "ping"
 
-    # —— 拒绝：起草不支持的工具（WBS / 干系人登记册等）——
+    # —— 拒绝：起草不支持的工具（干系人登记册 / 甘特图等非 draftable）——
     draft_intent = _contains_any(
         text,
         ["起草", "填写", "写一份", "帮我写", "自动生成", "帮我填"],
@@ -63,16 +63,18 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
     unsupported_target = _contains_any(
         text,
         [
-            "wbs",
-            "工作分解",
             "干系人登记册",
             "stakeholder-register",
             "stakeholder register",
             "甘特图",
-            "沟通管理计划",
-            "采购管理计划",
-            "需求跟踪",
-            "质量核对",
+            "gantt",
+            "经验教训",
+            "lessons-learned",
+            "风险报告",
+            "risk-report",
+            "raci",
+            "swot",
+            "事前验尸",
         ],
     )
     allowed_draft_target = _contains_any(
@@ -85,11 +87,13 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
         ],
     )
     if draft_intent and unsupported_target and not allowed_draft_target:
-        slug = "wbs"
-        if _contains_any(text, ["干系人", "stakeholder"]):
-            slug = "stakeholder-register"
-        elif _contains_any(text, ["甘特"]):
+        slug = "stakeholder-register"
+        if _contains_any(text, ["甘特", "gantt"]):
             slug = "gantt-chart"
+        elif _contains_any(text, ["经验教训", "lessons"]):
+            slug = "lessons-learned-register"
+        elif _contains_any(text, ["风险报告", "risk-report"]):
+            slug = "risk-report"
         return [
             {
                 "tool_calls": [
@@ -435,7 +439,7 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
                             "candidate_slugs": [
                                 "project-charter",
                                 "stakeholder-register",
-                                "assumption-log",
+                                "raci-matrix",
                             ],
                         },
                     }
@@ -447,7 +451,7 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
                     "1. **项目章程**（project-charter，启动/整合）——正式授权项目，"
                     "明确目的与高层约束；适合「还没正式立项」的当下。\n"
                     "2. **干系人登记册**（stakeholder-register）——先认清发起人与关键干系人。\n"
-                    "3. **假设日志**（assumption-log）——把未验证假设写清楚，降低后期翻车。\n"
+                    "3. **RACI 矩阵**（raci-matrix）——厘清谁负责、谁批准、谁协作。\n"
                     "可继续说「帮我起草项目章程」进入起草导出。"
                 )
             },
@@ -464,8 +468,8 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
                             "question": text,
                             "candidate_slugs": [
                                 "risk-register",
-                                "risk-management-plan",
                                 "risk-report",
+                                "pre-mortem",
                             ],
                         },
                     }
@@ -475,8 +479,8 @@ def demo_script_for_user_text(user_text: str) -> list[dict[str, Any]]:
                 "content": (
                     "针对风险类卡点，推荐：\n"
                     "1. **风险登记册**（risk-register）——记录风险、评估与应对。\n"
-                    "2. **风险管理计划**——先对齐识别/评估方法。\n"
-                    "3. **风险报告**——需要向发起人汇报态势时使用。\n"
+                    "2. **风险报告**（risk-report）——需要向发起人汇报态势时使用。\n"
+                    "3. **事前验尸**（pre-mortem）——提前设想失败场景，补齐盲点。\n"
                     "可说「起草风险登记册」开始录入 1～3 条。"
                 )
             },

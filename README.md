@@ -1,6 +1,6 @@
 # pmbox
 
-面向个人项目经理的 CLI Agent：根据工作卡点推荐 PMBOK 工具，并起草「项目章程 / 风险登记册」Markdown。
+面向个人项目经理的 CLI Agent：根据工作卡点推荐 PM 工具（正式库约 20 个），并起草「项目章程 / 风险登记册」Markdown。
 
 技术栈：Python 3.11+、自研 Agent Loop、`openai` SDK（OpenAI 兼容网关）、Pydantic、标准库 `input()`。
 
@@ -107,7 +107,8 @@ printf '帮我起草 WBS\n/quit\n' | USE_FAKE_LLM=true uv run pmbox
 
 ```
 src/pm_agent/     # cli / agent / tools / knowledge / export
-data/tools.json   # ~39 个 PMBOK 工具
+data/tools.json   # 正式 PM 工具库（约 20 个）
+data/tools.archive.json # 已归档的流程文档类工具
 output/           # 导出 Markdown（gitignore）
 tests/            # pytest
 doc/              # PRD / 方案 / 开发计划 / agent_learn
