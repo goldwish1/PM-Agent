@@ -24,5 +24,6 @@ output/*
 # IDE / 系统
 .idea/
 .vscode/
+.specstory/
 *.swp
 .DS_Store
