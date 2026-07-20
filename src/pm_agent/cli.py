@@ -71,6 +71,7 @@ WELCOME = """\
 HELP = """\
 可用指令：
   /help · 帮助     显示本说明
+  /new · 新会话    清除上下文并重新开始
   /quit · 退出     结束进程
   /tools · 工具库  浏览知识库（/tools · /tools <slug> · /tools <关键词>）
   /status · 状态   查看运行配置（路径、max_iter、debug/dump 等）
@@ -116,6 +117,10 @@ def _is_quit(text: str) -> bool:
 
 def _is_help(text: str) -> bool:
     return text == "/help"
+
+
+def _is_new(text: str) -> bool:
+    return text == "/new"
 
 
 def _is_status(text: str) -> bool:
@@ -255,6 +260,15 @@ def main() -> None:
 
         if _is_help(raw):
             _print_help()
+            continue
+
+        if _is_new(raw):
+            state.clear()
+            user_turn = 0
+            print(
+                "已开启新会话。可直接描述新问题，或输入 /help。",
+                flush=True,
+            )
             continue
 
         if is_tools_command(raw):

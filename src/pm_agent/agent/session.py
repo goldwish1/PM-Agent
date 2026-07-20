@@ -225,6 +225,18 @@ class SessionState:
     def append(self, message: ChatMessage) -> None:
         self.messages.append(message)
 
+    def clear(self) -> None:
+        """就地清空会话（供 /new）；保留同一对象引用供 Tool 闭包使用。"""
+        self.messages = []
+        self.mode = SessionMode.IDLE
+        self.clarify_count = 0
+        self.charter_draft = None
+        self.risk_draft = None
+        self.decision_draft = None
+        self.matrix_draft = None
+        self.consulting_tool_slug = None
+        self.consulting_notes = []
+
     def ensure_charter_draft(self) -> CharterDraft:
         if self.charter_draft is None:
             self.charter_draft = CharterDraft()

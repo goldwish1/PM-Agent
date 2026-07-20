@@ -27,6 +27,7 @@ def test_matching_slash_root() -> None:
     cmds = [c for c, _ in matching_slash_commands("/")]
     assert cmds == [
         "/help",
+        "/new",
         "/quit",
         "/tools",
         "/status",
@@ -34,6 +35,11 @@ def test_matching_slash_root() -> None:
         "/dump",
         "/setup-terminal",
     ]
+
+
+def test_matching_slash_new_prefix() -> None:
+    cmds = [c for c, _ in matching_slash_commands("/n")]
+    assert cmds == ["/new"]
 
 
 def test_matching_slash_tools_prefix() -> None:

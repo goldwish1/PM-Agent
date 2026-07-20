@@ -100,6 +100,7 @@ printf '帮我起草 WBS\n/quit\n' | USE_FAKE_LLM=true uv run pmbox
 | 输入 | 行为 |
 |------|------|
 | `/help` | 能力说明与演示句 |
+| `/new` | 清除上下文并重新开始 |
 | `/quit` | 结束进程 |
 | `/status` | 查看运行配置（路径、max_iter、debug/dump） |
 | 空回车 | 提示示例卡点（不进 Loop） |

@@ -10,6 +10,12 @@
 
 ## 新增功能
 
+### 2026-07-20 · CLI `/new` 清空会话
+
+- **新增加了什么功能**：元指令 `/new`：就地清空 `SessionState`（对话、mode、草稿、陪跑状态），`user_turn` 归零；保留 debug/dump、LLM 与输入历史。
+- **原因**：多轮咨询后开启新问题需清上下文，避免旧草稿/澄清状态干扰；类似 Claude Code `/clear`。
+- **一句话方案**：`SessionState.clear()` 就地 reset（工具闭包仍指向同一对象）+ slash 补全与 HELP/README。
+
 ### 2026-07-20 · 精简欢迎语与 /status
 
 - **新增加了什么功能**：启动欢迎语与 `[config]` 精简为一屏短文案 + 一行摘要；新增只读 `/status` 查看完整运行配置；`/debug` / `/dump` 切换后打印同一套完整状态。

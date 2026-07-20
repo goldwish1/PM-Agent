@@ -39,6 +39,7 @@ _history = InMemoryHistory()
 # (命令, 说明) — 仅 slash 元指令进入补全列表
 SLASH_COMMANDS: tuple[tuple[str, str], ...] = (
     ("/help", "显示本说明"),
+    ("/new", "清除上下文并重新开始"),
     ("/quit", "结束进程"),
     ("/tools", "浏览知识库工具"),
     ("/status", "查看运行配置"),
