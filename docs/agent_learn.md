@@ -70,6 +70,12 @@
 
 ## 新增功能
 
+### 2026-07-21 · 对话上下文前三层（API 视图裁剪）
+
+- **新增加了什么功能**：`prepare_messages_for_api` 在每次 LLM 调用前生成裁剪视图——旧回合 tool JSON 压缩、保留最近 15 个用户回合、裁掉历史时注入 `consulting_notes`/draft 快照；`PMBOX_CONTEXT_COMPACT` / `PMBOX_CONTEXT_WINDOW` 可配置。
+- **原因**：对话历史与 tool 返回线性膨胀，固定开销之外的可变上下文易撑满窗口。
+- **一句话方案**：新增 `agent/context.py`，`state.messages` 仍全量 append；`loop.py` 仅对 API 使用视图。第四五层见 `docs/后续迭代注意点.md`。
+
 ### 2026-07-21 · 观测 DeepSeek prompt cache hit/miss
 
 - **新增加了什么功能**：LLM `usage` 提取并展示 `prompt_cache_hit_tokens` / `prompt_cache_miss_tokens`；L1 `[llm]` 摘要与 L2 `usage_total` 均可聚合查看。

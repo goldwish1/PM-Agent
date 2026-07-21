@@ -42,6 +42,8 @@ class Settings:
     provider_label: str
     debug_llm: bool
     debug_dump_llm: bool
+    context_compact: bool
+    context_window_turns: int
     config_notice: str | None = None
 
 
@@ -85,6 +87,22 @@ def _parse_debug_dump_llm() -> bool:
     if parsed is None:
         return True
     return parsed
+
+
+def _parse_context_compact() -> bool:
+    """PMBOX_CONTEXT_COMPACT：未设 → True；仅显式 falsy → False。"""
+    parsed = _parse_bool_env(os.getenv("PMBOX_CONTEXT_COMPACT"))
+    if parsed is None:
+        return True
+    return parsed
+
+
+def _parse_context_window_turns() -> int:
+    raw = os.getenv("PMBOX_CONTEXT_WINDOW", str(15))
+    try:
+        return max(1, int(raw))
+    except ValueError:
+        return 15
 
 
 def resolve_use_fake_llm(
@@ -151,5 +169,7 @@ def load_settings() -> Settings:
         provider_label=provider_label,
         debug_llm=_parse_debug_llm(),
         debug_dump_llm=_parse_debug_dump_llm(),
+        context_compact=_parse_context_compact(),
+        context_window_turns=_parse_context_window_turns(),
         config_notice=notice,
     )

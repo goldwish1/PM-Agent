@@ -85,3 +85,22 @@ def test_fake_script_happy_path_echo_and_add() -> None:
     assert len(tool_msgs) == 2
     assert "echo:" in tool_msgs[0]["content"]
     assert "sum: 3" in tool_msgs[1]["content"]
+
+
+def test_loop_with_context_compact_enabled() -> None:
+    """开启上下文裁剪时 FakeLLM 成功路径仍可用。"""
+    from pm_agent.agent.context import ContextPolicy
+
+    llm = FakeLlmClient(demo_script_for_user_text("请用 echo 说 hello"))
+    registry = build_demo_registry()
+    state = SessionState()
+    reply = handle_user_turn(
+        "请用 echo 说 hello",
+        state,
+        llm,
+        registry,
+        max_iterations=10,
+        context_policy=ContextPolicy(enabled=True, window_turns=15),
+    )
+    assert reply
+    assert any(m.get("role") == "tool" for m in state.messages)

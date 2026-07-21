@@ -6,6 +6,7 @@ import sys
 import threading
 
 from pm_agent import __version__
+from pm_agent.agent.context import context_policy_from_settings
 from pm_agent.agent.debug_log import debug_dir
 from pm_agent.agent.fake_llm import FakeLlmClient, demo_script_for_user_text
 from pm_agent.agent.llm import build_llm_client
@@ -336,6 +337,10 @@ def main() -> None:
             output_dir=settings.output_dir,
             user_turn=user_turn,
             llm_is_fake=settings.use_fake_llm,
+            context_policy=context_policy_from_settings(
+                context_compact=settings.context_compact,
+                context_window_turns=settings.context_window_turns,
+            ),
         )
         print(flush=True)
         print_assistant_reply(reply)

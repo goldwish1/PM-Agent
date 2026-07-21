@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
+from pm_agent.agent.context import ContextPolicy, prepare_messages_for_api
 from pm_agent.agent.debug_log import TurnDebugDump, print_llm_round
 from pm_agent.agent.llm_types import LlmApiError, LlmClient
 from pm_agent.agent.prompts import MAX_CLARIFY_ROUNDS, get_system_prompt
@@ -241,6 +242,7 @@ def run_agent_loop(
     user_turn: int = 1,
     user_text: str = "",
     llm_is_fake: bool = False,
+    context_policy: ContextPolicy | None = None,
 ) -> str:
     """
     在已含本轮 user message 的 session 上跑工具循环。
@@ -270,7 +272,11 @@ def run_agent_loop(
         started = time.perf_counter()
         try:
             with llm_spinner(enabled=tty):
-                response = llm.complete(state.messages, tools=tools_schema)
+                api_messages = prepare_messages_for_api(
+                    state,
+                    policy=context_policy,
+                )
+                response = llm.complete(api_messages, tools=tools_schema)
         except LlmApiError as exc:
             final_text = exc.user_message
             state.append({"role": "assistant", "content": final_text})
@@ -284,7 +290,7 @@ def run_agent_loop(
             turn_dump=turn_dump,
             user_turn=user_turn,
             iteration=round_n,
-            messages=state.messages,
+            messages=api_messages,
             tools_count=tools_count,
             response=response,
             llm_is_fake=llm_is_fake,
@@ -348,6 +354,7 @@ def handle_user_turn(
     output_dir: Path | None = None,
     user_turn: int = 1,
     llm_is_fake: bool = False,
+    context_policy: ContextPolicy | None = None,
 ) -> str:
     """追加用户消息并跑 Agent Loop；维护澄清计数与系统提示。"""
     _ensure_system_prompt(state)
@@ -366,6 +373,7 @@ def handle_user_turn(
         user_turn=user_turn,
         user_text=text,
         llm_is_fake=llm_is_fake,
+        context_policy=context_policy,
     )
     _update_clarify_after_turn(state, tools_before=tools_before, reply=reply)
     return reply
