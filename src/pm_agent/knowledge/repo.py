@@ -13,6 +13,9 @@ from pm_agent.knowledge.categories import USE_CASE_ORDER, validate_use_cases
 
 DEFAULT_BOOSTS_PATH = REPO_ROOT / "data" / "recommendation_boosts.json"
 
+# 得分全 0 时的兜底推荐理由；recommend_tools 据此标 match_strength=weak
+FALLBACK_RECOMMEND_REASON = "信息有限，先从通用启动工具切入"
+
 
 class BoostRule(BaseModel):
     """推荐启发式单条场景桶。"""
@@ -253,7 +256,7 @@ class ToolsRepository:
             for slug in self._fallback_slugs[:2]:
                 tool = self._by_slug.get(slug)
                 if tool:
-                    results.append((tool, "信息有限，先从通用启动工具切入"))
+                    results.append((tool, FALLBACK_RECOMMEND_REASON))
         return results
 
     @staticmethod

@@ -8,11 +8,11 @@ import pytest
 
 from pm_agent.agent.llm import FakeLlmClient, demo_script_for_user_text
 from pm_agent.agent.loop import handle_user_turn
-from pm_agent.agent.prompts import MAX_CLARIFY_ROUNDS
+from pm_agent.agent.prompts import MAX_CLARIFY_ROUNDS, get_system_prompt
 from pm_agent.agent.session import SessionMode, SessionState
 from pm_agent.config import REPO_ROOT
 from pm_agent.knowledge.categories import BOOST_EXPECTED_USE_CASE
-from pm_agent.knowledge.repo import ToolsRepository
+from pm_agent.knowledge.repo import FALLBACK_RECOMMEND_REASON, ToolsRepository
 from pm_agent.tools.bootstrap import build_registry
 from pm_agent.tools.registry import ToolRegistry
 
@@ -152,6 +152,57 @@ def test_recommend_rejects_unknown_slug() -> None:
     assert "project-charter" in returned
     assert "made-up-tool" not in returned
     assert "unicorn-framework" in payload["rejected_slugs"]
+    assert payload.get("match_strength") == "strong"
+
+
+def test_system_prompt_discovery_gate_on_idle() -> None:
+    prompt = get_system_prompt(clarify_count=0, mode=SessionMode.IDLE)
+    assert "发现与推荐闸门" in prompt
+    assert "禁止" in prompt and "随便聊" in prompt
+    assert "优先调用 recommend_tools" in prompt
+    assert "口头判死刑" in prompt or "未拿到工具返回前" in prompt
+
+
+def test_recommend_empty_question_is_weak() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    registry = _registry(repo)
+    payload = json.loads(
+        registry.execute("recommend_tools", {"question": "   ", "context": ""})
+    )
+    assert payload["tools"] == []
+    assert payload["match_strength"] == "weak"
+    assert "暂时匹配不到" in payload["instruction"]
+    assert "闲聊" in payload["instruction"]
+
+
+def test_recommend_fallback_is_weak_match() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    registry = _registry(repo)
+    # 无触发语/boost 的乱码，应落入 fallback
+    payload = json.loads(
+        registry.execute(
+            "recommend_tools",
+            {"question": "zzzxqqq999 unrelated gibberish xyzzy"},
+        )
+    )
+    assert payload["tools"]
+    assert payload["match_strength"] == "weak"
+    assert all(t["reason"] == FALLBACK_RECOMMEND_REASON for t in payload["tools"])
+    assert "不要把下列工具说成强相关首选" in payload["instruction"]
+    assert "闲聊" in payload["instruction"]
+
+
+def test_recommend_strong_match_for_立项() -> None:
+    repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
+    registry = _registry(repo)
+    payload = json.loads(
+        registry.execute("recommend_tools", {"question": "下周立项，还没正式授权"})
+    )
+    assert payload["tools"]
+    assert payload["match_strength"] == "strong"
+    assert "instruction" not in payload
+    slugs = {t["slug"] for t in payload["tools"]}
+    assert "project-charter" in slugs
 
 
 def test_recommend_heuristic_for_立项() -> None:

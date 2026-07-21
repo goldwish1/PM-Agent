@@ -7,8 +7,21 @@ import json
 from pydantic import BaseModel, Field
 
 from pm_agent.knowledge.categories import format_use_cases_label
-from pm_agent.knowledge.repo import ToolsRepository
+from pm_agent.knowledge.repo import FALLBACK_RECOMMEND_REASON, ToolsRepository
 from pm_agent.tools.registry import ToolRegistry, ToolSpec
+
+_EMPTY_INSTRUCTION = (
+    "暂时匹配不到合适工具。请向用户说明，并只问一个问题："
+    "「可以补充：你卡在启动、进度、风险、沟通还是复盘/对外分享？」"
+    "然后停止等待补充；禁止编造库外工具；禁止改为通用闲聊陪跑。"
+)
+
+_WEAK_INSTRUCTION = (
+    "匹配很弱（多为通用兜底）。请向用户说明暂时匹配不到合适工具，"
+    "并只问一个问题：「可以补充：你卡在启动、进度、风险、沟通还是复盘/对外分享？」"
+    "然后停止；不要把下列工具说成强相关首选；"
+    "禁止改为通用闲聊陪跑；禁止编造库外工具。"
+)
 
 
 class RecommendToolsArgs(BaseModel):
@@ -41,6 +54,12 @@ def _filter_whitelist(
         else:
             rejected.append(slug)
     return valid[:3], rejected
+
+
+def _all_fallback(tools_out: list[dict[str, str | list[str] | bool]]) -> bool:
+    if not tools_out:
+        return False
+    return all(t.get("reason") == FALLBACK_RECOMMEND_REASON for t in tools_out)
 
 
 def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> None:
@@ -93,9 +112,10 @@ def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> N
                         "draftable": tool.draftable,
                     }
                 )
-            reasoning_parts.append(
-                "基于卡点关键词在库内启发式匹配 1～3 个工具。"
-            )
+            if tools_out:
+                reasoning_parts.append(
+                    "基于卡点关键词在库内启发式匹配 1～3 个工具。"
+                )
 
         if not tools_out:
             return json.dumps(
@@ -103,8 +123,20 @@ def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> N
                     "reasoning": "无法从库内匹配到可靠推荐。",
                     "tools": [],
                     "rejected_slugs": rejected,
-                    "instruction": "请补充卡点类型（如立项、风险、决策、汇报）后重试；"
-                    "不要编造库外工具。",
+                    "match_strength": "weak",
+                    "instruction": _EMPTY_INSTRUCTION,
+                },
+                ensure_ascii=False,
+            )
+
+        if _all_fallback(tools_out):
+            return json.dumps(
+                {
+                    "reasoning": "关键词无法可靠命中，仅返回通用兜底工具。",
+                    "tools": tools_out,
+                    "rejected_slugs": rejected,
+                    "match_strength": "weak",
+                    "instruction": _WEAK_INSTRUCTION,
                 },
                 ensure_ascii=False,
             )
@@ -114,6 +146,7 @@ def register_recommend_tools(registry: ToolRegistry, repo: ToolsRepository) -> N
                 "reasoning": " ".join(reasoning_parts),
                 "tools": tools_out,
                 "rejected_slugs": rejected,
+                "match_strength": "strong",
             },
             ensure_ascii=False,
         )
