@@ -97,6 +97,7 @@ printf '帮我起草 WBS\n/quit\n' | USE_FAKE_LLM=true uv run pmbox
 交互终端下输入 `@` 路径前缀时，可递归补全当前工作目录下的 `.md`/`.txt` 文件。
 
 输入中可用 `@./notes.md` 附带本地 `.md`/`.txt`（发送前显示 `[attach]`），辅助更准确的工具推荐。
+粘贴较长文本（≥10 行或 ≥2KB）时自动折叠为 `[paste] +N lines`，提交后显示 `[paste] ok` 并注入全文。
 
 | 输入 | 行为 |
 |------|------|

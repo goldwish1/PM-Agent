@@ -6,9 +6,10 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from pm_agent.cli_text_budget import truncate_utf8
+
 MAX_FILE_BYTES = 64 * 1024
 MAX_TOTAL_BYTES = 128 * 1024
-TRUNCATION_SUFFIX = "\n\n…[内容已截断]"
 _ALLOWED_SUFFIX = {".md", ".txt"}
 
 ATTACH_EMPTY_HINT = (
@@ -51,14 +52,6 @@ class AttachResult:
 
 _QUOTED = re.compile(r'@(?:"([^"]+)"|\'([^\']+)\')')
 _BARE = re.compile(r"@([^\s@]+)")
-
-
-def _truncate_utf8(text: str, max_bytes: int) -> tuple[str, bool]:
-    raw = text.encode("utf-8")
-    if len(raw) <= max_bytes:
-        return text, False
-    cut = raw[:max_bytes].decode("utf-8", errors="ignore")
-    return cut + TRUNCATION_SUFFIX, True
 
 
 def load_attachment(
@@ -108,7 +101,7 @@ def load_attachment(
         )
 
     limit = min(MAX_FILE_BYTES, remaining_budget)
-    content, truncated = _truncate_utf8(text, limit)
+    content, truncated = truncate_utf8(text, limit)
     return AttachItem(
         ok=True,
         display_name=display,

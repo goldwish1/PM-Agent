@@ -12,12 +12,8 @@ from pm_agent.agent.llm import build_llm_client
 from pm_agent.agent.llm_types import LlmApiError, LlmClient
 from pm_agent.agent.loop import handle_user_turn
 from pm_agent.agent.session import SessionState
-from pm_agent.cli_attach import (
-    ATTACH_EMPTY_HINT,
-    format_attach_line,
-    resolve_attachments,
-)
 from pm_agent.cli_input import read_user_line
+from pm_agent.cli_material import MATERIAL_EMPTY_HINT, resolve_user_material
 from pm_agent.cli_render import print_assistant_reply
 from pm_agent.cli_terminal import integrated_terminal_hint, setup_terminal_keybinding
 from pm_agent.cli_tools import format_tools_reply, is_tools_command
@@ -82,6 +78,7 @@ HELP = """\
 交互终端下 Shift+Enter 换行、Enter 提交（集成终端需先 /setup-terminal）。
 输入 / 或 /h 可边打边补，Tab 补全完整命令。
 输入 @ 路径前缀时，会递归提示当前工作目录下的 .md/.txt 文件。
+粘贴较长文本（≥10 行或 ≥2KB）时自动折叠为 [paste] +N lines，提交后显示 [paste] ok。
 ↑/↓ 可回填本会话已提交的输入（进程结束后清空）。
 
 演示句（Fake / 真模型均可试）：
@@ -245,7 +242,8 @@ def main() -> None:
     user_turn = 0
     while True:
         try:
-            raw = read_user_line("> ").strip()
+            user_line = read_user_line("> ")
+            raw = user_line.text.strip()
         except (EOFError, KeyboardInterrupt):
             print("\n再见。", flush=True)
             break
@@ -308,11 +306,11 @@ def main() -> None:
             print(setup_terminal_keybinding(), flush=True)
             continue
 
-        attach = resolve_attachments(raw)
-        for item in attach.items:
-            print(format_attach_line(item), flush=True)
-        if not attach.should_enter_loop:
-            print(ATTACH_EMPTY_HINT, flush=True)
+        material = resolve_user_material(user_line.text, pastes=user_line.pastes)
+        for status in material.status_lines:
+            print(status, flush=True)
+        if not material.should_enter_loop:
+            print(MATERIAL_EMPTY_HINT, flush=True)
             continue
 
         user_turn += 1
@@ -320,7 +318,7 @@ def main() -> None:
             llm = _client_for_turn(
                 use_fake=settings.use_fake_llm,
                 real_warmup=real_warmup,
-                user_text=attach.assembled,
+                user_text=material.assembled,
             )
         except LlmApiError as exc:
             print(f"[llm] {exc.user_message}", flush=True)
@@ -328,7 +326,7 @@ def main() -> None:
             continue
 
         reply = handle_user_turn(
-            attach.assembled,
+            material.assembled,
             state,
             llm,
             registry,

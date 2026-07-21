@@ -10,8 +10,10 @@ from prompt_toolkit.input.ansi_escape_sequences import ANSI_SEQUENCES
 from prompt_toolkit.keys import Keys
 
 from pm_agent.cli_input import (
+    PasteSession,
     PmboxCompleter,
     SlashCompleter,
+    UserLine,
     _accept_current_completion,
     _build_input_key_bindings,
     _patch_shift_enter_sequences,
@@ -99,7 +101,8 @@ def test_read_user_line_falls_back_when_not_tty() -> None:
         patch("pm_agent.cli_input.input", return_value="  hello  ") as mock_input,
     ):
         mock_stdin.isatty.return_value = False
-        assert read_user_line("> ") == "  hello  "
+        line = read_user_line("> ")
+        assert line == UserLine(text="  hello  ")
         mock_input.assert_called_once_with("> ")
 
 
@@ -109,7 +112,8 @@ def test_read_user_line_uses_multiline_prompt_when_tty() -> None:
         patch("pm_agent.cli_input.prompt", return_value="line1\nline2") as mock_prompt,
     ):
         mock_stdin.isatty.return_value = True
-        assert read_user_line("> ") == "line1\nline2"
+        line = read_user_line("> ")
+        assert line == UserLine(text="line1\nline2")
         mock_prompt.assert_called_once()
         _, kwargs = mock_prompt.call_args
         assert kwargs["multiline"] is True
@@ -117,10 +121,47 @@ def test_read_user_line_uses_multiline_prompt_when_tty() -> None:
 
 
 def test_input_key_bindings_register_enter_and_shift_enter() -> None:
-    bindings = _build_input_key_bindings()
+    bindings = _build_input_key_bindings(PasteSession())
     keys = {binding.keys for binding in bindings.bindings}
     assert (Keys.ControlM,) in keys
     assert (Keys.ControlJ,) in keys
+    assert (Keys.BracketedPaste,) in keys
+
+
+def test_paste_session_add_returns_placeholder() -> None:
+    session = PasteSession()
+    body = "\n".join(f"line{i}" for i in range(12))
+    placeholder = session.add(body)
+    assert placeholder == "[paste] +12 lines"
+    assert len(session.blocks) == 1
+    assert session.blocks[0].content == body
+
+
+def test_bracketed_paste_binding_folds_large_paste() -> None:
+    session = PasteSession()
+    bindings = _build_input_key_bindings(session)
+    handler = next(
+        b.handler for b in bindings.bindings if b.keys == (Keys.BracketedPaste,)
+    )
+    body = "\n".join(f"line{i}" for i in range(12))
+    buffer = MagicMock()
+    event = MagicMock(current_buffer=buffer, data=body)
+    handler(event)
+    buffer.insert_text.assert_called_once_with("[paste] +12 lines")
+    assert session.blocks[0].content == body
+
+
+def test_bracketed_paste_binding_keeps_small_paste() -> None:
+    session = PasteSession()
+    bindings = _build_input_key_bindings(session)
+    handler = next(
+        b.handler for b in bindings.bindings if b.keys == (Keys.BracketedPaste,)
+    )
+    buffer = MagicMock()
+    event = MagicMock(current_buffer=buffer, data="短文本")
+    handler(event)
+    buffer.insert_text.assert_called_once_with("短文本")
+    assert session.blocks == ()
 
 
 def test_shift_enter_sequences_map_to_control_j() -> None:

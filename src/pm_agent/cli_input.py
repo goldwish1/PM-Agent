@@ -18,6 +18,13 @@ from prompt_toolkit.key_binding.bindings.named_commands import get_by_name
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.shortcuts import CompleteStyle
 
+from pm_agent.cli_paste import (
+    PasteBlock,
+    count_lines,
+    format_paste_placeholder,
+    should_fold_paste,
+)
+
 # Shift+Enter 在多数终端会落成下列 CSI；prompt_toolkit 默认把它们当成 Enter。
 # 重映射为 ControlJ，再由自定义绑定插入换行。
 _SHIFT_ENTER_SEQUENCES: tuple[str, ...] = (
@@ -58,6 +65,29 @@ IGNORED_ATTACH_DIR_NAMES: tuple[str, ...] = (
     ".superpowers",
     "__pycache__",
 )
+
+
+@dataclass(frozen=True)
+class UserLine:
+    """一次用户输入：可见文本 + 粘贴侧车。"""
+
+    text: str
+    pastes: tuple[PasteBlock, ...] = ()
+
+
+class PasteSession:
+    """单次 prompt 调用内的粘贴侧车。"""
+
+    def __init__(self) -> None:
+        self._blocks: list[PasteBlock] = []
+
+    def add(self, content: str) -> str:
+        self._blocks.append(PasteBlock(content=content))
+        return format_paste_placeholder(count_lines(content))
+
+    @property
+    def blocks(self) -> tuple[PasteBlock, ...]:
+        return tuple(self._blocks)
 
 
 @dataclass(frozen=True)
@@ -182,7 +212,7 @@ def _accept_current_completion(event: Any) -> bool:
     return True
 
 
-def _build_input_key_bindings() -> KeyBindings:
+def _build_input_key_bindings(session: PasteSession) -> KeyBindings:
     kb = KeyBindings()
 
     @kb.add("tab")
@@ -201,19 +231,30 @@ def _build_input_key_bindings() -> KeyBindings:
     def _(event: Any) -> None:
         event.current_buffer.insert_text("\n")
 
+    @kb.add(Keys.BracketedPaste)
+    def _(event: Any) -> None:
+        pasted = event.data
+        if should_fold_paste(pasted):
+            placeholder = session.add(pasted)
+            event.current_buffer.insert_text(placeholder)
+            return
+        event.current_buffer.insert_text(pasted)
+
     return kb
 
 
-def read_user_line(prompt_text: str = "> ") -> str:
+def read_user_line(prompt_text: str = "> ") -> UserLine:
     """TTY 下用 prompt_toolkit（边打边补、多行输入）；管道/非交互回退 input()。"""
     if not sys.stdin.isatty():
-        return input(prompt_text)
-    return prompt(
+        return UserLine(text=input(prompt_text))
+    session = PasteSession()
+    text = prompt(
         prompt_text,
         completer=PmboxCompleter(),
         history=_history,
-        key_bindings=_build_input_key_bindings(),
+        key_bindings=_build_input_key_bindings(session),
         complete_while_typing=True,
         complete_style=CompleteStyle.COLUMN,
         multiline=True,
     )
+    return UserLine(text=text, pastes=session.blocks)
