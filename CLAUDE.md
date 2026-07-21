@@ -9,20 +9,20 @@ PM Agent 是一个面向个人项目经理的 CLI 工具。用户可通过终端
 
 ## 项目状态
 
-当前处于 **MVP 可演示完成**（阶段 0～5）。需求/方案见 `doc/`；实现见 `src/pm_agent/`。
+当前处于 **MVP 可演示完成**（阶段 0～5）。需求/方案见本地 `docs/`（gitignore，不入库）；实现见 `src/pm_agent/`。
 
 ## 关键文档
 
-- `doc/PM-Agent-MVP-PRD.md` — 产品需求文档
-- `doc/PM-Agent-技术方案.md` — 技术架构方案（Python、自研 Loop、Tool Registry）
-- `doc/PM-Agent-技术选型调研-2026-07-14.md` — 技术选型调研（含语言从 TS → Python 的修订说明）
-- `doc/PM-Agent-开发计划.md` — 分阶段开发计划（6 个阶段：0～5）
-- `doc/需求孵化.md` — 需求孵化记录
-- `doc/agent_learn.md` — **功能变更与问题解决记录**（见下方说明）
+- `docs/PM-Agent-MVP-PRD.md` — 产品需求文档
+- `docs/PM-Agent-技术方案.md` — 技术架构方案（Python、自研 Loop、Tool Registry）
+- `docs/PM-Agent-技术选型调研-2026-07-14.md` — 技术选型调研（含语言从 TS → Python 的修订说明）
+- `docs/PM-Agent-开发计划.md` — 分阶段开发计划（6 个阶段：0～5）
+- `docs/需求孵化.md` — 需求孵化记录
+- `docs/agent_learn.md` — **功能变更与问题解决记录**（见下方说明）
 
 ## 变更记录要求
 
-每当新增功能或解决问题时，必须在 `doc/agent_learn.md` 中做简要记录：
+每当新增功能或解决问题时，必须在 `docs/agent_learn.md` 中做简要记录：
 
 **新增功能** 需记录：
 - 新增加了什么功能

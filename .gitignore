@@ -21,6 +21,9 @@ htmlcov/
 output/*
 !output/.gitkeep
 
+# 本地文档（需求/方案/变更记录等，不入库）
+docs/
+
 # IDE / 系统
 .idea/
 .vscode/
