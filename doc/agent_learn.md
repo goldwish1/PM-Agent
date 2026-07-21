@@ -2,6 +2,18 @@
 
 ## 解决问题
 
+### 2026-07-21 · 开源前去掉仓库内默认公司网关
+
+- **遇到的问题**：未配置 `.env` 时默认指向公司内网兼容端，不宜进入公开仓库。
+- **原因**：早期本地开发把内网 base_url/model 写进了 `getenv` 回退默认与示例文档。
+- **解决方案**：回退默认改为官方 `api.deepseek.com` / `deepseek-chat`；兼容网关仅通过本地 `.env` 覆盖；同步 `.env.example`、README 与单测。
+
+### 2026-07-21 · 开源前移出版本库的私人/调试文件
+
+- **遇到的问题**：`.cursor/debug-*.log`、`.DS_Store`、`我的笔记.md` 曾被跟踪，不宜公开。
+- **原因**：本地调试与系统文件误入版本库。
+- **解决方案**：`git rm --cached` 停止跟踪；`.gitignore` 补充对应规则；新增 MIT LICENSE。
+
 ### 2026-07-20 · Rich Markdown 行内代码黑底刺眼
 
 - **遇到的问题**：`/tools` 等渲染结果里 slug（`` `code` ``）带大块黑底，观感差。
@@ -312,11 +324,11 @@ scenarios: 「下周要立项，还没正式授权」…「别和范围说明书
 - **原因**：产品对外名称从「PM Agent」改为更好记的 CLI 命令。
 - **一句话方案**：保留 Python 包 `pm_agent`；`pyproject.toml` 注册 `pmbox`；运行时文案与 README/开发命令同步；`python -m pm_agent` 仍可用。
 
-### 2026-07-14 · 适配 NIO OpenAI 兼容网关
+### 2026-07-14 · 支持 OpenAI 兼容网关配置
 
-- **新增加了什么功能**：默认 `DEEPSEEK_BASE_URL=https://api.deepseek.com/v1`、`DEEPSEEK_MODEL=DeepSeek-V4-Flash`；Real 客户端超时 120s；`.env.example` / README 说明兼容网关。
-- **原因**：用户实际走 NIO 网关而非官方 `api.deepseek.com`。
-- **一句话方案**：保留 `DEEPSEEK_*` 变量名，仅改默认 base_url/model 与文档表述。
+- **新增加了什么功能**：Real 客户端超时 120s；通过 `DEEPSEEK_BASE_URL` / `DEEPSEEK_MODEL` 配置任意 OpenAI 兼容端（默认官方 DeepSeek）。
+- **原因**：开发期可能使用非官方兼容网关，需可配置且不把特定内网写进公开默认。
+- **一句话方案**：保留 `DEEPSEEK_*` 变量名；网关与模型由 `.env` 覆盖，仓库仅提供官方回退默认。
 
 ### 2026-07-14 · 阶段 5：打磨与 PRD 验收
 

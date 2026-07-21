@@ -27,3 +27,5 @@ output/*
 .specstory/
 *.swp
 .DS_Store
+.cursor/debug-*.log
+我的笔记.md

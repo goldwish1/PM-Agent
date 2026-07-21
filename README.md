@@ -28,9 +28,10 @@ cp .env.example .env
 # FakeLLM（无需 API Key，适合本地练循环与验收演示）
 USE_FAKE_LLM=true uv run pmbox
 
-# DeepSeek / OpenAI 兼容网关（.env 中有有效 Key；未设 USE_FAKE_LLM 时有 Key 自动走 Real）
-# 本仓库默认示例：DEEPSEEK_BASE_URL=https://api.deepseek.com/v1
-#                 DEEPSEEK_MODEL=DeepSeek-V4-Flash
+# DeepSeek / OpenAI 兼容端（.env 中有有效 Key；未设 USE_FAKE_LLM 时有 Key 自动走 Real）
+# 默认：DEEPSEEK_BASE_URL=https://api.deepseek.com
+#       DEEPSEEK_MODEL=deepseek-chat
+# 兼容网关：在 .env 覆盖 BASE_URL / MODEL 即可
 uv run pmbox
 
 # 强制 Real
@@ -122,3 +123,7 @@ doc/              # PRD / 方案 / 开发计划 / agent_learn
 **阶段 0～5 已完成**（工程骨架 → Fake 循环 → 真 LLM → 知识库推荐 → 起草导出 → PRD 打磨验收）。
 
 详见 `doc/PM-Agent-开发计划.md`、`CLAUDE.md`。
+
+## License
+
+[MIT](LICENSE)

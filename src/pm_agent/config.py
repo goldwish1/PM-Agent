@@ -140,9 +140,9 @@ def load_settings() -> Settings:
     return Settings(
         deepseek_api_key=deepseek_api_key if has_key else "",
         deepseek_base_url=os.getenv(
-            "DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"
+            "DEEPSEEK_BASE_URL", "https://api.deepseek.com"
         ).strip(),
-        deepseek_model=os.getenv("DEEPSEEK_MODEL", "DeepSeek-V4-Flash").strip(),
+        deepseek_model=os.getenv("DEEPSEEK_MODEL", "deepseek-chat").strip(),
         openai_api_key=os.getenv("OPENAI_API_KEY", "").strip(),
         use_fake_llm=use_fake,
         output_dir=output_dir,

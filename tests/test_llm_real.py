@@ -59,8 +59,8 @@ def test_load_settings_auto_fake_without_key(
     assert settings.use_fake_llm is True
     assert settings.provider_label == "FakeLLM"
     assert settings.config_notice is not None
-    assert settings.deepseek_base_url == "https://api.deepseek.com/v1"
-    assert settings.deepseek_model == "DeepSeek-V4-Flash"
+    assert settings.deepseek_base_url == "https://api.deepseek.com"
+    assert settings.deepseek_model == "deepseek-chat"
 
 
 def test_classify_auth_rate_network_errors() -> None:
@@ -106,8 +106,8 @@ def test_openai_compatible_client_parses_tool_calls() -> None:
 
     llm = OpenAICompatibleClient(
         api_key="sk-test",
-        base_url="https://api.deepseek.com/v1",
-        model="DeepSeek-V4-Flash",
+        base_url="https://api.deepseek.com",
+        model="deepseek-chat",
         client=mock_client,
     )
     result = llm.complete(
@@ -120,7 +120,7 @@ def test_openai_compatible_client_parses_tool_calls() -> None:
     assert result["tool_calls"][0]["arguments"] == {"text": "hello"}
     mock_client.chat.completions.create.assert_called_once()
     kwargs = mock_client.chat.completions.create.call_args.kwargs
-    assert kwargs["model"] == "DeepSeek-V4-Flash"
+    assert kwargs["model"] == "deepseek-chat"
     assert "tools" in kwargs
 
 
