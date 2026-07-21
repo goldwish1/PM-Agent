@@ -1,5 +1,24 @@
 # PM Agent 变更记录
 
+## 新增功能
+
+### 2026-07-21 · 范围与变更管控家族 5 个工具发布
+
+- **新增加了什么功能**：通过 pm-tool-catalog 工作流批量新增 5 个 PM 工具：
+  - 范围蔓延协商（scope-creep-negotiation）：用「接/拒/调」三路径应对增量需求
+  - 变更影响快速评估（change-impact-triage）：多维影响量化评估
+  - 需求澄清画布（requirements-clarification-canvas）：六问结构化需求澄清
+  - 交付物完成定义 DoD（deliverable-dod）：开工前约定完成条件
+  - 范围争议调解（scope-conflict-resolution）：书面证据+分级调解
+- **原因**：工具库在「范围与需求」「变更与管控」分类完全空白，PM 真实卡点无法被命中
+- **方案**：走完 pm-tool-catalog 完整流程（prompt→ingest→review→eval→promote），每个工具附带 13 条黄金评测用例、recommendation_boosts 规则
+
+### 2026-07-21 · 新增评测用例
+
+- **新增加了什么功能**：为上述 5 个工具生成 65 条黄金评测用例（每个 9 正例+2 边界+2 反例），合并后黄金集从 168 条增至 233 条
+- **原因**：新工具必须有评测覆盖才能通过发布门禁
+- **方案**：通过 eval-prompt 生成草案，人工审核后写入 tool_recommendation_cases.json
+
 ## 解决问题
 
 ### 2026-07-21 · Agent 约束文件补充开源与安全守则

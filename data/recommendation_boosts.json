@@ -393,6 +393,31 @@
         "risk-register"
       ],
       "reason": "与方案决策/权衡相关"
+    },
+    {
+      "keywords": ["加需求", "口头承诺", "范围蔓延", "追加需求", "不接怕影响关系", "版本中期", "往里塞需求", "上线前"],
+      "slugs": ["scope-creep-negotiation", "moscow-prioritization", "decision-record"],
+      "reason": "与范围蔓延协商相关"
+    },
+    {
+      "keywords": ["变更影响", "改一下要", "返工成本", "影响范围", "影不影响", "要改接口", "会不会影响", "得评估一下"],
+      "slugs": ["change-impact-triage", "decision-record", "risk-register"],
+      "reason": "与变更影响快速评估相关"
+    },
+    {
+      "keywords": ["需求文档写得太模糊", "理解不一样", "没说数据格式", "没说分页", "没说几级审批", "做完了对方说不是他要的", "上线后业务方说不是他要的", "什么样的响应"],
+      "slugs": ["requirements-clarification-canvas", "five-whys", "raci-matrix"],
+      "reason": "与需求澄清相关"
+    },
+    {
+      "keywords": ["验收时", "做完了", "完成条件", "怕验收时扯皮", "交付物", "缺少测试报告"],
+      "slugs": ["deliverable-dod", "lessons-learned-register", "decision-record"],
+      "reason": "与交付物完成定义相关"
+    },
+    {
+      "keywords": ["范围分歧", "范围争议", "各执一词", "对范围有分歧", "合同里写得太模糊", "都认为不该自己负责", "双方僵住了", "乙方说满足"],
+      "slugs": ["scope-conflict-resolution", "conflict-resolution-process", "difficult-conversation-prep"],
+      "reason": "与范围争议调解相关"
     }
   ]
 }

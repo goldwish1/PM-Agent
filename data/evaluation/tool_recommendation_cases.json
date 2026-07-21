@@ -3824,5 +3824,1483 @@
       "反例",
       "无责事后复盘"
     ]
+  },
+  {
+    "id": "scope-013",
+    "query": "需求越加越多，又不敢拒绝，怕老板不高兴",
+    "context": "项目执行阶段，上级频繁追加需求",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-creep-negotiation",
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "范围蔓延",
+      "执行阶段"
+    ]
+  },
+  {
+    "id": "scope-014",
+    "query": "客户口头说先做这个功能，但没有正式变更流程，我怕回头不认账",
+    "context": "客户在非正式场合提出需求变更",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-creep-negotiation",
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "口头变更",
+      "书面记录"
+    ]
+  },
+  {
+    "id": "scope-015",
+    "query": "评审会开成了需求收集会，本来确定的范围又被打开了",
+    "context": "需求评审会上各方不断提新需求",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-creep-negotiation",
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "范围失控",
+      "评审"
+    ]
+  },
+  {
+    "id": "scope-016",
+    "query": "项目中期老板说这个功能很小顺手做了吧，但我觉得会影响交付",
+    "context": "执行阶段被要求加小需求",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "scope-creep-negotiation"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "增量需求",
+      "小需求"
+    ]
+  },
+  {
+    "id": "scope-017",
+    "query": "不做客户不高兴，做了肯定延期，怎么跟客户谈范围",
+    "context": "客户提出额外需求",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-creep-negotiation",
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "客户需求",
+      "延期"
+    ]
+  },
+  {
+    "id": "scope-018",
+    "query": "每次版本中期产品经理都往里塞需求，说好的冻结等于没有",
+    "context": "迭代过程中范围持续膨胀",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-creep-negotiation",
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "迭代",
+      "范围冻结"
+    ]
+  },
+  {
+    "id": "scope-019",
+    "query": "合作方说这个很简单，但我评估下来涉及三个模块的改动",
+    "context": "外部合作方低估需求复杂度",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "scope-creep-negotiation"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "复杂度评估",
+      "外部合作"
+    ]
+  },
+  {
+    "id": "scope-020",
+    "query": "上线前两周甲方提了新需求，不接怕影响关系，接了必然影响发布日",
+    "context": "交付前被追加需求",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-creep-negotiation",
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "上线前",
+      "交付压力"
+    ]
+  },
+  {
+    "id": "scope-021",
+    "query": "项目做了一半，老板口头承诺客户加功能，我现在才知道",
+    "context": "上级未经评估承诺客户需求",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "scope-creep-negotiation"
+    ],
+    "required_top3": [
+      "scope-creep-negotiation"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "口头承诺",
+      "被动接受"
+    ]
+  },
+  {
+    "id": "scope-022",
+    "query": "还在做规划，需求列表还没定下来，怎么排优先级",
+    "context": "项目计划阶段，需求尚未锁定基线",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "moscow-prioritization"
+    ],
+    "forbidden_top3": [
+      "scope-creep-negotiation"
+    ],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "计划阶段",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-023",
+    "query": "这个变更到底要花多少人天，影响几个系统",
+    "context": "收到变更请求需要量化工作量",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "risk-register"
+    ],
+    "required_top3": [
+      "risk-register"
+    ],
+    "forbidden_top3": [
+      "scope-creep-negotiation"
+    ],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "量化评估",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-024",
+    "query": "我手里有十个需求不知道怎么排序，哪些先做哪些后做",
+    "context": "需求太多需要排序优先级",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "moscow-prioritization"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "scope-creep-negotiation"
+    ],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "优先级排序",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-025",
+    "query": "合同到期了，我要核对交付物清单做验收",
+    "context": "项目收尾验收",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "lessons-learned-register"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "scope-creep-negotiation"
+    ],
+    "requires_tools": [
+      "scope-creep-negotiation"
+    ],
+    "tags": [
+      "验收",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-026",
+    "query": "客户说要改一个字段，我得先知道改一下要多少人天、影不影响上线日",
+    "context": "收到客户变更请求需要评估影响",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "change-impact-triage",
+      "decision-record",
+      "risk-register"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "变更评估",
+      "工作量估算"
+    ]
+  },
+  {
+    "id": "scope-027",
+    "query": "改了A接口会不会影响B系统的功能，得评估一下才能回复",
+    "context": "接口变更需要评估下游影响",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "change-impact-triage",
+      "raci-matrix",
+      "cross-functional-alignment"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "接口变更",
+      "连锁影响"
+    ]
+  },
+  {
+    "id": "scope-028",
+    "query": "领导问这个变更会不会导致延期，我说不出数据",
+    "context": "需要向上汇报变更影响",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "change-impact-triage",
+      "decision-record",
+      "risk-register"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "向上汇报",
+      "延期评估"
+    ]
+  },
+  {
+    "id": "scope-029",
+    "query": "每次评估变更都要花好几天问一圈人，有没有快速评估框架",
+    "context": "变更评估效率低",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "change-impact-triage",
+      "decision-record",
+      "risk-register"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "评估效率",
+      "框架"
+    ]
+  },
+  {
+    "id": "scope-030",
+    "query": "供应商说要换一个核心组件型号，我想知道对进度和质量的影响",
+    "context": "供应商变更提议",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "change-impact-triage"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "供应商",
+      "组件变更"
+    ]
+  },
+  {
+    "id": "scope-031",
+    "query": "安全评审要求增加额外测试，我需要评估对排期的影响",
+    "context": "安全合规要求引发变更",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "change-impact-triage"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "安全测试",
+      "合规"
+    ]
+  },
+  {
+    "id": "scope-032",
+    "query": "设计稿在开发中途大幅修改，想快速算一下返工成本",
+    "context": "设计变更导致开发返工",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "change-impact-triage",
+      "decision-record",
+      "risk-register"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "设计变更",
+      "返工成本"
+    ]
+  },
+  {
+    "id": "scope-033",
+    "query": "业务方要求改报表计算逻辑，我想按范围/进度/成本/风险四个维度评估一遍",
+    "context": "业务需求变更需要系统化评估",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "change-impact-triage",
+      "cross-functional-alignment",
+      "decision-matrix"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "业务需求",
+      "多维评估"
+    ]
+  },
+  {
+    "id": "scope-034",
+    "query": "上游团队要改接口协议，我想知道对我们这边的影响范围和风险等级",
+    "context": "跨团队接口变更",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "change-impact-triage",
+      "cross-functional-alignment",
+      "raci-matrix"
+    ],
+    "required_top3": [
+      "change-impact-triage"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "接口协议",
+      "跨团队"
+    ]
+  },
+  {
+    "id": "scope-035",
+    "query": "需求越加越多又不敢拒绝，不知道怎么跟客户开口谈",
+    "context": "执行阶段范围蔓延，需要协商话术",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "moscow-prioritization"
+    ],
+    "forbidden_top3": [
+      "change-impact-triage"
+    ],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "范围蔓延",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-036",
+    "query": "变更量很小，在团队容差范围内，我想直接做了不走评估",
+    "context": "小变更在容差范围内",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "change-impact-triage"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "容差",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-037",
+    "query": "两个方案各有优劣，想打分比较一下选哪个",
+    "context": "多方案决策比较",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "decision-matrix"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "change-impact-triage"
+    ],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "方案比较",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-038",
+    "query": "合同条款约定必须执行这项变更，不需要评估",
+    "context": "合同强制变更",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "project-charter"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "change-impact-triage"
+    ],
+    "requires_tools": [
+      "change-impact-triage"
+    ],
+    "tags": [
+      "合同约束",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-039",
+    "query": "PRD 写「优化搜索体验」但没说具体优化什么，开发测试理解不一样",
+    "context": "需求描述模糊",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "requirements-clarification-canvas",
+      "five-whys"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "PRD",
+      "模糊需求"
+    ]
+  },
+  {
+    "id": "scope-040",
+    "query": "业务方说要「批量导入」但没说数据格式、校验规则、失败怎么处理",
+    "context": "需求描述不完整",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "requirements-clarification-canvas",
+      "five-whys"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "批量导入",
+      "细节缺失"
+    ]
+  },
+  {
+    "id": "scope-041",
+    "query": "产品说要做一个审批流，但没说几级审批、超时怎么办、驳回能不能重新提交",
+    "context": "流程类需求边界不清",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "requirements-clarification-canvas",
+      "five-whys"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "审批流",
+      "异常场景"
+    ]
+  },
+  {
+    "id": "scope-042",
+    "query": "开发说做完了，测试说还差得远，产品说理解不一样——怎么对齐",
+    "context": "多方理解不一致",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "requirements-clarification-canvas",
+      "five-whys"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "理解不一致",
+      "对齐"
+    ]
+  },
+  {
+    "id": "scope-043",
+    "query": "每次需求评审过了，上线后业务方说不是他要的",
+    "context": "验收与需求不一致",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "requirements-clarification-canvas",
+      "five-whys"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "验收失败",
+      "需求偏差"
+    ]
+  },
+  {
+    "id": "scope-044",
+    "query": "跨团队依赖的需求，各团队对接口的理解不一样，怎么统一",
+    "context": "跨团队需求对齐",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "requirements-clarification-canvas"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "跨团队",
+      "接口理解"
+    ]
+  },
+  {
+    "id": "scope-045",
+    "query": "新功能上线后用户反馈完全不是他们想要的，到底哪里理解错了",
+    "context": "上线后需求偏差复盘",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": false,
+    "acceptable_top1": [
+      "requirements-clarification-canvas",
+      "raci-matrix",
+      "five-whys"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "上线反馈",
+      "偏差分析"
+    ]
+  },
+  {
+    "id": "scope-046",
+    "query": "需求里说「列表页」但没说分页方式、排序规则、空状态展示",
+    "context": "UI 需求边界缺失",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "requirements-clarification-canvas",
+      "five-whys"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "UI",
+      "边界条件"
+    ]
+  },
+  {
+    "id": "scope-047",
+    "query": "产品说用户点击按钮后系统做出响应——什么样的响应？什么条件下触发？",
+    "context": "交互逻辑不清",
+    "family": "范围与变更管控",
+    "case_type": "typical",
+    "critical": true,
+    "acceptable_top1": [
+      "requirements-clarification-canvas",
+      "five-whys"
+    ],
+    "required_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "交互",
+      "触发条件"
+    ]
+  },
+  {
+    "id": "scope-048",
+    "query": "需求是修改登录页的文案，不需要澄清，直接做",
+    "context": "极简需求不需要澄清",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "sbi-feedback"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "简单需求",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-049",
+    "query": "还在探索期不确定要不要做这个功能，想先验证假设",
+    "context": "探索期不确定性",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "decision-matrix"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "探索期",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-050",
+    "query": "我有十个需求不知道怎么排优先级，先做哪个后做哪个",
+    "context": "需求排序",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "moscow-prioritization"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "排序",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-051",
+    "query": "合同里写得太模糊，和甲方在交付范围上扯不清",
+    "context": "合同范围争议",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "conflict-resolution-process"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "requirements-clarification-canvas"
+    ],
+    "requires_tools": [
+      "requirements-clarification-canvas"
+    ],
+    "tags": [
+      "合同争议",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-052",
+    "query": "做完了对方说不是他要的，怎么提前定义好「做完了」的标准",
+    "context": "交付物验收标准不明确",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "deliverable-dod",
+      "lessons-learned-register"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "验收标准",
+      "完成定义"
+    ]
+  },
+  {
+    "id": "scope-053",
+    "query": "验收时才发现理解不一样，怎么在开工前就对齐",
+    "context": "验收争议",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "deliverable-dod",
+      "lessons-learned-register",
+      "raci-matrix"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "验收争议",
+      "前期对齐"
+    ]
+  },
+  {
+    "id": "scope-054",
+    "query": "外包团队交付一个模块，怕验收时扯皮，想提前定好验收条件",
+    "context": "外包交付管理",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "deliverable-dod",
+      "lessons-learned-register"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "外包",
+      "验收"
+    ]
+  },
+  {
+    "id": "scope-055",
+    "query": "开发说做完了，测试说还没好，产品说差得远——大家对完成的定义不一样",
+    "context": "团队对完成标准分歧",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "deliverable-dod",
+      "lessons-learned-register"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "完成定义分歧",
+      "团队对齐"
+    ]
+  },
+  {
+    "id": "scope-056",
+    "query": "每次上线前都有遗留问题，想定一个上线必须满足的条件清单",
+    "context": "上线前质量门禁",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "deliverable-dod"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "上线条件",
+      "质量门禁"
+    ]
+  },
+  {
+    "id": "scope-057",
+    "query": "跨团队交付接口，双方对「完成」的定义不一样，怎么统一",
+    "context": "跨团队接口交付",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "deliverable-dod"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "跨团队",
+      "接口交付"
+    ]
+  },
+  {
+    "id": "scope-058",
+    "query": "设计稿交付时经常缺标注和切图，想定一个设计交付物的完成清单",
+    "context": "设计交付物标准",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "deliverable-dod"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "设计交付",
+      "标注切图"
+    ]
+  },
+  {
+    "id": "scope-059",
+    "query": "数据分析报告交付时没有数据字典和计算逻辑说明，想标准化",
+    "context": "数据交付物标准化",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "deliverable-dod"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "数据交付",
+      "标准化"
+    ]
+  },
+  {
+    "id": "scope-060",
+    "query": "硬件样机交付时缺少测试报告和认证文件，怎么把交付条件写进合同",
+    "context": "硬件交付管理",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "deliverable-dod"
+    ],
+    "required_top3": [
+      "deliverable-dod"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "硬件",
+      "合同条件"
+    ]
+  },
+  {
+    "id": "scope-061",
+    "query": "需求是改一个文案错误，不需要写 DoD，直接改了就行",
+    "context": "极小任务不需要 DoD",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "sbi-feedback"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "deliverable-dod"
+    ],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "简单任务",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-062",
+    "query": "组织已经有标准的质量门禁流程，还需要再定义 DoD 吗",
+    "context": "组织已有质量流程",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "deliverable-dod"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "组织流程",
+      "边界"
+    ]
+  },
+  {
+    "id": "scope-063",
+    "query": "需求描述模糊，开发测试理解不一样，需要先澄清需求",
+    "context": "需求模糊",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "five-whys"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "deliverable-dod"
+    ],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "需求澄清",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-064",
+    "query": "项目结束了想写结项报告给老板",
+    "context": "项目收尾",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "lessons-learned-register"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "deliverable-dod"
+    ],
+    "requires_tools": [
+      "deliverable-dod"
+    ],
+    "tags": [
+      "结项",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-065",
+    "query": "产品和业务对范围有分歧，会开了三次没结论",
+    "context": "内部范围争议",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-conflict-resolution",
+      "conflict-resolution-process"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "内部争议",
+      "范围分歧"
+    ]
+  },
+  {
+    "id": "scope-066",
+    "query": "甲方和我们对交付范围理解不一样，合同写得太模糊",
+    "context": "合同范围争议",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-conflict-resolution",
+      "five-whys",
+      "moscow-prioritization"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "合同",
+      "范围争议"
+    ]
+  },
+  {
+    "id": "scope-067",
+    "query": "两个部门都认为某项工作不该自己负责，项目卡住了",
+    "context": "职责归属争议",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-conflict-resolution",
+      "conflict-resolution-process"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "职责",
+      "部门争议"
+    ]
+  },
+  {
+    "id": "scope-068",
+    "query": "合同里写「系统集成」但没说集成到什么程度，现在双方各执一词",
+    "context": "合同定义模糊",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-conflict-resolution",
+      "conflict-resolution-process"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "合同模糊",
+      "集成"
+    ]
+  },
+  {
+    "id": "scope-069",
+    "query": "项目章程定义太模糊，现在执行时各部门对范围理解完全不一样",
+    "context": "章程模糊导致范围分歧",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "scope-conflict-resolution"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "章程",
+      "执行分歧"
+    ]
+  },
+  {
+    "id": "scope-070",
+    "query": "验收时客户说交付物不满足合同要求，乙方说满足，两边僵住了",
+    "context": "验收争议",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-conflict-resolution",
+      "raci-matrix",
+      "conflict-resolution-process"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "验收",
+      "合同纠纷"
+    ]
+  },
+  {
+    "id": "scope-071",
+    "query": "项目做了一半发现大家对 MVP 范围的理解完全不同",
+    "context": "MVP 范围分歧",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "scope-conflict-resolution"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "MVP",
+      "范围分歧"
+    ]
+  },
+  {
+    "id": "scope-072",
+    "query": "两个子系统团队都认为某个模块归对方做，没有人认领",
+    "context": "模块归属争议",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": true,
+    "acceptable_top1": [
+      "scope-conflict-resolution",
+      "conflict-resolution-process"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "模块归属",
+      "无人认领"
+    ]
+  },
+  {
+    "id": "scope-073",
+    "query": "客户在验收时说某项功能不在合同里，但我们认为在，怎么调",
+    "context": "客户验收争议",
+    "family": "范围与变更管控",
+    "case_type": "paraphrase",
+    "critical": false,
+    "acceptable_top1": [
+      "scope-conflict-resolution"
+    ],
+    "required_top3": [
+      "scope-conflict-resolution"
+    ],
+    "forbidden_top3": [],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "客户",
+      "验收争议"
+    ]
+  },
+  {
+    "id": "scope-074",
+    "query": "两个同事因为说话语气不好闹矛盾了",
+    "context": "人际冲突",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "conflict-resolution-process"
+    ],
+    "required_top3": [
+      "conflict-resolution-process"
+    ],
+    "forbidden_top3": [
+      "scope-conflict-resolution"
+    ],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "人际冲突",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-075",
+    "query": "只是职责不清还没发生争议，想提前定义清楚",
+    "context": "预防性职责定义",
+    "family": "范围与变更管控",
+    "case_type": "boundary",
+    "critical": false,
+    "acceptable_top1": [
+      "raci-matrix"
+    ],
+    "required_top3": [
+      "raci-matrix"
+    ],
+    "forbidden_top3": [
+      "scope-conflict-resolution"
+    ],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "职责定义",
+      "分流"
+    ]
+  },
+  {
+    "id": "scope-076",
+    "query": "同事开会时经常打断别人，我想给他反馈又不想伤关系",
+    "context": "行为反馈",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "sbi-feedback"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "scope-conflict-resolution"
+    ],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "行为反馈",
+      "反例"
+    ]
+  },
+  {
+    "id": "scope-077",
+    "query": "涉及腐败或泄密问题，需要走合规调查",
+    "context": "合规问题",
+    "family": "范围与变更管控",
+    "case_type": "negative",
+    "critical": false,
+    "acceptable_top1": [
+      "conflict-resolution-process"
+    ],
+    "required_top3": [],
+    "forbidden_top3": [
+      "scope-conflict-resolution"
+    ],
+    "requires_tools": [
+      "scope-conflict-resolution"
+    ],
+    "tags": [
+      "合规",
+      "反例"
+    ]
   }
 ]
