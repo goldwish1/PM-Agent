@@ -136,3 +136,19 @@ uv run python scripts/manage_tool_catalog.py discard <slug> --yes
 - 禁止绕过 dry-run/确认直接归档 `draftable` 或推荐启发式配置中的 slug（须 `--force`）。
 - 禁止手改 `output/evaluation/cases.*` / `baseline.*` 视图；改期望只改 JSON 再 export。
 - 每次新增或解决问题后更新 `doc/agent_learn.md`。
+
+## 推荐匹配升级要点（trigger_phrases → trigger_match_rules）
+
+- 新工具/候选条目在 `tool` 里必须同时提供：
+  - `trigger_phrases`：用户原话示例（用于 search 索引与 eval-prompt，**不再参与 +12 打分**）
+  - `trigger_match_rules`：`all_of`/`any_of` 关键词组合（**唯一 +12 触发源**）
+- 迁移与诊断命令：
+
+```bash
+uv run python scripts/manage_tool_catalog.py migration-status
+uv run python scripts/manage_tool_catalog.py migrate-rules --yes
+uv run python scripts/manage_tool_catalog.py suggest-triggers <slug> [--formal] --max 10
+```
+
+- `migrate-rules` 会为缺规则的条目写盘（精确子串规则 + 关键词派生规则）；已有规则默认跳过，可用 `--force` 覆盖。
+- `suggest-triggers` 输出用于补 `any_of` 的建议，需人工确认后再改 JSON。

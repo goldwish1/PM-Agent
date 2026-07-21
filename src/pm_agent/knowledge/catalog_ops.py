@@ -13,6 +13,10 @@ from pydantic import BaseModel, Field
 from pm_agent.evaluation.dataset import load_evaluation_cases
 from pm_agent.evaluation.models import CaseType, EvaluationCase
 from pm_agent.knowledge.categories import USE_CASE_ORDER, validate_use_cases
+from pm_agent.knowledge.matching import (
+    TriggerMatchRule,
+    build_trigger_match_rules_for_tool,
+)
 from pm_agent.knowledge.repo import (
     PmTool,
     ToolsRepository,
@@ -94,6 +98,8 @@ def strict_tool_issues(tool: PmTool, *, trigger_phrases: list[str] | None = None
         issues.append("scenarios 至少需要一条易混或反例")
     if len({phrase.strip() for phrase in phrases if phrase.strip()}) < 3:
         issues.append("至少需要 3 条不重复的 trigger_phrases")
+    if not tool.trigger_match_rules:
+        issues.append("至少需要 1 条 trigger_match_rules")
     return issues
 
 
@@ -153,6 +159,220 @@ def validate_catalog(
     return result
 
 
+def _raw_has_explicit_rules(item: dict[str, object]) -> bool:
+    rules = item.get("trigger_match_rules")
+    return isinstance(rules, list) and len(rules) > 0
+
+
+class MigrationStatusReport(BaseModel):
+    """trigger_match_rules 迁移进度。"""
+
+    formal_total: int
+    formal_migrated: int
+    formal_pending: list[str]
+    candidate_total: int
+    candidate_migrated: int
+    candidate_pending: list[str]
+
+    @property
+    def complete(self) -> bool:
+        return not self.formal_pending and not self.candidate_pending
+
+
+def migration_status(
+    tools_path: Path | str,
+    candidates_path: Path | str,
+) -> MigrationStatusReport:
+    """扫描 JSON 原文，统计尚未写入显式 trigger_match_rules 的 slug。"""
+
+    tools_file = Path(tools_path)
+    raw_tools = json.loads(tools_file.read_text(encoding="utf-8"))
+    if not isinstance(raw_tools, list):
+        raise ValueError("tools.json 根节点必须是数组")
+
+    formal_pending = [
+        str(item["slug"])
+        for item in raw_tools
+        if isinstance(item, dict) and not _raw_has_explicit_rules(item)
+    ]
+
+    candidates_file = Path(candidates_path)
+    raw_candidates = json.loads(candidates_file.read_text(encoding="utf-8"))
+    if not isinstance(raw_candidates, list):
+        raise ValueError("tool_candidates.json 根节点必须是数组")
+
+    candidate_pending: list[str] = []
+    for item in raw_candidates:
+        if not isinstance(item, dict):
+            continue
+        slug = str(item.get("slug", ""))
+        tool = item.get("tool")
+        if isinstance(tool, dict) and _raw_has_explicit_rules(tool):
+            continue
+        candidate_pending.append(slug)
+
+    formal_total = len(raw_tools)
+    candidate_total = len(raw_candidates)
+    return MigrationStatusReport(
+        formal_total=formal_total,
+        formal_migrated=formal_total - len(formal_pending),
+        formal_pending=sorted(formal_pending),
+        candidate_total=candidate_total,
+        candidate_migrated=candidate_total - len(candidate_pending),
+        candidate_pending=sorted(candidate_pending),
+    )
+
+
+def validate_formal_tools(tools_path: Path | str) -> dict[str, list[str]]:
+    """校验正式库每条工具在 JSON 中显式包含 trigger_match_rules。"""
+
+    raw_tools = json.loads(Path(tools_path).read_text(encoding="utf-8"))
+    if not isinstance(raw_tools, list):
+        raise ValueError("tools.json 根节点必须是数组")
+
+    issues: dict[str, list[str]] = {}
+    for item in raw_tools:
+        if not isinstance(item, dict):
+            continue
+        slug = str(item.get("slug", ""))
+        slug_issues: list[str] = []
+        if not _raw_has_explicit_rules(item):
+            slug_issues.append("JSON 缺少显式 trigger_match_rules")
+        else:
+            phrases = item.get("trigger_phrases")
+            if not isinstance(phrases, list) or len({p for p in phrases if str(p).strip()}) < 3:
+                slug_issues.append("至少需要 3 条 trigger_phrases")
+        if slug_issues:
+            issues[slug] = slug_issues
+    return issues
+
+
+def _rules_to_json(rules: list[TriggerMatchRule]) -> list[dict[str, list[str]]]:
+    return [rule.model_dump(mode="json") for rule in rules]
+
+
+def _collect_phrase_sources(
+    *,
+    trigger_phrases: list[str] | None,
+    scenarios: list[str] | None,
+) -> list[str]:
+    """合并 trigger_phrases 与 scenarios，供规则生成使用。"""
+
+    merged: list[str] = []
+    seen: set[str] = set()
+    for raw in (trigger_phrases or []) + (scenarios or []):
+        if not isinstance(raw, str):
+            continue
+        text = raw.strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        merged.append(text)
+    return merged
+
+
+def _ensure_trigger_phrases(item: dict[str, object]) -> None:
+    """缺 trigger_phrases 时从 scenarios 回填 3～5 条用户原话。"""
+
+    existing = item.get("trigger_phrases")
+    if isinstance(existing, list):
+        unique = {str(p).strip() for p in existing if str(p).strip()}
+        if len(unique) >= 3:
+            return
+    scenarios = item.get("scenarios")
+    if not isinstance(scenarios, list):
+        return
+    picked = [str(s).strip() for s in scenarios if isinstance(s, str) and str(s).strip()][:5]
+    if len(picked) < 3:
+        summary = item.get("summary")
+        if isinstance(summary, str) and summary.strip():
+            picked.append(summary.strip())
+    if len(picked) >= 3:
+        item["trigger_phrases"] = picked[:5]
+
+
+def _list_field(item: dict[str, object], key: str) -> list[str] | None:
+    value = item.get(key)
+    return value if isinstance(value, list) else None
+
+
+def migrate_trigger_rules(
+    tools_path: Path | str,
+    candidates_path: Path | str,
+    *,
+    dry_run: bool = False,
+    slugs: list[str] | None = None,
+    force: bool = False,
+) -> MigrationStatusReport:
+    """为正式库与候选池写入显式 trigger_match_rules（保留既有规则）。"""
+
+    tools_file = Path(tools_path)
+    candidates_file = Path(candidates_path)
+    slug_filter = set(slugs) if slugs else None
+
+    raw_tools = json.loads(tools_file.read_text(encoding="utf-8"))
+    tools_updated = 0
+    for item in raw_tools:
+        if not isinstance(item, dict):
+            continue
+        slug = str(item.get("slug", ""))
+        if slug_filter is not None and slug not in slug_filter:
+            continue
+        if _raw_has_explicit_rules(item) and not force:
+            continue
+        _ensure_trigger_phrases(item)
+        phrases = _collect_phrase_sources(
+            trigger_phrases=_list_field(item, "trigger_phrases"),
+            scenarios=_list_field(item, "scenarios"),
+        )
+        rules = build_trigger_match_rules_for_tool(phrases)
+        if not rules:
+            raise ValueError(f"工具「{slug}」无法从 trigger_phrases 生成规则")
+        item["trigger_match_rules"] = _rules_to_json(rules)
+        tools_updated += 1
+
+    raw_candidates = json.loads(candidates_file.read_text(encoding="utf-8"))
+    candidates_updated = 0
+    for item in raw_candidates:
+        if not isinstance(item, dict):
+            continue
+        slug = str(item.get("slug", ""))
+        if slug_filter is not None and slug not in slug_filter:
+            continue
+        tool = item.get("tool")
+        if not isinstance(tool, dict):
+            continue
+        if _raw_has_explicit_rules(tool) and not force:
+            continue
+        tool_phrases = _list_field(tool, "trigger_phrases")
+        if tool_phrases is None or len(tool_phrases) < 3:
+            _ensure_trigger_phrases(tool)
+        phrases = _collect_phrase_sources(
+            trigger_phrases=_list_field(item, "trigger_phrases"),
+            scenarios=_list_field(tool, "scenarios"),
+        )
+        if not phrases:
+            phrases = _collect_phrase_sources(
+                trigger_phrases=_list_field(tool, "trigger_phrases"),
+                scenarios=None,
+            )
+        rules = build_trigger_match_rules_for_tool(phrases)
+        if not rules:
+            raise ValueError(f"候选「{slug}」无法从 trigger_phrases 生成规则")
+        tool["trigger_match_rules"] = _rules_to_json(rules)
+        candidates_updated += 1
+
+    if not dry_run:
+        _atomic_write_json(tools_file, raw_tools)
+        _atomic_write_json(candidates_file, raw_candidates)
+
+    report = migration_status(tools_path, candidates_path)
+    report.formal_migrated = report.formal_total - len(report.formal_pending)
+    report.candidate_migrated = report.candidate_total - len(report.candidate_pending)
+    _ = tools_updated, candidates_updated
+    return report
+
+
 def build_generation_prompt(
     *,
     family: str,
@@ -176,14 +396,15 @@ def build_generation_prompt(
 1. 仅输出合法 JSON 数组，不要 Markdown 代码围栏或解释。
 2. 每个对象必须符合 ToolCandidate 结构，status 固定为 drafted，quality_score 为 null。
 3. tool 必须是完整正式条目，包含 slug/name/name_en/summary/description/steps/scenarios，
-    以及 draftable/use_cases/trigger_phrases。
+    以及 draftable/use_cases/trigger_phrases/trigger_match_rules。
 4. description 必须同时包含“何时用：”“何时别用：”“常见坑：”。
 5. steps 为 5～8 条，每条严格使用“动作 → 产出”格式。
 6. scenarios 为 6～12 条口语场景，至少含一条标注“易混”或“反例”的边界场景。
 7. trigger_phrases 至少 3 条，必须像用户会说出的原话，而不是分类关键词。
-8. use_cases 只能从以下集合选择：{use_cases}。
-9. 默认 draftable=false；只有已存在专用 draft_* 实现时才可设为 true。
-10. 禁止复制、改名或轻微改写现有工具；differentiation 必须说明与最近邻工具的边界。
+8. trigger_match_rules 至少 1 条，采用 all_of/any_of 关键词组合规则。
+9. use_cases 只能从以下集合选择：{use_cases}。
+10. 默认 draftable=false；只有已存在专用 draft_* 实现时才可设为 true。
+11. 禁止复制、改名或轻微改写现有工具；differentiation 必须说明与最近邻工具的边界。
 
 ## 候选对象字段
 slug, name, family, problem, trigger_phrases, differentiation, proposed_use_cases,
@@ -267,8 +488,16 @@ def promote_candidate(
     if issues:
         raise ValueError(_format_issues(slug, issues))
     assert candidate.tool is not None
+    existing_rules = list(candidate.tool.trigger_match_rules)
+    if existing_rules:
+        rules = existing_rules
+    else:
+        rules = build_trigger_match_rules_for_tool(list(candidate.trigger_phrases))
     tool = candidate.tool.model_copy(
-        update={"trigger_phrases": list(candidate.trigger_phrases)}
+        update={
+            "trigger_phrases": list(candidate.trigger_phrases),
+            "trigger_match_rules": rules,
+        }
     )
     if dry_run:
         return tool

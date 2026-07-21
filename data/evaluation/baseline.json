@@ -1,24 +1,35 @@
 {
   "dataset_digest": "61e798b3d504b55fa029f745690b128b1dc182abe63326a91e447ab88989114d",
-  "tools_digest": "fffbf26e558b1dbb4d9d3f1a28c353d01a9ffd04fe2627a6ac14be9792048dc7",
+  "tools_digest": "11e187ff775c092f65264a6ce0df75603e8c1cecd205cc2cad1a7cff4b376a8c",
   "summary": {
     "total_cases": 233,
-    "active_cases": 144,
-    "skipped_cases": 89,
-    "top1_cases": 115,
-    "top1_passed": 113,
-    "top1_accuracy": 0.982609,
-    "top3_cases": 124,
-    "top3_passed": 120,
-    "top3_recall": 0.967742,
-    "mrr_cases": 124,
-    "mrr": 0.944892,
-    "forbidden_cases": 50,
+    "active_cases": 209,
+    "skipped_cases": 24,
+    "top1_cases": 180,
+    "top1_passed": 165,
+    "top1_accuracy": 0.916667,
+    "top3_cases": 174,
+    "top3_passed": 167,
+    "top3_recall": 0.95977,
+    "mrr_cases": 189,
+    "mrr": 0.902116,
+    "forbidden_cases": 68,
     "forbidden_violations": 2,
-    "forbidden_violation_rate": 0.04,
+    "forbidden_violation_rate": 0.029412,
     "confusion": {
       "blameless-postmortem -> decision-matrix": 1,
-      "start-stop-continue -> cross-functional-alignment": 1
+      "change-impact-triage -> decision-record": 1,
+      "change-impact-triage -> raci-matrix": 1,
+      "conflict-resolution-process -> project-charter": 2,
+      "conflict-resolution-process -> scope-conflict-resolution": 1,
+      "decision-matrix -> risk-register": 1,
+      "five-whys -> requirements-clarification-canvas": 1,
+      "lessons-learned-register -> deliverable-dod": 1,
+      "moscow-prioritization -> scope-creep-negotiation": 1,
+      "project-charter -> decision-record": 1,
+      "raci-matrix -> project-charter": 1,
+      "risk-register -> decision-record": 1,
+      "sbi-feedback -> moscow-prioritization": 2
     }
   },
   "results": [
@@ -464,8 +475,8 @@
       "skipped_reason": "",
       "rankings": [
         "conflict-resolution-process",
-        "moscow-prioritization",
-        "cross-functional-alignment"
+        "difficult-conversation-prep",
+        "moscow-prioritization"
       ],
       "top1_pass": true,
       "top3_pass": true,
@@ -1346,13 +1357,13 @@
       "active": true,
       "skipped_reason": "",
       "rankings": [
+        "start-stop-continue",
         "cross-functional-alignment",
-        "raci-matrix",
-        "stakeholder-register"
+        "raci-matrix"
       ],
-      "top1_pass": false,
-      "top3_pass": false,
-      "reciprocal_rank": 0.0,
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -2893,12 +2904,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -2907,12 +2922,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "decision-record",
+        "moscow-prioritization"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -2921,12 +2940,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -2935,12 +2958,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "conflict-resolution-process",
+        "moscow-prioritization"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -2949,12 +2976,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "moscow-prioritization",
+        "decision-matrix",
+        "scope-creep-negotiation"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -2963,12 +2994,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -2977,12 +3012,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -2991,12 +3030,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3005,12 +3048,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3019,12 +3066,16 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "moscow-prioritization",
+        "cross-functional-alignment",
+        "decision-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3033,12 +3084,16 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-record",
+        "five-whys",
+        "raci-matrix"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3047,12 +3102,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "moscow-prioritization",
+        "cross-functional-alignment",
+        "decision-matrix"
+      ],
+      "top1_pass": true,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3061,12 +3120,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-creep-negotiation",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3075,12 +3138,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "change-impact-triage",
+        "decision-record",
+        "five-whys"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3089,12 +3156,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "change-impact-triage",
+        "decision-record",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3103,12 +3174,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "change-impact-triage",
+        "decision-record",
+        "gantt-chart"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3117,12 +3192,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "change-impact-triage",
+        "decision-record",
+        "five-whys"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3131,12 +3210,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "raci-matrix",
+        "change-impact-triage",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
       "forbidden_hits": []
     },
     {
@@ -3145,12 +3228,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "change-impact-triage",
+        "decision-record",
+        "gantt-chart"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3159,12 +3246,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-record",
+        "change-impact-triage",
+        "decision-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3173,12 +3264,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "moscow-prioritization",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": false,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3187,12 +3282,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "change-impact-triage",
+        "cross-functional-alignment",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3201,12 +3300,16 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-creep-negotiation",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
+      "top3_pass": true,
+      "reciprocal_rank": 0.5,
       "forbidden_hits": []
     },
     {
@@ -3215,12 +3318,16 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-record",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3229,12 +3336,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-matrix",
+        "swot-analysis",
+        "pre-mortem"
+      ],
+      "top1_pass": true,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3243,12 +3354,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：change-impact-triage",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "decision-record",
+        "five-whys",
+        "raci-matrix"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3257,12 +3372,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3271,12 +3390,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3285,12 +3408,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3299,12 +3426,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "raci-matrix",
+        "deliverable-dod"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3313,12 +3444,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3327,12 +3462,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "cross-functional-alignment",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3341,12 +3480,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3355,12 +3498,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3369,12 +3516,16 @@
       "family": "范围与变更管控",
       "case_type": "typical",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "five-whys",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3383,12 +3534,16 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "moscow-prioritization",
+        "cross-functional-alignment",
+        "decision-matrix"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3397,12 +3552,16 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "risk-register",
+        "risk-report",
+        "pre-mortem"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3411,12 +3570,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "moscow-prioritization",
+        "cross-functional-alignment",
+        "decision-matrix"
+      ],
+      "top1_pass": true,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3425,12 +3588,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：requirements-clarification-canvas",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution",
+        "moscow-prioritization",
+        "conflict-resolution-process"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.3333333333333333,
       "forbidden_hits": []
     },
     {
@@ -3439,12 +3606,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "moscow-prioritization",
+        "requirements-clarification-canvas"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3453,12 +3624,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "cross-functional-alignment",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3467,12 +3642,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3481,12 +3660,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3495,12 +3678,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "scope-creep-negotiation",
+        "moscow-prioritization"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3509,12 +3696,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "cross-functional-alignment",
+        "raci-matrix"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3523,12 +3714,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3537,12 +3732,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3551,12 +3750,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod",
+        "lessons-learned-register",
+        "decision-record"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3565,12 +3768,16 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "moscow-prioritization",
+        "cross-functional-alignment",
+        "decision-matrix"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3579,12 +3786,14 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "deliverable-dod"
+      ],
+      "top1_pass": true,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3593,12 +3802,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "requirements-clarification-canvas",
+        "moscow-prioritization",
+        "cross-functional-alignment"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3607,12 +3820,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：deliverable-dod",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "lessons-learned-register",
+        "decision-record",
+        "risk-report"
+      ],
+      "top1_pass": true,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3621,12 +3838,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution",
+        "moscow-prioritization",
+        "conflict-resolution-process"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3635,12 +3856,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution",
+        "moscow-prioritization",
+        "requirements-clarification-canvas"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3649,12 +3874,14 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3663,12 +3890,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution",
+        "conflict-resolution-process",
+        "difficult-conversation-prep"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3677,12 +3908,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution",
+        "moscow-prioritization",
+        "project-charter"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3691,12 +3926,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution",
+        "deliverable-dod",
+        "moscow-prioritization"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3705,12 +3944,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution",
+        "moscow-prioritization",
+        "conflict-resolution-process"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3719,12 +3962,14 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": true,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3733,12 +3978,16 @@
       "family": "范围与变更管控",
       "case_type": "paraphrase",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "scope-conflict-resolution",
+        "deliverable-dod",
+        "moscow-prioritization"
+      ],
+      "top1_pass": true,
+      "top3_pass": true,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3747,12 +3996,15 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3761,12 +4013,15 @@
       "family": "范围与变更管控",
       "case_type": "boundary",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
-      "top3_pass": null,
-      "reciprocal_rank": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": false,
+      "top3_pass": false,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     },
     {
@@ -3775,12 +4030,16 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "sbi-feedback",
+        "difficult-conversation-prep",
+        "pyramid-principle"
+      ],
+      "top1_pass": true,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 1.0,
       "forbidden_hits": []
     },
     {
@@ -3789,12 +4048,15 @@
       "family": "范围与变更管控",
       "case_type": "negative",
       "critical": false,
-      "active": false,
-      "skipped_reason": "缺少条件工具：scope-conflict-resolution",
-      "rankings": [],
-      "top1_pass": null,
+      "active": true,
+      "skipped_reason": "",
+      "rankings": [
+        "project-charter",
+        "stakeholder-register"
+      ],
+      "top1_pass": false,
       "top3_pass": null,
-      "reciprocal_rank": null,
+      "reciprocal_rank": 0.0,
       "forbidden_hits": []
     }
   ]

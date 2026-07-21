@@ -2,6 +2,21 @@
 
 ## 新增功能
 
+### 2026-07-21 · 推荐匹配规则 Phase 4/5：正式库全量迁移 + Legacy 移除
+
+- **新增加了什么功能**：
+  - `migrate-rules` / `migration-status` CLI：为正式库与候选池批量写入显式 `trigger_match_rules`
+  - 正式库 34/34、候选池 4/4 完成 JSON 级迁移；缺 `trigger_phrases` 的 15 个工具从 scenarios 回填
+  - Phase 5 单轨：`recommend_by_question` 仅 `trigger_match_rules` 命中 +12；删除运行时派生与 `trigger_phrases` 子串回退
+- **原因**：长期不希望双轨；匹配能力需沉淀在数据而非加载时隐式派生
+- **一句话方案**：精确子串规则（整句 all_of/any_of）+ 关键词派生规则写盘 → evaluate 门禁通过 → 移除 legacy 分支
+
+### 2026-07-21 · 推荐匹配规则改造（trigger_phrases + trigger_match_rules）
+
+- **新增加了什么功能**：新增离线匹配引擎 `matching.py` 与同义词表；`recommend_by_question` 改为 **仅** `trigger_match_rules` 命中 +12（Phase 5 已移除双轨）
+- **原因**：避免自然语言改写导致的命中损失，同时控制误召回对门禁的影响。
+- **一句话方案**：规则单轨 +12；`trigger_phrases` 仅保留原话示例与 search 索引；配合 `migrate-rules` 写盘与 `evaluate` 门禁
+
 ### 2026-07-21 · 范围与变更管控家族 5 个工具发布
 
 - **新增加了什么功能**：通过 pm-tool-catalog 工作流批量新增 5 个 PM 工具：

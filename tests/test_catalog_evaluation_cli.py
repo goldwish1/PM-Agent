@@ -6,6 +6,7 @@ import importlib.util
 import json
 from pathlib import Path
 
+from conftest import sample_trigger_rules
 from pm_agent.evaluation.models import CaseType, EvaluationCase
 from pm_agent.knowledge.catalog_ops import CandidateStatus, QualityScore, ToolCandidate
 from pm_agent.knowledge.repo import PmTool, ToolsRepository
@@ -33,6 +34,7 @@ def _formal_tool() -> PmTool:
         use_cases=["沟通与汇报"],
         summary="处理正式场景",
         trigger_phrases=["正式场景问题"],
+        trigger_match_rules=sample_trigger_rules("正式场景问题"),
     )
 
 
@@ -62,6 +64,11 @@ def _candidate_tool() -> PmTool:
             "紧急事故应直接处置（反例）",
         ],
         trigger_phrases=["候选场景问题", "先理解再建议", "确认真实顾虑"],
+        trigger_match_rules=sample_trigger_rules(
+            "候选场景问题",
+            "先理解再建议",
+            "确认真实顾虑",
+        ),
     )
 
 

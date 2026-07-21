@@ -57,6 +57,14 @@ uv run python scripts/manage_tool_catalog.py export-baseline
 # 对已批准候选运行正式库/候选库 A/B 评测
 uv run python scripts/manage_tool_catalog.py evaluate-candidate nonviolent-communication
 
+# 若 evaluate-candidate 阻断：用 suggest-triggers 反推 trigger_match_rules 补词（建议先用 --formal）
+uv run python scripts/manage_tool_catalog.py suggest-triggers nonviolent-communication --formal --max 10
+
+# 查看 / 执行 trigger_match_rules 迁移（正式库 + 候选池）
+uv run python scripts/manage_tool_catalog.py migration-status
+uv run python scripts/manage_tool_catalog.py migrate-rules --dry-run
+uv run python scripts/manage_tool_catalog.py migrate-rules --yes
+
 # promote 会重复执行基线与候选门禁；先无副作用演练，再正式发布
 uv run python scripts/manage_tool_catalog.py promote nonviolent-communication --dry-run
 uv run python scripts/manage_tool_catalog.py promote nonviolent-communication
@@ -94,6 +102,7 @@ uv run python scripts/manage_tool_catalog.py discard draft-slug --yes
 - steps 为 5～8 条，每条是“动作 → 产出”；
 - scenarios 为 6～12 条，至少包含一条易混或反例；
 - trigger_phrases 至少 3 条用户原话；
+- trigger_match_rules 至少 1 条（all_of/any_of 组合，命中时规则召回加权）；
 - use_cases 只能使用运行时合法分类；
 - 默认 `draftable=false`，除非代码中已存在对应专用起草工具；
 - 与正式库、候选池均不得重复。

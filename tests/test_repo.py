@@ -45,7 +45,7 @@ TOP10_THICK_SLUGS = frozenset(
 
 def test_repo_loads_all_tools() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 29
+    assert len(repo) == 34
     assert repo.exists("project-charter")
     assert repo.exists("risk-register")
     assert repo.exists("decision-record")
@@ -92,7 +92,7 @@ def test_repo_search_finds_charter() -> None:
 
 def test_all_tools_have_valid_use_cases() -> None:
     repo = ToolsRepository.from_json_path(REPO_ROOT / "data" / "tools.json")
-    assert len(repo) == 29
+    assert len(repo) == 34
     for tool in repo.all():
         assert tool.use_cases
         assert all(isinstance(c, str) and c for c in tool.use_cases)

@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from conftest import sample_trigger_rules
 from pm_agent.evaluation.dataset import load_evaluation_cases
 from pm_agent.evaluation.models import CaseType, EvaluationCase
 from pm_agent.knowledge.catalog_ops import (
@@ -23,6 +24,7 @@ from pm_agent.knowledge.catalog_ops import (
     review_candidate,
     scrub_evaluation_cases,
     strict_tool_issues,
+    migration_status,
 )
 from pm_agent.knowledge.repo import PmTool, ToolsRepository
 
@@ -60,6 +62,10 @@ def _valid_tool(slug: str = "active-listening") -> PmTool:
             "沟通会上大家都在说但没人听",
             "我总是忍不住马上给建议",
         ],
+        trigger_match_rules=sample_trigger_rules(
+            "我不知道对方真正想要什么",
+            "沟通会上大家都在说但没人听",
+        ),
         draftable=False,
         use_cases=["沟通与汇报", "干系人与协作"],
     )
@@ -92,6 +98,7 @@ def _setup_files(tmp_path: Path) -> tuple[Path, Path]:
         name="进度汇总稿",
         summary="同步项目状态",
         use_cases=["沟通与汇报"],
+        trigger_match_rules=sample_trigger_rules("同步项目状态"),
     )
     _write_json(tools_path, [existing.model_dump(exclude_none=True)])
     _write_json(
@@ -99,6 +106,17 @@ def _setup_files(tmp_path: Path) -> tuple[Path, Path]:
         [_candidate().model_dump(mode="json", exclude_none=True)],
     )
     return tools_path, candidates_path
+
+
+def test_migration_status_on_migrated_repo() -> None:
+    from pm_agent.config import REPO_ROOT
+
+    report = migration_status(
+        REPO_ROOT / "data" / "tools.json",
+        REPO_ROOT / "data" / "tool_candidates.json",
+    )
+    assert report.formal_total == 34
+    assert report.complete
 
 
 def test_strict_tool_quality_gate() -> None:
@@ -260,6 +278,7 @@ def test_retire_rejects_duplicate_archive_slug(tmp_path: Path) -> None:
         name="旧进度汇总稿",
         summary="归档副本",
         use_cases=["沟通与汇报"],
+        trigger_match_rules=sample_trigger_rules("归档副本"),
     )
     _write_json(archive_path, [existing.model_dump(exclude_none=True)])
     with pytest.raises(ValueError, match="归档库已存在"):

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from conftest import sample_trigger_rules
 from pm_agent.cli_tools import (
     format_tool_detail,
     format_tools_catalog,
@@ -25,6 +26,7 @@ def _sample_repo() -> ToolsRepository:
                 description="立项授权核心依据。",
                 steps=["明确目的", "获得签字"],
                 scenarios=["项目启动", "下周要立项"],
+                trigger_match_rules=sample_trigger_rules("下周要立项"),
                 draftable=True,
             ),
             PmTool(
@@ -36,6 +38,7 @@ def _sample_repo() -> ToolsRepository:
                 description="识别与应对风险。",
                 steps=["识别风险", "评估影响"],
                 scenarios=["担心延期", "风险很多"],
+                trigger_match_rules=sample_trigger_rules("担心延期"),
                 draftable=True,
             ),
             PmTool(
@@ -47,6 +50,7 @@ def _sample_repo() -> ToolsRepository:
                 description="周报式状态同步。",
                 steps=["汇总进度", "标出风险"],
                 scenarios=["要写周报"],
+                trigger_match_rules=sample_trigger_rules("要写周报"),
                 draftable=False,
             ),
         ]
@@ -106,7 +110,14 @@ def test_format_search_no_hit() -> None:
 
 
 def test_format_tool_detail_empty_lists() -> None:
-    tool = PmTool(slug="x", name="空", use_cases=["范围与需求"], steps=[], scenarios=[])
+    tool = PmTool(
+        slug="x",
+        name="空",
+        use_cases=["范围与需求"],
+        steps=[],
+        scenarios=[],
+        trigger_match_rules=sample_trigger_rules("空"),
+    )
     text = format_tool_detail(tool)
     assert "### steps\n\n- （无）" in text
     assert "### scenarios\n\n- （无）" in text

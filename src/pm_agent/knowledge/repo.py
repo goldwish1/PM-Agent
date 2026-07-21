@@ -10,6 +10,13 @@ from pydantic import BaseModel, Field
 
 from pm_agent.config import REPO_ROOT
 from pm_agent.knowledge.categories import USE_CASE_ORDER, validate_use_cases
+from pm_agent.knowledge.matching import (
+    TriggerMatchRule,
+    expand_keyword,
+    load_synonyms,
+    match_trigger_rules,
+    tokenize_query_for_search,
+)
 
 DEFAULT_BOOSTS_PATH = REPO_ROOT / "data" / "recommendation_boosts.json"
 
@@ -66,6 +73,7 @@ class PmTool(BaseModel):
     steps: list[str] = Field(default_factory=list)
     scenarios: list[str] = Field(default_factory=list)
     trigger_phrases: list[str] = Field(default_factory=list)
+    trigger_match_rules: list[TriggerMatchRule] = Field(default_factory=list, min_length=1)
     draftable: bool = False
     template: dict[str, Any] | None = None
     template_fields: list[str] | None = None
@@ -86,6 +94,7 @@ class ToolsRepository:
         self._by_slug = {t.slug: t for t in self._tools}
         self._boosts = list(boosts or [])
         self._fallback_slugs = list(fallback_slugs or [])
+        self._synonyms = load_synonyms()
 
     @classmethod
     def from_json_path(
@@ -172,9 +181,7 @@ class ToolsRepository:
         if not query:
             return []
 
-        tokens = [t for t in query.replace("，", " ").replace(",", " ").split() if t]
-        if not tokens:
-            tokens = [query]
+        tokens = tokenize_query_for_search(query)
 
         scored: list[tuple[int, PmTool]] = []
         for tool in self._tools:
@@ -189,12 +196,22 @@ class ToolsRepository:
                     " ".join(tool.scenarios),
                     " ".join(tool.steps),
                     " ".join(tool.trigger_phrases),
+                    " ".join(
+                        kw
+                        for rule in tool.trigger_match_rules
+                        for kw in (*rule.all_of, *rule.any_of)
+                    ),
                 ]
             ).lower()
             score = 0
             for token in tokens:
-                if token in hay:
-                    score += 2 if token in tool.slug or token in tool.name.lower() else 1
+                variants = expand_keyword(token, synonyms=self._synonyms)
+                hit_variant = next((v for v in variants if v.lower() in hay), None)
+                if hit_variant is not None:
+                    score_delta = (
+                        2 if hit_variant in tool.slug or hit_variant in tool.name.lower() else 1
+                    )
+                    score += score_delta
                 for use_case in tool.use_cases:
                     if token in use_case.lower():
                         score += 2
@@ -220,13 +237,11 @@ class ToolsRepository:
         reasons: dict[str, str] = {}
 
         for tool in self._tools:
-            if any(
-                phrase.strip().lower() in text
-                for phrase in tool.trigger_phrases
-                if phrase.strip()
+            if match_trigger_rules(
+                text, tool.trigger_match_rules, synonyms=self._synonyms
             ):
                 scores[tool.slug] += 12
-                reasons.setdefault(tool.slug, "与用户口语卡点直接匹配")
+                reasons.setdefault(tool.slug, "与用户口语卡点规则命中")
 
         for rule in self._boosts:
             if any(k.lower() in text for k in rule.keywords):

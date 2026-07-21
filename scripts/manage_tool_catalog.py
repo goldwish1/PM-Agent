@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -23,19 +24,24 @@ from pm_agent.evaluation.service import (
     evaluate_candidate,
     evaluate_current,
 )
+from pm_agent.evaluation.trigger_diagnostics import suggest_any_of_keywords
 from pm_agent.evaluation.views import write_baseline_views, write_cases_views
 from pm_agent.knowledge.catalog_ops import (
     CandidateStatus,
+    MigrationStatusReport,
     QualityScore,
     RetireResult,
     build_generation_prompt,
     discard_candidate,
     ingest_candidates,
     load_candidates,
+    migrate_trigger_rules,
+    migration_status,
     promote_candidate,
     retire_tool,
     review_candidate,
     validate_catalog,
+    validate_formal_tools,
 )
 from pm_agent.knowledge.repo import ToolsRepository
 
@@ -161,6 +167,45 @@ def build_parser() -> argparse.ArgumentParser:
     eval_prompt_parser.add_argument("--count", type=int, default=12)
     eval_prompt_parser.add_argument("--output", type=Path)
 
+    suggest_parser = commands.add_parser(
+        "suggest-triggers",
+        help="根据评测失败案例反推触发关键词（建议补到 trigger_match_rules 的 any_of）",
+    )
+    suggest_parser.add_argument("slug")
+    suggest_parser.add_argument(
+        "--formal",
+        action="store_true",
+        help="针对正式库工具生成建议（不使用候选 A/B）",
+    )
+    suggest_parser.add_argument("--max", type=int, default=10)
+    suggest_parser.add_argument("--output", type=Path)
+
+    commands.add_parser(
+        "migration-status",
+        help="列出尚未写入显式 trigger_match_rules 的正式库/候选 slug",
+    )
+
+    migrate_parser = commands.add_parser(
+        "migrate-rules",
+        help="为正式库与候选池写入 trigger_match_rules（默认跳过已有规则）",
+    )
+    migrate_parser.add_argument("--dry-run", action="store_true")
+    migrate_parser.add_argument(
+        "--force",
+        action="store_true",
+        help="覆盖已有 trigger_match_rules",
+    )
+    migrate_parser.add_argument(
+        "--yes",
+        action="store_true",
+        help="确认写盘；未指定时仅打印计划",
+    )
+    migrate_parser.add_argument(
+        "slugs",
+        nargs="*",
+        help="可选：仅迁移指定 slug",
+    )
+
     commands.add_parser(
         "export-cases",
         help="导出黄金用例的 Markdown/HTML 可读视图",
@@ -196,6 +241,9 @@ def _run(args: argparse.Namespace) -> int:
         repo = ToolsRepository.from_json_path(args.tools)
         candidates = load_candidates(args.candidates)
         issues = validate_catalog(candidates, repo)
+        formal_issues = validate_formal_tools(args.tools)
+        if formal_issues:
+            issues = {**issues, **formal_issues}
         if not issues:
             print(f"ok: 正式工具 {len(repo)} 个，候选 {len(candidates)} 个")
             return 0
@@ -204,6 +252,53 @@ def _run(args: argparse.Namespace) -> int:
             for message in messages:
                 print(f"  - {message}", file=sys.stderr)
         return 1
+
+    if args.command == "migration-status":
+        report = migration_status(args.tools, args.candidates)
+        print(
+            f"正式库：{report.formal_migrated}/{report.formal_total} 已迁移"
+            f"（待迁移 {len(report.formal_pending)}）"
+        )
+        if report.formal_pending:
+            for slug in report.formal_pending:
+                print(f"  - {slug}")
+        print(
+            f"候选池：{report.candidate_migrated}/{report.candidate_total} 已迁移"
+            f"（待迁移 {len(report.candidate_pending)}）"
+        )
+        if report.candidate_pending:
+            for slug in report.candidate_pending:
+                print(f"  - {slug}")
+        return 0 if report.complete else 2
+
+    if args.command == "migrate-rules":
+        before = migration_status(args.tools, args.candidates)
+        _print_migration_plan(before, slugs=args.slugs or None)
+        if args.dry_run:
+            migrate_trigger_rules(
+                args.tools,
+                args.candidates,
+                dry_run=True,
+                slugs=args.slugs or None,
+                force=args.force,
+            )
+            print("dry-run: 未写盘")
+            return 0
+        if not args.yes:
+            print("未写盘；确认后加 --yes")
+            return 2
+        after = migrate_trigger_rules(
+            args.tools,
+            args.candidates,
+            dry_run=False,
+            slugs=args.slugs or None,
+            force=args.force,
+        )
+        print(
+            f"ok: 正式库 {after.formal_migrated}/{after.formal_total}；"
+            f"候选池 {after.candidate_migrated}/{after.candidate_total}"
+        )
+        return 0 if after.complete else 2
 
     if args.command == "prompt":
         if not 1 <= args.count <= 12:
@@ -291,6 +386,66 @@ def _run(args: argparse.Namespace) -> int:
         print(f"报告：{paths[1]}")
         _print_gate(bundle.gate)
         return 0 if bundle.gate and bundle.gate.passed else 2
+
+    if args.command == "suggest-triggers":
+        if args.max < 1:
+            raise ValueError("--max 必须是正整数")
+
+        if args.formal:
+            bundle = evaluate_current(args.tools, args.cases)
+            repo = ToolsRepository.from_json_path(args.tools)
+            tool = repo.get_by_slug(args.slug)
+            if tool is None:
+                raise ValueError(f"正式库不存在工具 slug：{args.slug}")
+            suggestions = suggest_any_of_keywords(
+                tool=tool,
+                cases=bundle.cases,
+                report=bundle.current,
+                tool_slug=args.slug,
+                max_suggestions=args.max,
+            )
+        else:
+            bundle = evaluate_candidate(
+                args.tools,
+                args.candidates,
+                args.cases,
+                args.slug,
+            )
+            tool = promote_candidate(
+                args.candidates,
+                args.tools,
+                args.slug,
+                dry_run=True,
+            )
+            suggestions = suggest_any_of_keywords(
+                tool=tool,
+                cases=bundle.cases,
+                report=bundle.candidate,
+                tool_slug=args.slug,
+                max_suggestions=args.max,
+            )
+
+        payload = {
+            "slug": args.slug,
+            "formal": bool(args.formal),
+            "max_suggestions": args.max,
+            "suggestions": suggestions,
+        }
+        if args.output:
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+            print(f"已写入建议：{args.output}")
+
+        if suggestions:
+            print("建议关键词（补充到 any_of）：")
+            for kw in suggestions:
+                print(f"- {kw}")
+        else:
+            print("未发现需要补词的失败用例（或关键词已全部覆盖）。")
+        return 0
 
     if args.command == "update-baseline":
         bundle = evaluate_current(args.tools, args.cases)
@@ -437,6 +592,19 @@ def _run(args: argparse.Namespace) -> int:
         return 0
 
     raise ValueError(f"未知命令：{args.command}")
+
+
+def _print_migration_plan(
+    report: MigrationStatusReport,
+    *,
+    slugs: list[str] | None,
+) -> None:
+    if slugs:
+        print(f"计划迁移 slug：{', '.join(slugs)}")
+    print(
+        f"正式库待迁移 {len(report.formal_pending)} / {report.formal_total}；"
+        f"候选池待迁移 {len(report.candidate_pending)} / {report.candidate_total}"
+    )
 
 
 def _print_retire_plan(result: RetireResult, *, keep_cases: bool) -> None:

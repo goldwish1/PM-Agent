@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from conftest import sample_trigger_rules
 from pm_agent.evaluation.comparison import compare_reports
 from pm_agent.evaluation.dataset import dataset_digest, load_evaluation_cases
 from pm_agent.evaluation.gates import evaluate_baseline_gate, evaluate_regression_gate
@@ -22,6 +23,7 @@ def _tool(slug: str, trigger_phrases: list[str]) -> PmTool:
         use_cases=["沟通与汇报"],
         summary=f"{slug} 摘要",
         trigger_phrases=trigger_phrases,
+        trigger_match_rules=sample_trigger_rules(*trigger_phrases),
     )
 
 
